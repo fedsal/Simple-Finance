@@ -8,5 +8,5 @@ class ExpenseRepository(
     suspend fun createExpense(expense: Expense) = expenseLocalDataSource.create(expense)
     suspend fun getAllExpenses() = expenseLocalDataSource.read()
     suspend fun updateExpense(expense: Expense) = expenseLocalDataSource.update(expense)
-    suspend fun deleteExpense(expense: Expense) = expenseLocalDataSource.delete(expense.id)
+    suspend fun deleteExpense(expense: Expense) = expenseLocalDataSource.delete(expense)
 }

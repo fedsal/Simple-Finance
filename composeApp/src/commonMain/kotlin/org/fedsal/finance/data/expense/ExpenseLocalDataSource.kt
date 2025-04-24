@@ -6,5 +6,5 @@ interface ExpenseLocalDataSource {
     suspend fun create(expense: Expense)
     suspend fun read(): List<Expense>
     suspend fun update(expense: Expense)
-    suspend fun delete(id: Int)
+    suspend fun delete(expense: Expense)
 }
