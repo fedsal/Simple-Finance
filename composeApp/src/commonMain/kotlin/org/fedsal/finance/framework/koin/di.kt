@@ -2,14 +2,11 @@ package org.fedsal.finance.framework.koin
 
 import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.data.expense.ExpenseRepository
-import org.fedsal.finance.framework.room.dao.ExpenseDao
 import org.fedsal.finance.framework.room.database.getExpenseDao
 import org.fedsal.finance.framework.room.database.getRoomDatabase
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
-import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
