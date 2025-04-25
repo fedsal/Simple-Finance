@@ -9,7 +9,7 @@ import org.fedsal.finance.domain.models.PaymentMethod
 @Entity(tableName = "expenses")
 data class ExpenseEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val title: String,
     val amount: Double,
     val date: String,
@@ -32,7 +32,6 @@ fun ExpenseEntity.toDomain(): Expense {
 
 fun Expense.toEntity(): ExpenseEntity {
     return ExpenseEntity(
-        id = id,
         title = title,
         amount = amount,
         date = date,

@@ -36,6 +36,8 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -64,6 +66,7 @@ kotlin {
 
             // Room
             implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
     }
 }

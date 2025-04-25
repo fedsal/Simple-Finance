@@ -5,10 +5,30 @@ import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.framework.room.database.getExpenseDao
 import org.fedsal.finance.framework.room.database.getRoomDatabase
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
+import org.koin.core.KoinApplication
+import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+
+
+fun initializeKoin(
+    config: (KoinApplication.() -> Unit)? = null,
+) {
+    // Start Koin
+    startKoin {
+        config?.invoke(this)
+        modules(
+            platformModule(),
+            provideDataSourceModule,
+            provideRepositoryModule,
+            provideDatabaseModule
+        )
+    }
+}
+
+// Modules
 
 expect fun platformModule(): Module
 
