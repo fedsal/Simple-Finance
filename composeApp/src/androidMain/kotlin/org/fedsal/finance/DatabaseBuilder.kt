@@ -3,7 +3,6 @@ package org.fedsal.finance
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import kotlinx.coroutines.Dispatchers
 import org.fedsal.finance.framework.room.database.AppDatabase
 
 fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDatabase>  {
@@ -12,6 +11,4 @@ fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDatabase>  {
         context = context.applicationContext,
         name = dbFile.absolutePath
     )
-        .fallbackToDestructiveMigrationOnDowngrade(true)
-        .setQueryCoroutineContext(Dispatchers.IO)
 }
