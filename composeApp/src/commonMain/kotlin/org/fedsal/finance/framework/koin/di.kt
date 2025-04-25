@@ -2,6 +2,7 @@ package org.fedsal.finance.framework.koin
 
 import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.data.expense.ExpenseRepository
+import org.fedsal.finance.framework.room.database.getDebtDao
 import org.fedsal.finance.framework.room.database.getExpenseDao
 import org.fedsal.finance.framework.room.database.getRoomDatabase
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
@@ -43,4 +44,5 @@ val provideRepositoryModule = module {
 val provideDatabaseModule = module {
     single { getRoomDatabase(get()) }
     single { getExpenseDao(get()) }
+    single { getDebtDao(get()) }
 }

@@ -14,7 +14,7 @@ class ExpenseRoomDataSource(
     }
 
     override suspend fun read(): List<Expense> {
-        return expenseDao.read().map { it.toDomain() }
+        return expenseDao.readAll().map { it.toDomain() }
     }
 
     override suspend fun update(expense: Expense) {
