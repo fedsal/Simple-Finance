@@ -5,7 +5,7 @@ import org.fedsal.finance.domain.models.Debt
 class DebtRepository(
     private val localDataSource: DebtLocalDataSource,
 ) {
-    suspend fun create(debt: Debt) {
+    suspend fun createDebt(debt: Debt) {
         localDataSource.create(debt)
     }
 

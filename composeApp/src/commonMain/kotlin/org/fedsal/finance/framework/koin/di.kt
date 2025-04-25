@@ -1,10 +1,13 @@
 package org.fedsal.finance.framework.koin
 
+import org.fedsal.finance.data.debt.DebtLocalDataSource
+import org.fedsal.finance.data.debt.DebtRepository
 import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.framework.room.database.getDebtDao
 import org.fedsal.finance.framework.room.database.getExpenseDao
 import org.fedsal.finance.framework.room.database.getRoomDatabase
+import org.fedsal.finance.framework.room.datasource.DebtRoomDataSource
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -35,10 +38,12 @@ expect fun platformModule(): Module
 
 val provideDataSourceModule = module {
     singleOf(::ExpenseRoomDataSource).bind(ExpenseLocalDataSource::class)
+    singleOf(::DebtRoomDataSource).bind(DebtLocalDataSource::class)
 }
 
 val provideRepositoryModule = module {
     singleOf(::ExpenseRepository)
+    singleOf(::DebtRepository)
 }
 
 val provideDatabaseModule = module {
