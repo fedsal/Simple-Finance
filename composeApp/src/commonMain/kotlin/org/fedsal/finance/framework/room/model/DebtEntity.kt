@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.Debt
 import org.fedsal.finance.domain.models.PaymentMethod
+import org.fedsal.finance.domain.models.PaymentMethodType
 
 @Entity(tableName = "debts")
 data class DebtEntity(
@@ -15,7 +16,7 @@ data class DebtEntity(
     val date: String,
     val category: Category,
     val installments: Int,
-    val paymentMethod: PaymentMethod,
+    val paymentMethodId: Int,
     val description: String,
 )
 
@@ -27,7 +28,13 @@ fun DebtEntity.toDomain(): Debt {
         date = date,
         category = category,
         installments = installments,
-        paymentMethod = paymentMethod,
+        paymentMethod = PaymentMethod(
+            id = paymentMethodId,
+            name = "",
+            type = PaymentMethodType.CREDIT,
+            iconId = "",
+            color = ""
+        ),
         description = description
     )
 }
@@ -39,7 +46,7 @@ fun Debt.toEntity(): DebtEntity {
         date = date,
         category = category,
         installments = installments,
-        paymentMethod = paymentMethod,
+        paymentMethodId = paymentMethod.id,
         description = description
     )
 }

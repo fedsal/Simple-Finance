@@ -14,7 +14,7 @@ data class ExpenseEntity(
     val amount: Double,
     val date: String,
     val description: String,
-    val category: Category,
+    val categoryId: Int,
     val paymentMethod: PaymentMethod
 )
 
@@ -25,7 +25,13 @@ fun ExpenseEntity.toDomain(): Expense {
         amount = amount,
         date = date,
         description = description,
-        category = category,
+        category = Category(
+            id = categoryId,
+            title = "",
+            budget = 0.0,
+            iconId = "",
+            color = ""
+        ),
         paymentMethod = paymentMethod
     )
 }
@@ -36,7 +42,7 @@ fun Expense.toEntity(): ExpenseEntity {
         amount = amount,
         date = date,
         description = description,
-        category = category,
+        categoryId = category.id,
         paymentMethod = paymentMethod
     )
 }

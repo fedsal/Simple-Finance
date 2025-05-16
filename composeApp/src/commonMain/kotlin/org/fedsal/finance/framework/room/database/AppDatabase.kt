@@ -8,17 +8,23 @@ import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import org.fedsal.finance.framework.room.dao.CategoryDao
 import org.fedsal.finance.framework.room.dao.DebtDao
 import org.fedsal.finance.framework.room.dao.ExpenseDao
+import org.fedsal.finance.framework.room.dao.PaymentMethodDao
+import org.fedsal.finance.framework.room.model.CategoryEntity
 import org.fedsal.finance.framework.room.model.DebtEntity
 import org.fedsal.finance.framework.room.model.ExpenseEntity
+import org.fedsal.finance.framework.room.model.PaymentMethodEntity
 
-@Database(entities = [ExpenseEntity::class, DebtEntity::class], version = 1)
+@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, PaymentMethodEntity::class], version = 1)
 @TypeConverters(Converters::class)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
     abstract fun debtDao(): DebtDao
+    abstract fun paymentMethodDao(): PaymentMethodDao
+    abstract fun categoryDao(): CategoryDao
 }
 
 // The Room compiler generates the `actual` implementations.

@@ -20,4 +20,8 @@ interface ExpenseDao {
 
     @Delete
     suspend fun delete(entity: ExpenseEntity)
+
+
+    @Query("SELECT * FROM expenses WHERE categoryId = :categoryId ORDER BY date DESC")
+    suspend fun getExpensesByCategory(categoryId: String): List<ExpenseEntity>
 }

@@ -24,4 +24,8 @@ class ExpenseRoomDataSource(
     override suspend fun delete(expense: Expense) {
         expenseDao.delete(expense.toEntity())
     }
+
+    override suspend fun getExpensesByCategory(categoryId: String): List<Expense> {
+        return expenseDao.getExpensesByCategory(categoryId).map { it.toDomain() }
+    }
 }

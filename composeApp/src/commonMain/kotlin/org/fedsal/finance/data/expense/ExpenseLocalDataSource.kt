@@ -7,4 +7,6 @@ interface ExpenseLocalDataSource {
     suspend fun read(): List<Expense>
     suspend fun update(expense: Expense)
     suspend fun delete(expense: Expense)
+
+    suspend fun getExpensesByCategory(categoryId: String): List<Expense>
 }
