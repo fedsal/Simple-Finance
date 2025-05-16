@@ -47,3 +47,7 @@ fun getRoomDatabase(
 fun getExpenseDao(database: AppDatabase) = database.expenseDao()
 
 fun getDebtDao(database: AppDatabase) = database.debtDao()
+
+fun getPaymentMethodDao(database: AppDatabase) = database.paymentMethodDao()
+
+fun getCategoryDao(database: AppDatabase) = database.categoryDao()
