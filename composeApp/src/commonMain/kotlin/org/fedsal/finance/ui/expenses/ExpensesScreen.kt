@@ -10,19 +10,31 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.composables.SpentHeader
 import org.fedsal.finance.ui.expenses.composables.ExpenseCategoryItem
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun ExpensesScreen() {
+fun ExpensesScreen(
+    viewModel: ExpensesViewModel = koinViewModel()
+) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initViewModel()
+    }
+
+    val uiState = viewModel.uiState.collectAsState()
+
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
         contentWindowInsets = WindowInsets.safeGestures,
@@ -48,13 +60,16 @@ fun ExpensesScreen() {
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                items(4) {
+                items(uiState.value.expenses) {
                     ExpenseCategoryItem(
-                        categoryName = "Compras",
-                        totalSpent = "$ 1.500.000",
-                        availableAmount = "$ 1.500.000",
+                        categoryName = it.category.title,
+                        totalSpent = it.totalSpent.toString(),
+                        availableAmount = it.availableAmount.toString(),
                         icon = Icons.Outlined.ShoppingCart,
-                        iconTint = Color.Magenta
+                        iconTint = Color.Magenta,
+                        onClick = {
+                            viewModel.initViewModel()
+                        }
                     )
                 }
             }

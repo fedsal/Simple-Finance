@@ -1,6 +1,7 @@
 package org.fedsal.finance.ui.expenses.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,7 @@ fun ExpenseCategoryItem(
     icon: ImageVector,
     iconTint: Color,
 ) {
-    Box(contentAlignment = Alignment.TopCenter, modifier = modifier) {
+    Box(contentAlignment = Alignment.TopCenter, modifier = modifier.clickable { onClick.invoke() }) {
         Surface(
             modifier = Modifier.padding(top = 20.dp).width(180.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
