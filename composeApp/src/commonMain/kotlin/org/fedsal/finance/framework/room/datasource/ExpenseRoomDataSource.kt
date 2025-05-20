@@ -1,5 +1,6 @@
 package org.fedsal.finance.framework.room.datasource
 
+import io.ktor.util.date.Month
 import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.framework.room.dao.ExpenseDao
@@ -25,7 +26,15 @@ class ExpenseRoomDataSource(
         expenseDao.delete(expense.toEntity())
     }
 
-    override suspend fun getExpensesByCategory(categoryId: String): List<Expense> {
-        return expenseDao.getExpensesByCategory(categoryId).map { it.toDomain() }
+    override suspend fun getExpensesByCategory(
+        categoryId: String,
+        month: Month,
+        year: Int
+    ): List<Expense> {
+        return expenseDao.getExpensesByCategory(
+            categoryId,
+            (month.ordinal + 1).toString(),
+            year.toString()
+        ).map { it.toDomain() }
     }
 }

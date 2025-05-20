@@ -24,6 +24,7 @@ import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.composables.SpentHeader
 import org.fedsal.finance.ui.expenses.composables.ExpenseCategoryItem
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.roundToInt
 
 @Composable
 fun ExpensesScreen(
@@ -40,9 +41,9 @@ fun ExpensesScreen(
         contentWindowInsets = WindowInsets.safeGestures,
         topBar = {
             DateFilterHeader(
-                onPreviousClicked = {},
-                onNextClicked = {},
-                dateString = "Abril 2025"
+                onPreviousClicked = { viewModel.onEvent(ExpensesUIEvent.OnMonthDecremented) },
+                onNextClicked = { viewModel.onEvent(ExpensesUIEvent.OnMonthIncremented) },
+                dateString = uiState.value.selectedMonth.name.uppercase()
             )
         }
     ) { paddingValues ->
@@ -53,7 +54,8 @@ fun ExpensesScreen(
             )
         ) {
             Spacer(Modifier.height(10.dp))
-            SpentHeader(totalSpent = "$ 1.500.000")
+            // TODO: Handle decimal values
+            SpentHeader(totalSpent = "$ ${uiState.value.totalSpent.roundToInt()}")
             Spacer(Modifier.height(20.dp))
             LazyVerticalGrid(
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),

@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
             // Ktor
             implementation(libs.ktor.client.core)

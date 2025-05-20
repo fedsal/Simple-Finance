@@ -1,5 +1,6 @@
 package org.fedsal.finance.data.expense
 
+import io.ktor.util.date.Month
 import org.fedsal.finance.domain.models.Expense
 
 interface ExpenseLocalDataSource {
@@ -8,5 +9,5 @@ interface ExpenseLocalDataSource {
     suspend fun update(expense: Expense)
     suspend fun delete(expense: Expense)
 
-    suspend fun getExpensesByCategory(categoryId: String): List<Expense>
+    suspend fun getExpensesByCategory(categoryId: String, month: Month, year: Int): List<Expense>
 }
