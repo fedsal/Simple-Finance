@@ -10,15 +10,15 @@ sealed class ItemsBottomNav(
     val title: String,
     val route: HomeDestination
 ) {
-    data object Profile: ItemsBottomNav(
+    data object Expenses: ItemsBottomNav(
         icon = Icons.Outlined.AccountBalanceWallet,
-        title = "Home",
+        title = "Gastos",
         route = HomeDestination.Home
     )
 
-    data object Shop: ItemsBottomNav(
+    data object Balance: ItemsBottomNav(
         icon = Icons.Outlined.AccountBalance,
-        title = "Shop",
+        title = "Balance",
         route = HomeDestination.Shop
     )
 }

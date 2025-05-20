@@ -1,11 +1,13 @@
 package org.fedsal.finance.ui.home
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.ui.common.composables.BottomNavigation
@@ -17,10 +19,13 @@ fun HomeScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         bottomBar = {
-            BottomNavigation(navController) {  }
+            BottomNavigation(navController) { }
         }
     ) {
-        SimpleFinanceNavigation(navController = navController)
+        SimpleFinanceNavigation(
+            modifier = Modifier.padding(bottom = 72.dp),
+            navController = navController
+        )
     }
 }
 
