@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses
+package org.fedsal.finance.ui.expenses.allcategories
 
 import io.ktor.util.date.Month
 import org.fedsal.finance.domain.models.ExpensesByCategory

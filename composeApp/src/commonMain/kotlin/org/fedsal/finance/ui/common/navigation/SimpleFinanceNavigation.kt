@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import org.fedsal.finance.ui.expenses.ExpensesScreen
+import org.fedsal.finance.ui.expenses.allcategories.ExpensesScreen
 
 @Composable
 fun SimpleFinanceNavigation(
