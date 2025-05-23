@@ -3,7 +3,8 @@ package org.fedsal.finance.ui.common
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.outlined.CreditCard
-import androidx.compose.material.icons.outlined.Paid
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.fedsal.finance.domain.models.AppIcons
 
@@ -33,4 +34,8 @@ fun getIcon(name: String): ImageVector {
     } catch (e: IllegalArgumentException) {
         return Icons.Filled.Paid
     }
+}
+
+fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
+    return lerp(color, Color.Black, factor.coerceIn(0f, 1f))
 }

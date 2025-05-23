@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.formatDecimal
-import org.fedsal.finance.ui.expenses.allcategories.composables.opaqueColor
+import org.fedsal.finance.ui.common.opaqueColor
 
 @Composable
 fun CategoryHeader(

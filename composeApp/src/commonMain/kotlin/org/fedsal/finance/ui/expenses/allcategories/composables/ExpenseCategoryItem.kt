@@ -19,11 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.fedsal.finance.ui.common.opaqueColor
 
 @Composable
 fun ExpenseCategoryItem(
@@ -86,8 +86,4 @@ fun ExpenseCategoryItem(
             )
         }
     }
-}
-
-fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
-    return lerp(color, Color.Black, factor.coerceIn(0f, 1f))
 }
