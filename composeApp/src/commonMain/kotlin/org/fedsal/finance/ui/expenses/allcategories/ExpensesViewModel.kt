@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses
+package org.fedsal.finance.ui.expenses.allcategories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
-import org.fedsal.finance.ui.expenses.allcategories.ExpensesUIEvent
-import org.fedsal.finance.ui.expenses.allcategories.ExpensesUIState
 
 class ExpensesViewModel(
     private val getExpensesByCategoryUseCase: GetExpensesByCategoryUseCase

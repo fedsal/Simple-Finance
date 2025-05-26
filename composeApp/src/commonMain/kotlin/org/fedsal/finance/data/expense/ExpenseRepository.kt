@@ -11,7 +11,7 @@ class ExpenseRepository(
     suspend fun updateExpense(expense: Expense) = expenseLocalDataSource.update(expense)
     suspend fun deleteExpense(expense: Expense) = expenseLocalDataSource.delete(expense)
 
-    suspend fun getExpensesByCategory(categoryId: String, month: Month, year: Int): List<Expense> {
+    suspend fun getExpensesByCategory(categoryId: Int, month: Month, year: Int): List<Expense> {
         return expenseLocalDataSource.getExpensesByCategory(categoryId, month, year)
     }
 }

@@ -9,5 +9,5 @@ interface ExpenseLocalDataSource {
     suspend fun update(expense: Expense)
     suspend fun delete(expense: Expense)
 
-    suspend fun getExpensesByCategory(categoryId: String, month: Month, year: Int): List<Expense>
+    suspend fun getExpensesByCategory(categoryId: Int, month: Month, year: Int): List<Expense>
 }

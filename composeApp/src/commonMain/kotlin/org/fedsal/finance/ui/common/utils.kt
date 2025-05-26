@@ -36,6 +36,17 @@ fun getIcon(name: String): ImageVector {
     }
 }
 
+
+fun hexToColor(hex: String): Color {
+    val color = hex.removePrefix("#")
+    val parsed = when (color.length) {
+        6 -> "FF$color" // Add alpha if missing
+        8 -> color
+        else -> throw IllegalArgumentException("Invalid color format")
+    }
+    return Color(parsed.toULong(16))
+}
+
 fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
     return lerp(color, Color.Black, factor.coerceIn(0f, 1f))
 }

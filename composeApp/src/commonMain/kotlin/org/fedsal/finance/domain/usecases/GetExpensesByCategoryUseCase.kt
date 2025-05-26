@@ -9,7 +9,8 @@ class GetExpensesByCategoryUseCase(
     private val expenseRepository: ExpenseRepository,
     private val categoryRepository: CategoryRepository
 ) : BaseUseCase<GetExpensesByCategoryUseCase.Params, List<ExpensesByCategory>>() {
-    data class Params constructor(
+
+    data class Params(
         val month: Month,
         val year: Int
     )
@@ -19,7 +20,7 @@ class GetExpensesByCategoryUseCase(
         return expenses.map { category ->
             val expensesByCategory =
                 expenseRepository.getExpensesByCategory(
-                    category.id.toString(),
+                    category.id,
                     params.month,
                     params.year
                 )

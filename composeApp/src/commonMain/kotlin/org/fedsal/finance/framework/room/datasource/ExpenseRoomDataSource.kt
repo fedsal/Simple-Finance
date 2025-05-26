@@ -27,7 +27,7 @@ class ExpenseRoomDataSource(
     }
 
     override suspend fun getExpensesByCategory(
-        categoryId: String,
+        categoryId: Int,
         month: Month,
         year: Int
     ): List<Expense> {

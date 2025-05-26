@@ -26,7 +26,7 @@ class CategoryRoomDataSource(
     }
 
     override suspend fun getById(id: Int): Category? {
-        TODO("Not yet implemented")
+        return categoryDao.getCategoryById(id)?.toDomain()
     }
 
     override suspend fun deleteById(id: Int): Boolean {

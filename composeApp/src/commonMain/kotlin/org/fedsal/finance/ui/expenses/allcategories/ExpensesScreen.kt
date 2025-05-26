@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.composables.SpentHeader
-import org.fedsal.finance.ui.expenses.ExpensesViewModel
 import org.fedsal.finance.ui.expenses.allcategories.composables.ExpenseCategoryItem
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt

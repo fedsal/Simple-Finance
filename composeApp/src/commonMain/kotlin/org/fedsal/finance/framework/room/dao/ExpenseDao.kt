@@ -27,7 +27,7 @@ interface ExpenseDao {
                 "strftime('%Y', date) = :year AND categoryId = :categoryId ORDER BY date DESC"
     )
     suspend fun getExpensesByCategory(
-        categoryId: String,
+        categoryId: Int,
         month: String,
         year: String
     ): List<ExpenseEntity>

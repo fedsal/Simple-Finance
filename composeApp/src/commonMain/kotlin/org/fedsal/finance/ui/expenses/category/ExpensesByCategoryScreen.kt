@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.AccountBalanceWallet
@@ -22,21 +23,32 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.fedsal.finance.domain.models.AppIcons
-import org.fedsal.finance.domain.models.Category
-import org.fedsal.finance.domain.models.PaymentMethod
-import org.fedsal.finance.domain.models.PaymentMethodType
 import org.fedsal.finance.ui.common.composables.ExpenseItem
 import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
+import org.fedsal.finance.ui.common.getIcon
+import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.expenses.category.composables.CategoryHeader
+import org.koin.compose.koinInject
 
 @Composable
-fun ExpensesByCategoryScreen() {
+fun ExpensesByCategoryScreen(
+    categoryId: Int = 0,
+    viewModel: ExpensesByCategoryViewModel = koinInject()
+) {
+
+    LaunchedEffect(Unit) {
+        viewModel.initViewModel(categoryId)
+    }
+
+    val uiState = viewModel.uiState.collectAsState()
+
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
         contentWindowInsets = WindowInsets.safeGestures,
@@ -65,13 +77,7 @@ fun ExpensesByCategoryScreen() {
             Spacer(Modifier.height(16.dp))
             CategoryHeader(
                 modifier = Modifier.padding(horizontal = 10.dp),
-                category = Category(
-                    id = 1,
-                    title = "Food",
-                    iconId = "food_icon",
-                    color = "0xFF000000",
-                    budget = 250000.0,
-                ),
+                category = uiState.value.category,
                 iconTint = Color.Green,
                 icon = Icons.Default.AccountBalanceWallet,
                 totalSpent = 200000.0,
@@ -79,36 +85,20 @@ fun ExpensesByCategoryScreen() {
                 onEditPressed = { /*TODO*/ },
             )
             Spacer(Modifier.height(20.dp))
-            val paymentMethods = listOf(
-                PaymentMethod(
-                    id = 1,
-                    name = "Efectivo",
-                    iconId = AppIcons.CASH.name,
-                    color = "F000000",
-                    type = PaymentMethodType.CASH
-                ),
-                PaymentMethod(
-                    id = 1,
-                    name = "Credit",
-                    iconId = AppIcons.CARD.name,
-                    color = "FF000000",
-                    type = PaymentMethodType.CREDIT
-                )
-            )
             PaymentMethodFilter(
-                items = paymentMethods,
+                items = emptyList(),
                 onItemSelected = {}
             )
             Spacer(Modifier.height(20.dp))
             LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                items(10) {
+                items(uiState.value.expenses) {
                     ExpenseItem(
                         modifier = Modifier.padding(horizontal = 10.dp),
-                        title = "Compra super",
-                        amount = 32000.0,
-                        paymentMethod = paymentMethods[0],
-                        icon = Icons.Default.AccountBalanceWallet,
-                        iconTint = Color.Green
+                        title = it.title,
+                        amount = it.amount,
+                        paymentMethod = it.paymentMethod,
+                        icon = getIcon(it.category.iconId),
+                        iconTint = hexToColor(it.category.color)
                     )
                 }
             }
