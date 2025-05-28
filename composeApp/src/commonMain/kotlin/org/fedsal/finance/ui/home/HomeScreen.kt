@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import org.fedsal.finance.ui.common.composables.AddCategoryButton
 import org.fedsal.finance.ui.common.composables.BaseModal
 import org.fedsal.finance.ui.common.composables.BottomNavigation
 import org.fedsal.finance.ui.common.composables.CategoryItem
@@ -66,6 +67,11 @@ fun HomeScreen(navController: NavHostController) {
                             onClick = {
                             }
                         )
+                    }
+                    item {
+                        AddCategoryButton {
+                            /* TODO */
+                        }
                     }
                 }
             }
