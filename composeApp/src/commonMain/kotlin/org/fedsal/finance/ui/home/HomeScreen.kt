@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,10 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.composables.AddCategoryButton
 import org.fedsal.finance.ui.common.composables.BaseModal
 import org.fedsal.finance.ui.common.composables.BottomNavigation
 import org.fedsal.finance.ui.common.composables.CategoryItem
+import org.fedsal.finance.ui.common.getIcon
+import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -52,28 +56,7 @@ fun HomeScreen(navController: NavHostController) {
                 onDismissRequest = { showBottomSheet = false },
                 title = "Agregar un gasto",
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(5) {
-                        CategoryItem(
-                            title = "Personal",
-                            spent = 30000.0,
-                            icon = Icons.Default.Home,
-                            iconTint = Color.Green,
-                            onClick = {
-                            }
-                        )
-                    }
-                    item {
-                        AddCategoryButton {
-                            /* TODO */
-                        }
-                    }
-                }
+
             }
         }
         SimpleFinanceNavigation(
@@ -87,4 +70,36 @@ fun HomeScreen(navController: NavHostController) {
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(rememberNavController())
+}
+
+@Composable
+fun SelectCategoryModalContent(
+    categories: List<Pair<Double, Category>>,
+    onCategoryClicked: (category: Category) -> Unit,
+    onNewCategoryClicked: () -> Unit,
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(categories) {
+            val (spent, category) = it
+            CategoryItem(
+                title = category.title,
+                spent = spent,
+                icon = getIcon(category.iconId),
+                iconTint = hexToColor(category.color),
+                onClick = {
+                    onCategoryClicked(category)
+                }
+            )
+        }
+        item {
+            AddCategoryButton {
+                onNewCategoryClicked()
+            }
+        }
+    }
 }
