@@ -1,6 +1,7 @@
 package org.fedsal.finance.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -58,29 +59,54 @@ fun HomeScreen(navController: NavHostController) {
         }
     ) {
         if (showBottomSheet) {
-            BaseModal(
-                sheetState = sheetState,
+            ModalBottomSheet(
                 onDismissRequest = { showBottomSheet = false },
-                title = "Agregar un gasto",
+                sheetState = sheetState,
             ) {
-                SelectCategoryModalContent(
-                    categories = listOf(
-                        Pair(100.0, Category(title = "food", budget = 2000.0, iconId ="food", color = "#FF0000")),
-                        Pair(50.0, Category(title = "food", budget = 2000.0, iconId ="food", color = "#FF0000")),
-                        Pair(200.0, Category(title = "food", budget = 2000.0, iconId ="food", color = "#FF0000"))
-                    ),
-                    onCategoryClicked = { category ->
-                        // Handle category selection
-                        showBottomSheet = false
-                        // Navigate to add expense screen with selected category
-                        //navController.navigate("add_expense/${category.id}")
-                    },
-                    onNewCategoryClicked = {
-                        // Handle new category creation
-                        showBottomSheet = false
-                        //navController.navigate("new_category")
-                    }
-                )
+                Box(modifier = Modifier.height(600.dp)) {
+                    SelectCategoryModalContent(
+                        categories = listOf(
+                            Pair(
+                                100.0,
+                                Category(
+                                    title = "food",
+                                    budget = 2000.0,
+                                    iconId = "food",
+                                    color = "#FF0000"
+                                )
+                            ),
+                            Pair(
+                                50.0,
+                                Category(
+                                    title = "food",
+                                    budget = 2000.0,
+                                    iconId = "food",
+                                    color = "#FF0000"
+                                )
+                            ),
+                            Pair(
+                                200.0,
+                                Category(
+                                    title = "food",
+                                    budget = 2000.0,
+                                    iconId = "food",
+                                    color = "#FF0000"
+                                )
+                            )
+                        ),
+                        onCategoryClicked = { category ->
+                            // Handle category selection
+                            showBottomSheet = false
+                            // Navigate to add expense screen with selected category
+                            //navController.navigate("add_expense/${category.id}")
+                        },
+                        onNewCategoryClicked = {
+                            // Handle new category creation
+                            showBottomSheet = false
+                            //navController.navigate("new_category")
+                        }
+                    )
+                }
             }
         }
         SimpleFinanceNavigation(
