@@ -54,7 +54,8 @@ fun AddExpenseModalContent(
             contentDescription = "Done",
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(16.dp)
+                .size(60.dp)
+                .padding(end = 24.dp)
                 .clickable {
                     if (selectedMethod >= 0) {
                         onNext(
