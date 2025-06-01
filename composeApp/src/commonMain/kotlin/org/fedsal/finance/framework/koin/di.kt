@@ -17,6 +17,8 @@ import org.fedsal.finance.framework.room.datasource.DebtRoomDataSource
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
 import org.fedsal.finance.ui.expenses.allcategories.ExpensesViewModel
 import org.fedsal.finance.ui.expenses.category.ExpensesByCategoryViewModel
+import org.fedsal.finance.ui.home.composables.AddExpenseModalViewModel
+import org.fedsal.finance.ui.home.composables.SelectCategoryViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -73,4 +75,6 @@ val useCaseModule = module {
 val provideViewModelModule = module {
     single { ExpensesViewModel(get()) }
     single { ExpensesByCategoryViewModel(get(), get()) }
+    single { AddExpenseModalViewModel(get()) }
+    single { SelectCategoryViewModel(get()) }
 }

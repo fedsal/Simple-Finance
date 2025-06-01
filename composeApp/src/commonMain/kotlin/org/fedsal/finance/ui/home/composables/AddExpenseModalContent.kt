@@ -15,18 +15,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -36,12 +35,21 @@ import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.PaymentMethodChip
+import org.fedsal.finance.ui.common.getIcon
+import org.fedsal.finance.ui.common.hexToColor
+import org.koin.compose.koinInject
 
 @Composable
 fun AddExpenseModalContent(
+    addExpenseModalViewModel: AddExpenseModalViewModel = koinInject(),
     category: Category, paymentMethods: List<PaymentMethod>,
-    onNext: (title: String, import: String, date: String, description: String, paymentMehod: PaymentMethod) -> Unit
+    onDismissRequest: () -> Unit,
 ) {
+    val uiState = addExpenseModalViewModel.uiState.collectAsState()
+    if (uiState.value.shouldContinue) {
+        onDismissRequest()
+        addExpenseModalViewModel.dispose()
+    }
     Box(Modifier.fillMaxSize()) {
         var title by remember { mutableStateOf("") }
         var importAmount by remember { mutableStateOf("") }
@@ -57,15 +65,15 @@ fun AddExpenseModalContent(
                 .size(60.dp)
                 .padding(end = 24.dp)
                 .clickable {
-                    if (selectedMethod >= 0) {
-                        onNext(
-                            title,
-                            importAmount,
-                            date,
-                            description,
-                            paymentMethods[selectedMethod]
+                    if (selectedMethod >= 0)
+                        addExpenseModalViewModel.addExpense(
+                            category = category,
+                            title = title,
+                            amount = importAmount.toDoubleOrNull() ?: 0.0,
+                            date = date,
+                            paymentMethod = paymentMethods[selectedMethod],
+                            description = description
                         )
-                    }
                 },
         )
 
@@ -75,7 +83,9 @@ fun AddExpenseModalContent(
             verticalArrangement = Arrangement.Top
         ) {
             CategoryIcon(
-                modifier = Modifier.size(50.dp), icon = Icons.Default.PushPin, iconTint = Color.Cyan
+                modifier = Modifier.size(50.dp),
+                icon = getIcon(category.iconId),
+                iconTint = hexToColor(category.color)
             )
             Spacer(Modifier.height(12.dp))
             Text(

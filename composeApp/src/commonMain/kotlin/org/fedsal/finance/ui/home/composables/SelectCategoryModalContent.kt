@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -21,13 +23,20 @@ import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.composables.AddCategoryButton
 import org.fedsal.finance.ui.common.composables.CategoryItem
 import org.fedsal.finance.ui.common.getIcon
+import org.koin.compose.koinInject
 
 @Composable
 fun SelectCategoryModalContent(
-    categories: List<Pair<Double, Category>>,
+    selectCategoryViewModel: SelectCategoryViewModel = koinInject(),
     onCategoryClicked: (category: Category) -> Unit,
     onNewCategoryClicked: () -> Unit,
 ) {
+
+    LaunchedEffect(Unit) {
+        selectCategoryViewModel.initViewModel()
+    }
+
+    val uiState = selectCategoryViewModel.uiState.collectAsState()
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Top) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -42,7 +51,7 @@ fun SelectCategoryModalContent(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(categories) {
+            items(uiState.value.categories) {
                 val (spent, category) = it
                 CategoryItem(
                     title = category.title,
