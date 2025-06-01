@@ -3,6 +3,7 @@ package org.fedsal.finance.ui.common
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -30,6 +31,7 @@ fun getIcon(name: String): ImageVector {
         return when (appIcon) {
             AppIcons.CARD -> Icons.Outlined.CreditCard
             AppIcons.CASH -> Icons.Filled.Paid
+            AppIcons.MARKET -> Icons.Outlined.ShoppingCart
         }
     } catch (e: IllegalArgumentException) {
         return Icons.Filled.Paid

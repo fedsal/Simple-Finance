@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -23,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.PaymentMethod
@@ -74,11 +74,13 @@ fun PaymentMethodFilter(
 fun PaymentMethodChip(
     paymentMethod: PaymentMethod,
     isSelected: Boolean,
+    baseColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    selectedColor: Color = MaterialTheme.colorScheme.surfaceBright,
     onClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier.clickable(onClick = onClick).height(50.dp).width(120.dp),
-        color = if (isSelected) MaterialTheme.colorScheme.surfaceBright else MaterialTheme.colorScheme.surfaceContainerLow,
+        color = if (isSelected) selectedColor else baseColor,
         shape = RoundedCornerShape(16.dp),
     ) {
         Row(

@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import org.fedsal.finance.domain.models.DefaultCategories
+import org.fedsal.finance.domain.models.DefaultPaymentMethods
 import org.fedsal.finance.ui.common.composables.BottomNavigation
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
@@ -46,7 +48,16 @@ fun HomeScreen(navController: NavHostController) {
                 sheetState = sheetState,
             ) {
                 Box(modifier = Modifier.height(600.dp)) {
-                    AddExpenseModalContent()
+                    AddExpenseModalContent(
+                        DefaultCategories.MARKET,
+                        paymentMethods = listOf(
+                            DefaultPaymentMethods.CASH,
+                            DefaultPaymentMethods.VISA
+                        ),
+                        onNext = { _, _, _ , _ , _ ->
+
+                        }
+                    )
                 }
             }
         }

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PaymentMethod (
-    val id: Int,
+    val id: Int = 0,
     val name: String,
     val type: PaymentMethodType,
     val iconId: String,
