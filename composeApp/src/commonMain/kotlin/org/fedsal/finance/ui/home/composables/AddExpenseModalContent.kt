@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +32,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Category
-import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.PaymentMethodChip
@@ -42,14 +42,20 @@ import org.koin.compose.koinInject
 @Composable
 fun AddExpenseModalContent(
     addExpenseModalViewModel: AddExpenseModalViewModel = koinInject(),
-    category: Category, paymentMethods: List<PaymentMethod>,
+    category: Category,
     onDismissRequest: () -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        addExpenseModalViewModel.initViewModel()
+    }
     val uiState = addExpenseModalViewModel.uiState.collectAsState()
     if (uiState.value.shouldContinue) {
         onDismissRequest()
         addExpenseModalViewModel.dispose()
     }
+
+    val paymentMethods = uiState.value.paymentMethods
+
     Box(Modifier.fillMaxSize()) {
         var title by remember { mutableStateOf("") }
         var importAmount by remember { mutableStateOf("") }

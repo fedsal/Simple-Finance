@@ -7,12 +7,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.fedsal.finance.data.expense.ExpenseRepository
+import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.domain.models.PaymentMethod
 
 class AddExpenseModalViewModel(
-    private val expenseRepository: ExpenseRepository
+    private val expenseRepository: ExpenseRepository,
+    private val paymentMethodRepository: PaymentMethodRepository
 ) : ViewModel() {
 
     data class UIState(
@@ -24,6 +26,22 @@ class AddExpenseModalViewModel(
 
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> get() = _uiState
+
+    fun initViewModel() {
+        getPaymentMethods()
+    }
+
+    private fun getPaymentMethods() = viewModelScope.launch {
+        _uiState.update { it.copy(isLoading = true) }
+        runCatching { paymentMethodRepository.read() }
+            .onSuccess { paymentMethods ->
+                _uiState.update { it.copy(paymentMethods = paymentMethods, isLoading = false) }
+            }
+            .onFailure { exception ->
+                _uiState.update { it.copy(isLoading = false, error = exception.message) }
+                exception.printStackTrace()
+            }
+    }
 
     /**
      * Adds an expense to the repository.

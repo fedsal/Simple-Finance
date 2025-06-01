@@ -6,6 +6,8 @@ import org.fedsal.finance.data.debt.DebtLocalDataSource
 import org.fedsal.finance.data.debt.DebtRepository
 import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.data.expense.ExpenseRepository
+import org.fedsal.finance.data.paymentmethod.PaymentMethodLocalDataSource
+import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
 import org.fedsal.finance.framework.room.database.getCategoryDao
 import org.fedsal.finance.framework.room.database.getDebtDao
@@ -15,6 +17,7 @@ import org.fedsal.finance.framework.room.database.getRoomDatabase
 import org.fedsal.finance.framework.room.datasource.CategoryRoomDataSource
 import org.fedsal.finance.framework.room.datasource.DebtRoomDataSource
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
+import org.fedsal.finance.framework.room.datasource.PaymentMethodRoomDataSource
 import org.fedsal.finance.ui.expenses.allcategories.ExpensesViewModel
 import org.fedsal.finance.ui.expenses.category.ExpensesByCategoryViewModel
 import org.fedsal.finance.ui.home.composables.AddExpenseModalViewModel
@@ -52,12 +55,14 @@ val provideDataSourceModule = module {
     singleOf(::ExpenseRoomDataSource).bind(ExpenseLocalDataSource::class)
     singleOf(::DebtRoomDataSource).bind(DebtLocalDataSource::class)
     singleOf(::CategoryRoomDataSource).bind(CategoryLocalDataSource::class)
+    singleOf(::PaymentMethodRoomDataSource).bind(PaymentMethodLocalDataSource::class)
 }
 
 val provideRepositoryModule = module {
     singleOf(::ExpenseRepository)
     singleOf(::DebtRepository)
     singleOf(::CategoryRepository)
+    singleOf(::PaymentMethodRepository)
 }
 
 val provideDatabaseModule = module {
@@ -75,6 +80,6 @@ val useCaseModule = module {
 val provideViewModelModule = module {
     single { ExpensesViewModel(get()) }
     single { ExpensesByCategoryViewModel(get(), get()) }
-    single { AddExpenseModalViewModel(get()) }
+    single { AddExpenseModalViewModel(get(), get()) }
     single { SelectCategoryViewModel(get()) }
 }

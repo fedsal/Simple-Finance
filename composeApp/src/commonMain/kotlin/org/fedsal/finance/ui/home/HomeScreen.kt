@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.domain.models.Category
-import org.fedsal.finance.domain.models.DefaultPaymentMethods
 import org.fedsal.finance.ui.common.composables.BottomNavigation
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
@@ -85,10 +84,6 @@ fun ButtonBottomSheet(
                 category?.let { safeCategory ->
                     AddExpenseModalContent(
                         category = safeCategory,
-                        paymentMethods = listOf(
-                            DefaultPaymentMethods.CASH,
-                            DefaultPaymentMethods.CREDIT_CARD
-                        ),
                         onDismissRequest = onDismissRequest
                     )
                 }
