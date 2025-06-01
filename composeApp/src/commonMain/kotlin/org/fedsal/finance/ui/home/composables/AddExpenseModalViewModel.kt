@@ -18,6 +18,7 @@ class AddExpenseModalViewModel(
     data class UIState(
         val isLoading: Boolean = false,
         val shouldContinue: Boolean = false,
+        val paymentMethods: List<PaymentMethod> = emptyList(),
         val error: String? = null
     )
 

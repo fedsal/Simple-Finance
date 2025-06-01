@@ -1,7 +1,11 @@
 package org.fedsal.finance.ui.common
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Paid
+import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.Color
@@ -31,7 +35,11 @@ fun getIcon(name: String): ImageVector {
         return when (appIcon) {
             AppIcons.CARD -> Icons.Outlined.CreditCard
             AppIcons.CASH -> Icons.Filled.Paid
-            AppIcons.MARKET -> Icons.Outlined.ShoppingCart
+            AppIcons.SHOPPING_CART -> Icons.Outlined.ShoppingCart
+            AppIcons.PIN -> Icons.Filled.PushPin
+            AppIcons.CAR -> Icons.Filled.DirectionsCar
+            AppIcons.HOME -> Icons.Filled.Home
+            AppIcons.SHOPPING_BAG -> Icons.Filled.ShoppingBag
         }
     } catch (e: IllegalArgumentException) {
         return Icons.Filled.Paid

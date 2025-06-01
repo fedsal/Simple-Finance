@@ -3,6 +3,7 @@ package org.fedsal.finance.framework.room.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import org.fedsal.finance.framework.room.model.PaymentMethodEntity
@@ -23,4 +24,7 @@ interface PaymentMethodDao {
 
     @Query("SELECT * FROM payment_methods WHERE id = :id")
     suspend fun getPaymentMethodById(id: Int): PaymentMethodEntity?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(vararg methods: PaymentMethodEntity)
 }

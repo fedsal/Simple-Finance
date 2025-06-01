@@ -8,8 +8,8 @@ object DefaultPaymentMethods {
         color = "#FF00A300"
     )
 
-    val VISA = PaymentMethod(
-        name = "VISA",
+    val CREDIT_CARD = PaymentMethod(
+        name = "Credito",
         iconId = AppIcons.CARD.name,
         type = PaymentMethodType.CREDIT,
         color = "#FF00A300"

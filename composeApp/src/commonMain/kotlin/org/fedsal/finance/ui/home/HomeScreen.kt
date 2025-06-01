@@ -87,7 +87,7 @@ fun ButtonBottomSheet(
                         category = safeCategory,
                         paymentMethods = listOf(
                             DefaultPaymentMethods.CASH,
-                            DefaultPaymentMethods.VISA
+                            DefaultPaymentMethods.CREDIT_CARD
                         ),
                         onDismissRequest = onDismissRequest
                     )
