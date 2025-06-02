@@ -50,7 +50,7 @@ class ExpensesViewModel(
         _uiState.value = uiState.value.copy(isLoading = true)
         try {
             getExpensesByCategoryUseCase(
-                params = GetExpensesByCategoryUseCase.Params(month = month, year = 2023),
+                params = GetExpensesByCategoryUseCase.Params(month = month, year = 2025),
                 onError = {
                     throw it
                 },

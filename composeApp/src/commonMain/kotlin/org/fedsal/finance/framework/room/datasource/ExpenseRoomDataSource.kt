@@ -31,9 +31,10 @@ class ExpenseRoomDataSource(
         month: Month,
         year: Int
     ): List<Expense> {
+        val paddedMonth = (month.ordinal + 1).toString().padStart(2, '0')
         return expenseDao.getExpensesByCategory(
             categoryId,
-            (month.ordinal + 1).toString(),
+            paddedMonth,
             year.toString()
         ).map { it.toDomain() }
     }
