@@ -7,5 +7,7 @@ data class CategoryExpensesUiState(
     val isLoading: Boolean = false,
     val category: Category = Category(),
     val expenses: List<Expense> = emptyList(),
+    val totalSpent: Double = 0.0,
+    val availableAmount: Double = 0.0,
     val error: String? = null,
 )

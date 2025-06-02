@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.ExpenseItem
@@ -82,10 +80,10 @@ fun ExpensesByCategoryScreen(
             CategoryHeader(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 category = uiState.value.category,
-                iconTint = Color.Green,
-                icon = Icons.Default.AccountBalanceWallet,
-                totalSpent = 200000.0,
-                availableAmount = 50000.0,
+                iconTint = hexToColor(uiState.value.category.color),
+                icon = getIcon(uiState.value.category.iconId),
+                totalSpent = uiState.value.totalSpent,
+                availableAmount = uiState.value.availableAmount,
                 onEditPressed = { /*TODO*/ },
             )
             Spacer(Modifier.height(20.dp))
@@ -101,8 +99,8 @@ fun ExpensesByCategoryScreen(
                         title = it.title,
                         amount = it.amount,
                         paymentMethod = it.paymentMethod,
-                        icon = getIcon(it.category.iconId),
-                        iconTint = hexToColor(it.category.color)
+                        icon = getIcon(uiState.value.category.iconId),
+                        iconTint = hexToColor(uiState.value.category.color)
                     )
                 }
             }

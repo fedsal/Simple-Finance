@@ -39,7 +39,9 @@ class ExpensesByCategoryViewModel(
             _uiState.value = uiState.value.copy(
                 isLoading = false,
                 category = category,
-                expenses = expenses
+                expenses = expenses,
+                totalSpent = expenses.sumOf { it.amount },
+                availableAmount = category.budget - expenses.sumOf { it.amount }
             )
         } catch (e: Exception) {
             _uiState.value = uiState.value.copy(
