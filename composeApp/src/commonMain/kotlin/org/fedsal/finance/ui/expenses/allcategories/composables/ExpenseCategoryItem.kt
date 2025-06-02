@@ -23,14 +23,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.opaqueColor
 
 @Composable
 fun ExpenseCategoryItem(
     modifier: Modifier = Modifier,
     categoryName: String,
-    totalSpent: String,
-    availableAmount: String,
+    totalSpent: Double,
+    availableAmount: Double,
     onClick: () -> Unit = {},
     icon: ImageVector,
     iconTint: Color,
@@ -56,7 +57,7 @@ fun ExpenseCategoryItem(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = totalSpent,
+                    text = "$ ${totalSpent.formatDecimal()}",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp
@@ -64,7 +65,7 @@ fun ExpenseCategoryItem(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = availableAmount,
+                    text = "$ ${availableAmount.formatDecimal()}",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = Color.Green.copy(alpha = .8f)
                 )

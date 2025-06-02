@@ -48,13 +48,32 @@ fun getIcon(name: String): ImageVector {
 
 
 fun hexToColor(hex: String): Color {
-    val color = hex.removePrefix("#")
-    val parsed = when (color.length) {
-        6 -> "FF$color" // Add alpha if missing
-        8 -> color
-        else -> throw IllegalArgumentException("Invalid color format")
+    val cleanHex = hex.removePrefix("#")
+    try {
+        val argb = when (cleanHex.length) {
+            6 -> { // RRGGBB → assume alpha = FF
+                val r = cleanHex.substring(0, 2).toInt(16)
+                val g = cleanHex.substring(2, 4).toInt(16)
+                val b = cleanHex.substring(4, 6).toInt(16)
+                Color(r, g, b, 255)
+            }
+
+            8 -> { // AARRGGBB
+                val a = cleanHex.substring(0, 2).toInt(16)
+                val r = cleanHex.substring(2, 4).toInt(16)
+                val g = cleanHex.substring(4, 6).toInt(16)
+                val b = cleanHex.substring(6, 8).toInt(16)
+                Color(r, g, b, a)
+            }
+
+            else -> throw IllegalArgumentException("Invalid color format: $hex")
+        }
+
+        return argb
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return Color.Blue
     }
-    return Color(parsed.toULong(16))
 }
 
 fun opaqueColor(color: Color, factor: Float = 0.55f): Color {

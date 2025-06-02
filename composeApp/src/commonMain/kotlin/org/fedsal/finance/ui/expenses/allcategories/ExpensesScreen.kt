@@ -11,17 +11,16 @@ import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.composables.SpentHeader
+import org.fedsal.finance.ui.common.getIcon
+import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.expenses.allcategories.composables.ExpenseCategoryItem
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
@@ -65,10 +64,10 @@ fun ExpensesScreen(
                 items(uiState.value.expenses) {
                     ExpenseCategoryItem(
                         categoryName = it.category.title,
-                        totalSpent = it.totalSpent.toString(),
-                        availableAmount = it.availableAmount.toString(),
-                        icon = Icons.Outlined.ShoppingCart,
-                        iconTint = Color.Magenta,
+                        totalSpent = it.totalSpent,
+                        availableAmount = it.availableAmount,
+                        icon = getIcon(it.category.iconId),
+                        iconTint = hexToColor(it.category.color),
                         onClick = {
                             viewModel.initViewModel()
                         }
