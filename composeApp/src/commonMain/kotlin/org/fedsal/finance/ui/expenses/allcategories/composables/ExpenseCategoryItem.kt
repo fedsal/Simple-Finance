@@ -36,7 +36,9 @@ fun ExpenseCategoryItem(
     icon: ImageVector,
     iconTint: Color,
 ) {
-    Box(contentAlignment = Alignment.TopCenter, modifier = modifier.clickable { onClick.invoke() }) {
+    Box(
+        contentAlignment = Alignment.TopCenter,
+        modifier = modifier.clickable { onClick.invoke() }) {
         Surface(
             modifier = Modifier.padding(top = 20.dp).width(180.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -67,7 +69,9 @@ fun ExpenseCategoryItem(
                 Text(
                     text = "$ ${availableAmount.formatDecimal()}",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = Color.Green.copy(alpha = .8f)
+                    color = if (availableAmount > 0) Color.Green.copy(alpha = .8f) else Color.Red.copy(
+                        alpha = .9f
+                    )
                 )
             }
         }

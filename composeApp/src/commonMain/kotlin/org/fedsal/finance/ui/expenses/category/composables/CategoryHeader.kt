@@ -45,7 +45,10 @@ fun CategoryHeader(
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             shape = RoundedCornerShape(20.dp)
         ) {
-            Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     Icon(
                         modifier = Modifier.clickable { onEditPressed.invoke() },
@@ -81,7 +84,10 @@ fun CategoryHeader(
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = "$ ${availableAmount.formatDecimal()}",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold, color = Color.Green),
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = if (availableAmount > 0) Color.Green else Color.Red
+                    ),
                 )
             }
         }

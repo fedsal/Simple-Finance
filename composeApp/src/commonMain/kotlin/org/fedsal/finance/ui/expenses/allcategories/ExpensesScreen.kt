@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.composables.SpentHeader
+import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.expenses.allcategories.composables.ExpenseCategoryItem
@@ -55,7 +56,7 @@ fun ExpensesScreen(
         ) {
             Spacer(Modifier.height(10.dp))
             // TODO: Handle decimal values
-            SpentHeader(totalSpent = "$ ${uiState.value.totalSpent.roundToInt()}")
+            SpentHeader(totalSpent = "$ ${uiState.value.totalSpent.formatDecimal()}")
             Spacer(Modifier.height(20.dp))
             LazyVerticalGrid(
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
