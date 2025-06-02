@@ -9,5 +9,8 @@ sealed class HomeDestination {
     @Serializable
     data object Home : HomeDestination()
     @Serializable
-    data object Shop : HomeDestination()
+    data object Balance : HomeDestination()
 }
+
+@Serializable
+data class CategoryExpenses(val id: Int)

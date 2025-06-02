@@ -2,6 +2,7 @@ package org.fedsal.finance.ui.expenses.category
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,7 +41,8 @@ import org.koin.compose.koinInject
 @Composable
 fun ExpensesByCategoryScreen(
     categoryId: Int = 0,
-    viewModel: ExpensesByCategoryViewModel = koinInject()
+    viewModel: ExpensesByCategoryViewModel = koinInject(),
+    onNavigateBack: () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -58,21 +60,23 @@ fun ExpensesByCategoryScreen(
                 .padding(top = paddingValues.calculateTopPadding(), start = 12.dp, end = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
-                    contentDescription = "Volver",
-                    modifier = Modifier.height(20.dp).clickable { }
-                )
-                Spacer(Modifier.width(4.dp))
-                Text(
-                    text = "VOLVER",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.clickable { }
-                )
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                        .clickable { onNavigateBack() },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                        contentDescription = "Volver",
+                        modifier = Modifier.height(20.dp)
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = "VOLVER",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    )
+                }
             }
             Spacer(Modifier.height(16.dp))
             CategoryHeader(

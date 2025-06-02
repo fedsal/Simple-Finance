@@ -27,7 +27,8 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ExpensesScreen(
-    viewModel: ExpensesViewModel = koinViewModel()
+    viewModel: ExpensesViewModel = koinViewModel(),
+    onNavigateToCategory: (categoryId: Int) -> Unit
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.initViewModel()
@@ -69,7 +70,7 @@ fun ExpensesScreen(
                         icon = getIcon(it.category.iconId),
                         iconTint = hexToColor(it.category.color),
                         onClick = {
-                            viewModel.initViewModel()
+                            onNavigateToCategory.invoke(it.category.id)
                         }
                     )
                 }

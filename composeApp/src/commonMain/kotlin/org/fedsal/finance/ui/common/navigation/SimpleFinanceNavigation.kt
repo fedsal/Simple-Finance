@@ -13,7 +13,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import org.fedsal.finance.ui.expenses.allcategories.ExpensesScreen
+import org.fedsal.finance.ui.expenses.category.ExpensesByCategoryScreen
 
 @Composable
 fun SimpleFinanceNavigation(
@@ -28,10 +31,23 @@ fun SimpleFinanceNavigation(
         navigation<HomeDestination.HomeGraph>(startDestination = HomeDestination.Home) {
             composable<HomeDestination.Home>(
                 enterTransition = { EnterTransition.None }
-            ) { ExpensesScreen() }
-            composable<HomeDestination.Shop>(
+            ) {
+                ExpensesScreen(onNavigateToCategory = { categoryId ->
+                    navController.navigate(
+                        route = CategoryExpenses(categoryId),
+                        navOptions = navOptions { launchSingleTop = true }
+                    )
+                })
+            }
+            composable<HomeDestination.Balance>(
                 enterTransition = { EnterTransition.None }
             ) { Text("Balance") }
+        }
+        animatedComposable<CategoryExpenses> { backStackEntry ->
+            val categoryExpenses: CategoryExpenses = backStackEntry.toRoute()
+            ExpensesByCategoryScreen(categoryExpenses.id) {
+                navController.navigateUp()
+            }
         }
     }
 }

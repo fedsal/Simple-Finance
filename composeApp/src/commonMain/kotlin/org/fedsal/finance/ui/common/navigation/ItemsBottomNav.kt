@@ -19,6 +19,6 @@ sealed class ItemsBottomNav(
     data object Balance: ItemsBottomNav(
         icon = Icons.Outlined.AccountBalance,
         title = "Balance",
-        route = HomeDestination.Shop
+        route = HomeDestination.Balance
     )
 }
