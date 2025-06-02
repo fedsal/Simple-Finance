@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,6 +22,7 @@ import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.composables.AddCategoryButton
 import org.fedsal.finance.ui.common.composables.CategoryItem
 import org.fedsal.finance.ui.common.getIcon
+import org.fedsal.finance.ui.common.hexToColor
 import org.koin.compose.koinInject
 
 @Composable
@@ -57,7 +57,7 @@ fun SelectCategoryModalContent(
                     title = category.title,
                     spent = spent,
                     icon = getIcon(category.iconId),
-                    iconTint = Color.Magenta,
+                    iconTint = hexToColor(category.color),
                     onClick = {
                         onCategoryClicked(category)
                     }
