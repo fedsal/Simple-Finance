@@ -5,14 +5,17 @@ import androidx.lifecycle.viewModelScope
 import io.ktor.util.date.Month
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.expense.ExpenseRepository
+import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import kotlin.properties.Delegates
 
 class ExpensesByCategoryViewModel(
     private val expenseRepository: ExpenseRepository,
     private val categoryRepository: CategoryRepository,
+    private val paymentMethodRepository: PaymentMethodRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CategoryExpensesUiState())
     val uiState: StateFlow<CategoryExpensesUiState> get() = _uiState
@@ -22,31 +25,49 @@ class ExpensesByCategoryViewModel(
         // Initialization logic if needed
         this.categoryId = categoryId
         loadExpenses()
+        loadPaymentMethods()
     }
 
     private fun loadExpenses() = viewModelScope.launch {
         _uiState.value = uiState.value.copy(isLoading = true)
-        try {
+        runCatching {
             val category =
                 categoryRepository.getById(this@ExpensesByCategoryViewModel.categoryId)
                     ?: throw IllegalStateException("Category not found")
-            val expenses =
-                expenseRepository.getExpensesByCategory(
-                    this@ExpensesByCategoryViewModel.categoryId,
-                    Month.MAY,
-                    2025
+
+            expenseRepository.getExpensesByCategory(
+                this@ExpensesByCategoryViewModel.categoryId,
+                Month.MAY,
+                2025
+            ).collectLatest { expenses ->
+                _uiState.value = uiState.value.copy(
+                    isLoading = false,
+                    category = category,
+                    expenses = expenses,
+                    totalSpent = expenses.sumOf { it.amount },
+                    availableAmount = category.budget - expenses.sumOf { it.amount }
                 )
-            _uiState.value = uiState.value.copy(
-                isLoading = false,
-                category = category,
-                expenses = expenses,
-                totalSpent = expenses.sumOf { it.amount },
-                availableAmount = category.budget - expenses.sumOf { it.amount }
-            )
-        } catch (e: Exception) {
+            }
+        }.onFailure { e ->
             _uiState.value = uiState.value.copy(
                 isLoading = false,
                 error = e.message ?: "An error occurred"
+            )
+        }
+    }
+
+    private fun loadPaymentMethods() = viewModelScope.launch {
+        _uiState.value = uiState.value.copy(isLoading = true)
+        runCatching {
+            val paymentMethods = paymentMethodRepository.read()
+            _uiState.value = uiState.value.copy(
+                isLoading = false,
+                paymentMethods = paymentMethods
+            )
+        }.onFailure { e ->
+            _uiState.value = uiState.value.copy(
+                isLoading = false,
+                error = e.message ?: "Failed to load payment methods"
             )
         }
     }

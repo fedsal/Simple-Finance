@@ -11,6 +11,7 @@ import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.domain.models.PaymentMethod
+import org.fedsal.finance.ui.common.convertToIso
 
 class AddExpenseModalViewModel(
     private val expenseRepository: ExpenseRepository,
@@ -66,7 +67,7 @@ class AddExpenseModalViewModel(
             title = title,
             category = category,
             amount = amount,
-            date = date,
+            date = convertToIso(date),
             paymentMethod = paymentMethod,
             description = description
         )

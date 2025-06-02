@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import io.ktor.util.date.Month
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
 
 class ExpensesViewModel(
     private val getExpensesByCategoryUseCase: GetExpensesByCategoryUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ExpensesUIState())
     val uiState: StateFlow<ExpensesUIState> get() = _uiState
@@ -24,7 +25,10 @@ class ExpensesViewModel(
             is ExpensesUIEvent.OnErrorConsumed -> {
                 _uiState.value = uiState.value.copy(error = null)
             }
-            is ExpensesUIEvent.OnCategorySelected -> { /* TODO */ }
+
+            is ExpensesUIEvent.OnCategorySelected -> { /* TODO */
+            }
+
             ExpensesUIEvent.OnMonthDecremented -> {
                 val currentMonth = uiState.value.selectedMonth.ordinal
                 val newMonth = if (currentMonth == 0) {
@@ -34,6 +38,7 @@ class ExpensesViewModel(
                 }
                 getExpensesByCategory(newMonth)
             }
+
             ExpensesUIEvent.OnMonthIncremented -> {
                 val currentMonth = uiState.value.selectedMonth.ordinal
                 val newMonth = if (currentMonth == Month.entries.lastIndex) {
@@ -46,25 +51,29 @@ class ExpensesViewModel(
         }
     }
 
-    private fun getExpensesByCategory(month: Month) = viewModelScope.launch {
+    private fun getExpensesByCategory(month: Month) {
         _uiState.value = uiState.value.copy(isLoading = true)
-        try {
+        runCatching {
             getExpensesByCategoryUseCase(
                 params = GetExpensesByCategoryUseCase.Params(month = month, year = 2025),
                 onError = {
                     throw it
                 },
                 onSuccess = { categories ->
-                    val totalSpent = categories.sumOf { it.totalSpent }
-                    _uiState.value = uiState.value.copy(
-                        isLoading = false,
-                        expenses = categories,
-                        totalSpent = totalSpent,
-                        selectedMonth = month
-                    )
+                    viewModelScope.launch {
+                        categories.collectLatest { expensesByCategory ->
+                            val totalSpent = expensesByCategory.sumOf { it.totalSpent }
+                            _uiState.value = uiState.value.copy(
+                                isLoading = false,
+                                expenses = expensesByCategory,
+                                totalSpent = totalSpent,
+                                selectedMonth = month
+                            )
+                        }
+                    }
                 }
             )
-        } catch (e: Exception) {
+        }.onFailure { e ->
             _uiState.value = uiState.value.copy(
                 isLoading = false,
                 error = e.message

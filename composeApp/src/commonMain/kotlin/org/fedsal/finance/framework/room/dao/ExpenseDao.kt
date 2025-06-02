@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.framework.room.model.ExpenseEntity
 
 @Dao
@@ -26,9 +27,9 @@ interface ExpenseDao {
         "SELECT * FROM expenses WHERE strftime('%m', date) = :month AND " +
                 "strftime('%Y', date) = :year AND categoryId = :categoryId ORDER BY date DESC"
     )
-    suspend fun getExpensesByCategory(
+    fun getExpensesByCategory(
         categoryId: Int,
         month: String,
         year: String
-    ): List<ExpenseEntity>
+    ): Flow<List<ExpenseEntity>>
 }

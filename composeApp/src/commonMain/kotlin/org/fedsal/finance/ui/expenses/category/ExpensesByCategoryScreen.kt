@@ -58,6 +58,8 @@ fun ExpensesByCategoryScreen(
                 .padding(top = paddingValues.calculateTopPadding(), start = 12.dp, end = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            // Back navigation button
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -77,6 +79,8 @@ fun ExpensesByCategoryScreen(
                 }
             }
             Spacer(Modifier.height(16.dp))
+
+            // Category header
             CategoryHeader(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 category = uiState.value.category,
@@ -87,21 +91,42 @@ fun ExpensesByCategoryScreen(
                 onEditPressed = { /*TODO*/ },
             )
             Spacer(Modifier.height(20.dp))
+
+            // Payment method filter
             PaymentMethodFilter(
-                items = emptyList(),
+                items = uiState.value.paymentMethods,
                 onItemSelected = {}
             )
             Spacer(Modifier.height(20.dp))
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                items(uiState.value.expenses) {
-                    ExpenseItem(
-                        modifier = Modifier.padding(horizontal = 10.dp),
-                        title = it.title,
-                        amount = it.amount,
-                        paymentMethod = it.paymentMethod,
-                        icon = getIcon(uiState.value.category.iconId),
-                        iconTint = hexToColor(uiState.value.category.color)
+
+
+            // Expenses section
+            if (uiState.value.expenses.isEmpty()) {
+                // No expenses message
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "No hay ningun gasto!",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(horizontal = 10.dp)
                     )
+                }
+            } else {
+                // Expenses list
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    items(uiState.value.expenses) {
+                        ExpenseItem(
+                            modifier = Modifier.padding(horizontal = 10.dp),
+                            title = it.title,
+                            amount = it.amount,
+                            paymentMethod = it.paymentMethod,
+                            icon = getIcon(uiState.value.category.iconId),
+                            iconTint = hexToColor(uiState.value.category.color)
+                        )
+                    }
                 }
             }
         }

@@ -79,3 +79,11 @@ fun hexToColor(hex: String): Color {
 fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
     return lerp(color, Color.Black, factor.coerceIn(0f, 1f))
 }
+
+fun convertToIso(input: String): String {
+    val parts = input.split("/") // expecting "dd/MM/yyyy"
+    val day = parts[0].padStart(2, '0')
+    val month = parts[1].padStart(2, '0')
+    val year = parts[2]
+    return "$year-$month-$day" // returns "yyyy-MM-dd"
+}

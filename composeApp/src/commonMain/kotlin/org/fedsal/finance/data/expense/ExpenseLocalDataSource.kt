@@ -1,6 +1,7 @@
 package org.fedsal.finance.data.expense
 
 import io.ktor.util.date.Month
+import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.domain.models.Expense
 
 interface ExpenseLocalDataSource {
@@ -9,5 +10,5 @@ interface ExpenseLocalDataSource {
     suspend fun update(expense: Expense)
     suspend fun delete(expense: Expense)
 
-    suspend fun getExpensesByCategory(categoryId: Int, month: Month, year: Int): List<Expense>
+    fun getExpensesByCategory(categoryId: Int, month: Month, year: Int): Flow<List<Expense>>
 }

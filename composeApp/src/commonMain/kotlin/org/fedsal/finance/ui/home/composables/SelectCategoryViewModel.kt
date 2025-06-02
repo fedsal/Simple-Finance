@@ -27,7 +27,7 @@ class SelectCategoryViewModel(
         loadCategories()
     }
 
-    private fun loadCategories() = viewModelScope.launch {
+    private fun loadCategories() {
         _uiState.value = UIState(isLoading = true)
         runCatching {
             getExpensesByCategoryUseCase.invoke(
@@ -37,10 +37,14 @@ class SelectCategoryViewModel(
                 ),
                 onError = { throw it },
                 onSuccess = { categories ->
-                    _uiState.update { ui ->
-                        ui.copy(isLoading = false, categories = categories.map {
-                            it.totalSpent to it.category
-                        })
+                    viewModelScope.launch {
+                        categories.collect { expensesByCategories ->
+                            _uiState.update { ui ->
+                                ui.copy(isLoading = false, categories = expensesByCategories.map {
+                                    it.totalSpent to it.category
+                                })
+                            }
+                        }
                     }
                 }
             )

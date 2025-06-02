@@ -1,6 +1,8 @@
 package org.fedsal.finance.framework.room.datasource
 
 import io.ktor.util.date.Month
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.framework.room.dao.ExpenseDao
@@ -26,16 +28,16 @@ class ExpenseRoomDataSource(
         expenseDao.delete(expense.toEntity())
     }
 
-    override suspend fun getExpensesByCategory(
+    override fun getExpensesByCategory(
         categoryId: Int,
         month: Month,
         year: Int
-    ): List<Expense> {
+    ): Flow<List<Expense>> {
         val paddedMonth = (month.ordinal + 1).toString().padStart(2, '0')
         return expenseDao.getExpensesByCategory(
             categoryId,
             paddedMonth,
             year.toString()
-        ).map { it.toDomain() }
+        ).map { expenseEntities -> expenseEntities.map { it.toDomain() } }
     }
 }
