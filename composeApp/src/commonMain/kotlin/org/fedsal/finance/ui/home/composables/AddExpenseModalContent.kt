@@ -34,12 +34,14 @@ import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
+import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.PaymentMethodChip
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
+import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
 import org.koin.compose.koinInject
 
 @Composable
@@ -117,14 +119,27 @@ fun AddExpenseModalContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "USD")
                 CustomEditText(
                     modifier = Modifier.width(180.dp),
                     value = importAmount,
-                    onValueChange = { importAmount = it },
+                    onValueChange = { newValue ->
+                        /**
+                         * Trim entered value removing 0 at start and then remove
+                         * every characters that is not a digit
+                         * Update value only if it's empty or if value is not higher
+                         * than 10000
+                         */
+                        val trimmed = newValue.trimStart('0').trim { it.isDigit().not() }
+                        if (trimmed.isEmpty() || trimmed.toInt() <= ExpenseDefaults.MAX_EXPENSE_VALUE) {
+                            importAmount = trimmed
+                        }
+                    },
                     label = "Importe",
                     placeHolder = "$ --- ---",
                     textAlign = TextAlign.Center,
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    visualTransformation = currencyVisualTransformation
                 )
                 CustomEditText(
                     modifier = Modifier.width(180.dp),
@@ -171,21 +186,5 @@ fun AddExpenseModalContent(
                 placeHolder = "Ingrese la descripción",
             )
         }
-    }
-}
-
-fun processDateInput(input: String): String {
-    val digits = input.filter { it.isDigit() }
-
-    // Step 1: Handle case like "12/" → remove last digit and slash
-    if (input.length == 3 && input[2] == '/') {
-        return digits.firstOrNull()?.toString() ?: ""
-    }
-
-    // Step 2: Format digits into dd/MM
-    return when {
-        digits.length <= 2 -> digits
-        digits.length <= 4 -> digits.substring(0, 2) + "/" + digits.substring(2)
-        else -> digits.substring(0, 2) + "/" + digits.substring(2, 4)  // trim extra
     }
 }

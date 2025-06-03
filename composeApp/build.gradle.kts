@@ -54,6 +54,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+            implementation("io.fluidsonic.currency:fluid-currency:0.13.0")
             implementation(libs.navigation.compose)
 
             // Ktor

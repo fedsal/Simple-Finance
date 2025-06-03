@@ -96,3 +96,7 @@ object DateDefaults {
     const val DATE_MASK = "##/##"
     const val DATE_LENGTH = 4
 }
+
+object ExpenseDefaults {
+    const val MAX_EXPENSE_VALUE = 10000000
+}
