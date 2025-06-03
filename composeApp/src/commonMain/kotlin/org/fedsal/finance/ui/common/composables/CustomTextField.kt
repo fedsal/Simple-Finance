@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -29,7 +30,8 @@ fun CustomEditText(
     placeHolder: String,
     textAlign: TextAlign = TextAlign.Start,
     style: TextStyle = MaterialTheme.typography.titleMedium,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     Box(modifier = modifier) {
         OutlinedTextField(
@@ -46,6 +48,7 @@ fun CustomEditText(
             },
             singleLine = true,
             maxLines = 1,
+            visualTransformation = visualTransformation,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             textStyle = style.copy(textAlign = textAlign),
             shape = RoundedCornerShape(20.dp),

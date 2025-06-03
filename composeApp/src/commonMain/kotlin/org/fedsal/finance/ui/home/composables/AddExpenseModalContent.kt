@@ -32,6 +32,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
+import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
+import org.fedsal.finance.ui.common.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.PaymentMethodChip
@@ -126,9 +129,14 @@ fun AddExpenseModalContent(
                 CustomEditText(
                     modifier = Modifier.width(180.dp),
                     value = date,
-                    onValueChange = { date = it },
+                    onValueChange = {
+                        if (it.length <= DATE_LENGTH) {
+                            date = it
+                        }
+                    },
+                    visualTransformation = MaskVisualTransformation(DATE_MASK),
                     label = "Fecha",
-                    placeHolder = "DD/MM/AAAA",
+                    placeHolder = "DD/MM",
                     textAlign = TextAlign.Center,
                     keyboardType = KeyboardType.Number
                 )
@@ -163,5 +171,21 @@ fun AddExpenseModalContent(
                 placeHolder = "Ingrese la descripción",
             )
         }
+    }
+}
+
+fun processDateInput(input: String): String {
+    val digits = input.filter { it.isDigit() }
+
+    // Step 1: Handle case like "12/" → remove last digit and slash
+    if (input.length == 3 && input[2] == '/') {
+        return digits.firstOrNull()?.toString() ?: ""
+    }
+
+    // Step 2: Format digits into dd/MM
+    return when {
+        digits.length <= 2 -> digits
+        digits.length <= 4 -> digits.substring(0, 2) + "/" + digits.substring(2)
+        else -> digits.substring(0, 2) + "/" + digits.substring(2, 4)  // trim extra
     }
 }

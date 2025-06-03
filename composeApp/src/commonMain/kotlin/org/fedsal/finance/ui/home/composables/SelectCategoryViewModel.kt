@@ -31,10 +31,7 @@ class SelectCategoryViewModel(
         _uiState.value = UIState(isLoading = true)
         runCatching {
             getExpensesByCategoryUseCase.invoke(
-                GetExpensesByCategoryUseCase.Params(
-                    Month.MAY,
-                    2025
-                ),
+                Month.MAY,
                 onError = { throw it },
                 onSuccess = { categories ->
                     viewModelScope.launch {

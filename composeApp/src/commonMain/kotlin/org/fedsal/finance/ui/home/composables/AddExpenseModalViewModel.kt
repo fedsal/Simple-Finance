@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Category
@@ -62,12 +65,13 @@ class AddExpenseModalViewModel(
         paymentMethod: PaymentMethod,
         description: String
     ) = viewModelScope.launch {
+        val year = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
         // Logic to add expense using the repository
         val expense = Expense(
             title = title,
             category = category,
             amount = amount,
-            date = convertToIso(date),
+            date = convertToIso("$date$year"),
             paymentMethod = paymentMethod,
             description = description
         )

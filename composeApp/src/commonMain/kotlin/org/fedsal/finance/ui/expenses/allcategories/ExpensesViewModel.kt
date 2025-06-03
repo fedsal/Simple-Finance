@@ -55,7 +55,7 @@ class ExpensesViewModel(
         _uiState.value = uiState.value.copy(isLoading = true)
         runCatching {
             getExpensesByCategoryUseCase(
-                params = GetExpensesByCategoryUseCase.Params(month = month, year = 2025),
+                params = month,
                 onError = {
                     throw it
                 },

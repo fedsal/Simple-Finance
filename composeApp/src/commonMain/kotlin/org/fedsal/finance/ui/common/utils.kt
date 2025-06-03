@@ -81,9 +81,18 @@ fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
 }
 
 fun convertToIso(input: String): String {
-    val parts = input.split("/") // expecting "dd/MM/yyyy"
-    val day = parts[0].padStart(2, '0')
-    val month = parts[1].padStart(2, '0')
-    val year = parts[2]
-    return "$year-$month-$day" // returns "yyyy-MM-dd"
+    val digits = input.filter { it.isDigit() }
+
+    if (digits.length != 8) return ""
+
+    val day = digits.substring(0, 2)
+    val month = digits.substring(2, 4)
+    val year = digits.substring(4, 8)
+
+    return "$year-$month-$day"
+}
+
+object DateDefaults {
+    const val DATE_MASK = "##/##"
+    const val DATE_LENGTH = 4
 }
