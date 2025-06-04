@@ -2,7 +2,6 @@ package org.fedsal.finance.ui.expenses.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.util.date.Month
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -10,6 +9,7 @@ import kotlinx.coroutines.launch
 import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
+import org.fedsal.finance.ui.common.DateManager
 import kotlin.properties.Delegates
 
 class ExpensesByCategoryViewModel(
@@ -37,8 +37,8 @@ class ExpensesByCategoryViewModel(
 
             expenseRepository.getExpensesByCategory(
                 this@ExpensesByCategoryViewModel.categoryId,
-                Month.MAY,
-                2025
+                DateManager.selectedMonth.value,
+                DateManager.year
             ).collectLatest { expenses ->
                 _uiState.value = uiState.value.copy(
                     isLoading = false,

@@ -2,13 +2,13 @@ package org.fedsal.finance.ui.home.composables
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.util.date.Month
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
+import org.fedsal.finance.ui.common.DateManager
 
 class SelectCategoryViewModel(
     private val getExpensesByCategoryUseCase: GetExpensesByCategoryUseCase
@@ -31,7 +31,7 @@ class SelectCategoryViewModel(
         _uiState.value = UIState(isLoading = true)
         runCatching {
             getExpensesByCategoryUseCase.invoke(
-                Month.MAY,
+                DateManager.selectedMonth.value,
                 onError = { throw it },
                 onSuccess = { categories ->
                     viewModelScope.launch {

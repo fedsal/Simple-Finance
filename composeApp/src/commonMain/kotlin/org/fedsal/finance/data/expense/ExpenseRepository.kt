@@ -1,7 +1,7 @@
 package org.fedsal.finance.data.expense
 
-import io.ktor.util.date.Month
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Month
 import org.fedsal.finance.domain.models.Expense
 
 class ExpenseRepository(

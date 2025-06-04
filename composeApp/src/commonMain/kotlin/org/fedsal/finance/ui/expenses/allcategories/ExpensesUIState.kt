@@ -1,6 +1,6 @@
 package org.fedsal.finance.ui.expenses.allcategories
 
-import io.ktor.util.date.Month
+import kotlinx.datetime.Month
 import org.fedsal.finance.domain.models.ExpensesByCategory
 
 data class ExpensesUIState(

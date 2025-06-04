@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.composables.BottomNavigation
+import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
 import org.fedsal.finance.ui.home.composables.SelectCategoryModalContent
@@ -39,18 +41,25 @@ fun HomeScreen(
     )
 
     Scaffold(
+        topBar = {
+            DateFilterHeader(
+                onPreviousClicked = { DateManager.decrementMonth() },
+                onNextClicked = { DateManager.incrementMonth() },
+                dateString = DateManager.selectedMonth.value.name.uppercase()
+            )
+        },
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         bottomBar = {
             BottomNavigation(navController) {
                 showBottomSheet = true
             }
         }
-    ) {
+    ) { paddingValues ->
         if (showBottomSheet) {
             ButtonBottomSheet(sheetState, onDismissRequest = { showBottomSheet = false })
         }
         SimpleFinanceNavigation(
-            modifier = Modifier.padding(bottom = 72.dp),
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding(), bottom = 72.dp),
             navController = navController
         )
     }

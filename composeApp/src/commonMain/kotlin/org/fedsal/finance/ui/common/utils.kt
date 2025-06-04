@@ -100,3 +100,4 @@ object DateDefaults {
 object ExpenseDefaults {
     const val MAX_EXPENSE_VALUE = 10000000
 }
+

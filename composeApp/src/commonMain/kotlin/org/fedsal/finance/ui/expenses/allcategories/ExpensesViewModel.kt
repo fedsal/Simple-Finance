@@ -2,12 +2,13 @@ package org.fedsal.finance.ui.expenses.allcategories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.util.date.Month
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Month
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
+import org.fedsal.finance.ui.common.DateManager
 
 class ExpensesViewModel(
     private val getExpensesByCategoryUseCase: GetExpensesByCategoryUseCase
@@ -17,36 +18,9 @@ class ExpensesViewModel(
     val uiState: StateFlow<ExpensesUIState> get() = _uiState
 
     fun initViewModel() {
-        getExpensesByCategory(month = Month.MAY)
-    }
-
-    fun onEvent(event: ExpensesUIEvent) {
-        when (event) {
-            is ExpensesUIEvent.OnErrorConsumed -> {
-                _uiState.value = uiState.value.copy(error = null)
-            }
-
-            is ExpensesUIEvent.OnCategorySelected -> { /* TODO */
-            }
-
-            ExpensesUIEvent.OnMonthDecremented -> {
-                val currentMonth = uiState.value.selectedMonth.ordinal
-                val newMonth = if (currentMonth == 0) {
-                    Month.entries.first()
-                } else {
-                    Month.entries[currentMonth - 1]
-                }
-                getExpensesByCategory(newMonth)
-            }
-
-            ExpensesUIEvent.OnMonthIncremented -> {
-                val currentMonth = uiState.value.selectedMonth.ordinal
-                val newMonth = if (currentMonth == Month.entries.lastIndex) {
-                    Month.entries.last()
-                } else {
-                    Month.entries[currentMonth + 1]
-                }
-                getExpensesByCategory(newMonth)
+        viewModelScope.launch {
+            DateManager.selectedMonth.collectLatest { month ->
+                getExpensesByCategory(month)
             }
         }
     }

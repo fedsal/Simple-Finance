@@ -40,13 +40,6 @@ fun ExpensesScreen(
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
         contentWindowInsets = WindowInsets.safeGestures,
-        topBar = {
-            DateFilterHeader(
-                onPreviousClicked = { viewModel.onEvent(ExpensesUIEvent.OnMonthDecremented) },
-                onNextClicked = { viewModel.onEvent(ExpensesUIEvent.OnMonthIncremented) },
-                dateString = uiState.value.selectedMonth.name.uppercase()
-            )
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier.padding(
