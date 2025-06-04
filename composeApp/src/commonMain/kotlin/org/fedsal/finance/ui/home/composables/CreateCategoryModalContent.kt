@@ -44,8 +44,17 @@ import org.fedsal.finance.ui.common.opaqueColor
 import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
 
 @Composable
-fun CreateCategoryModalContent() {
+fun CreateCategoryModalContent(
+) {
     Box(Modifier.fillMaxSize()) {
+
+        var categoryTitle by remember { mutableStateOf("") }
+        var categoryBudget by remember { mutableStateOf("") }
+        var selectedColor by remember { mutableStateOf(AppColors.RED) }
+        var selectedIcon by remember { mutableStateOf(AppIcons.SHOPPING_BAG) }
+
+        var titleError by remember { mutableStateOf(false) }
+        var budgetError by remember { mutableStateOf(false) }
 
         // Save button
         Icon(
@@ -56,7 +65,11 @@ fun CreateCategoryModalContent() {
                 .size(60.dp)
                 .padding(end = 24.dp)
                 .clickable {
+                    if (categoryTitle.isBlank()) { titleError = true }
+                    else if (categoryBudget.isBlank()) { budgetError = true }
+                    else {
 
+                    }
                 },
         )
 
@@ -72,20 +85,21 @@ fun CreateCategoryModalContent() {
             Spacer(Modifier.height(24.dp))
 
             // Title section
-            var categoryTitle by remember { mutableStateOf("") }
             CustomEditText(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Titulo",
                 value = categoryTitle,
                 onValueChange = {
+                    titleError = false
                     categoryTitle = it
                 },
-                placeHolder = "Ingrese el titulo"
+                placeHolder = "Ingrese el titulo",
+                isError = titleError,
+                keyboardType = KeyboardType.Text
             )
             Spacer(Modifier.height(16.dp))
 
             // Category budget
-            var categoryBudget by remember { mutableStateOf("") }
             val currencyVisualTransformation =
                 rememberCurrencyVisualTransformation(currency = "USD")
             CustomEditText(
@@ -93,6 +107,7 @@ fun CreateCategoryModalContent() {
                 label = "Presupuesto",
                 value = categoryBudget,
                 onValueChange = { newValue ->
+                    budgetError = false
                     val trimmed = newValue.trimStart('0').trim { it.isDigit().not() }
                     if (trimmed.isEmpty() || trimmed.toInt() <= ExpenseDefaults.MAX_EXPENSE_VALUE) {
                         categoryBudget = trimmed
@@ -101,6 +116,7 @@ fun CreateCategoryModalContent() {
                 placeHolder = "$ --- ---",
                 visualTransformation = currencyVisualTransformation,
                 keyboardType = KeyboardType.Number,
+                isError = budgetError
             )
             Spacer(Modifier.height(16.dp))
 
@@ -113,9 +129,6 @@ fun CreateCategoryModalContent() {
                 textAlign = TextAlign.Start
             )
             Spacer(Modifier.height(16.dp))
-
-            var selectedColor by remember { mutableStateOf(AppColors.RED) }
-            var selectedIcon by remember { mutableStateOf(AppIcons.SHOPPING_BAG) }
 
             CategoryIcon(
                 modifier = Modifier.size(50.dp),
