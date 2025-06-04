@@ -31,6 +31,7 @@ import org.fedsal.finance.ui.common.navigation.HomeDestination
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.common.navigation.hasRoute
 import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
+import org.fedsal.finance.ui.home.composables.CreateCategoryModalContent
 import org.fedsal.finance.ui.home.composables.SelectCategoryModalContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -86,6 +87,7 @@ fun ButtonBottomSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
 ) {
+    var creatingCategory by remember { mutableStateOf(false) }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
@@ -106,11 +108,13 @@ fun ButtonBottomSheet(
                     )
                 }
             }
-            if (category == null) {
+            if (creatingCategory) {
+                CreateCategoryModalContent()
+            } else if (category == null) {
                 // Show the category selection modal content
                 SelectCategoryModalContent(
                     onCategoryClicked = { category = it },
-                    onNewCategoryClicked = { /* TODO */ }
+                    onNewCategoryClicked = { creatingCategory = true },
                 )
             }
         }
