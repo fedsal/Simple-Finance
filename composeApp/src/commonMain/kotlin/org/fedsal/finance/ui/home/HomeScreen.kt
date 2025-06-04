@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.composables.BottomNavigation
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
@@ -49,7 +48,7 @@ fun HomeScreen(
         topBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val showHeader = navBackStackEntry.hasRoute(HomeDestination.HomeGraph)
-            val month= DateManager.selectedMonth.collectAsState()
+            val month = DateManager.selectedMonth.collectAsState()
             if (showHeader) {
                 DateFilterHeader(
                     onPreviousClicked = { DateManager.decrementMonth() },
@@ -93,27 +92,37 @@ fun ButtonBottomSheet(
         sheetState = sheetState,
     ) {
         Box(modifier = Modifier.height(600.dp)) {
-            var category: Category? by remember { mutableStateOf(null) }
+            var categoryId: Long? by remember { mutableStateOf(null) }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = category != null,
+                visible = categoryId != null,
                 enter = slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
             ) {
-                category?.let { safeCategory ->
+                categoryId?.let { safeCategory ->
                     AddExpenseModalContent(
-                        category = safeCategory,
+                        categoryId = safeCategory,
                         onDismissRequest = onDismissRequest
                     )
                 }
             }
-            if (creatingCategory) {
-                CreateCategoryModalContent()
-            } else if (category == null) {
+            androidx.compose.animation.AnimatedVisibility(
+                visible = creatingCategory,
+                enter = slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth }
+                ),
+            ) {
+                CreateCategoryModalContent(onCategoryCreated = {
+                    categoryId = it
+                    creatingCategory = false
+                })
+            }
+
+            if (categoryId == null && !creatingCategory) {
                 // Show the category selection modal content
                 SelectCategoryModalContent(
-                    onCategoryClicked = { category = it },
+                    onCategoryClicked = { categoryId = it.id.toLong() },
                     onNewCategoryClicked = { creatingCategory = true },
                 )
             }

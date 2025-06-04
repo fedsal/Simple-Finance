@@ -5,7 +5,7 @@ import org.fedsal.finance.domain.models.Category
 interface CategoryLocalDataSource {
 
     // CRUD
-    suspend fun create(category: Category)
+    suspend fun create(category: Category): Long
     suspend fun read(): List<Category>
     suspend fun update(category: Category)
     suspend fun delete(category: Category)

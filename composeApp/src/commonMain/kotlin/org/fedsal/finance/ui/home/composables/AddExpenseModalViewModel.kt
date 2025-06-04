@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
+import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Category
@@ -18,21 +19,24 @@ import org.fedsal.finance.ui.common.convertToIso
 
 class AddExpenseModalViewModel(
     private val expenseRepository: ExpenseRepository,
-    private val paymentMethodRepository: PaymentMethodRepository
+    private val paymentMethodRepository: PaymentMethodRepository,
+    private val categoryRepository: CategoryRepository
 ) : ViewModel() {
 
     data class UIState(
         val isLoading: Boolean = false,
         val shouldContinue: Boolean = false,
         val paymentMethods: List<PaymentMethod> = emptyList(),
+        val category: Category = Category(),
         val error: String? = null
     )
 
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> get() = _uiState
 
-    fun initViewModel() {
+    fun initViewModel(categoryId: Long) {
         getPaymentMethods()
+        getCategory(categoryId)
     }
 
     private fun getPaymentMethods() = viewModelScope.launch {
@@ -45,6 +49,18 @@ class AddExpenseModalViewModel(
                 _uiState.update { it.copy(isLoading = false, error = exception.message) }
                 exception.printStackTrace()
             }
+    }
+
+    private fun getCategory(categoryId: Long) = viewModelScope.launch {
+        _uiState.update { it.copy(isLoading = true) }
+        runCatching {
+            categoryRepository.getById(categoryId.toInt())?.let { category ->
+                _uiState.update { it.copy(isLoading = false, category = category) }
+            } ?: throw Exception("Category not found")
+        }.onFailure { exception ->
+            _uiState.update { it.copy(isLoading = false, error = exception.message) }
+            exception.printStackTrace()
+        }
     }
 
     /**

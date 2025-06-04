@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.ExpenseDefaults
@@ -47,11 +46,11 @@ import org.koin.compose.koinInject
 @Composable
 fun AddExpenseModalContent(
     addExpenseModalViewModel: AddExpenseModalViewModel = koinInject(),
-    category: Category,
+    categoryId: Long,
     onDismissRequest: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
-        addExpenseModalViewModel.initViewModel()
+        addExpenseModalViewModel.initViewModel(categoryId)
     }
     val uiState = addExpenseModalViewModel.uiState.collectAsState()
     if (uiState.value.shouldContinue) {
@@ -78,7 +77,7 @@ fun AddExpenseModalContent(
                 .clickable {
                     if (selectedMethod >= 0)
                         addExpenseModalViewModel.addExpense(
-                            category = category,
+                            category = uiState.value.category,
                             title = title,
                             amount = importAmount.toDoubleOrNull() ?: 0.0,
                             date = date,
@@ -95,12 +94,12 @@ fun AddExpenseModalContent(
         ) {
             CategoryIcon(
                 modifier = Modifier.size(50.dp),
-                icon = getIcon(category.iconId),
-                iconTint = hexToColor(category.color)
+                icon = getIcon(uiState.value.category.iconId),
+                iconTint = hexToColor(uiState.value.category.color)
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                text = category.title,
+                text = uiState.value.category.title,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
             )

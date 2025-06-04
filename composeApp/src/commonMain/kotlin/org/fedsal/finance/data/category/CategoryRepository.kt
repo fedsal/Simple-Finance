@@ -6,7 +6,7 @@ class CategoryRepository(
     private val localDataSource: CategoryLocalDataSource,
 ) {
     // CRUD
-    suspend fun create(category: Category){
+    suspend fun create(category: Category): Long {
         return localDataSource.create(category)
     }
 

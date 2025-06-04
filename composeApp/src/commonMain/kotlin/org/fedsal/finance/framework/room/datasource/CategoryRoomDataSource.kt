@@ -9,7 +9,7 @@ import org.fedsal.finance.framework.room.model.toEntity
 class CategoryRoomDataSource(
     private val categoryDao: CategoryDao
 ): CategoryLocalDataSource {
-    override suspend fun create(category: Category) {
+    override suspend fun create(category: Category): Long {
         return categoryDao.create(category.toEntity())
     }
 

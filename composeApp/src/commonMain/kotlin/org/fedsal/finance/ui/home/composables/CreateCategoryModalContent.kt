@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,11 +43,20 @@ import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.opaqueColor
 import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
+import org.koin.compose.koinInject
 
 @Composable
 fun CreateCategoryModalContent(
-) {
+    createCategoryViewModel: CreateCategoryViewModel = koinInject(),
+    onCategoryCreated: (Long) -> Unit
+ ) {
     Box(Modifier.fillMaxSize()) {
+
+        val uiState = createCategoryViewModel.uiState.collectAsState()
+
+        if (uiState.value.shouldContinue) {
+            onCategoryCreated(uiState.value.categoryId)
+        }
 
         var categoryTitle by remember { mutableStateOf("") }
         var categoryBudget by remember { mutableStateOf("") }
@@ -68,7 +78,12 @@ fun CreateCategoryModalContent(
                     if (categoryTitle.isBlank()) { titleError = true }
                     else if (categoryBudget.isBlank()) { budgetError = true }
                     else {
-
+                        createCategoryViewModel.createCategory(
+                            title = categoryTitle,
+                            budget = categoryBudget.toDoubleOrNull() ?: 0.0,
+                            color = selectedColor,
+                            icon = selectedIcon
+                        )
                     }
                 },
         )

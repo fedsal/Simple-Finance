@@ -11,7 +11,7 @@ import org.fedsal.finance.framework.room.model.CategoryEntity
 @Dao
 interface CategoryDao {
     @Insert
-    suspend fun create(category: CategoryEntity)
+    suspend fun create(category: CategoryEntity): Long
 
     @Query("SELECT * FROM categories ORDER BY title ASC")
     suspend fun readAll(): List<CategoryEntity>
