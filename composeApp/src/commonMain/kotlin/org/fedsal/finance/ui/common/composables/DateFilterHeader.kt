@@ -26,7 +26,7 @@ fun DateFilterHeader(
     onNextClicked: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp).height(40.dp),
+        modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp).height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

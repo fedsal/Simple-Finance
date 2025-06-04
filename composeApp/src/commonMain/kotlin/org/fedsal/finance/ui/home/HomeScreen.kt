@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,12 +21,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.composables.BottomNavigation
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
+import org.fedsal.finance.ui.common.navigation.HomeDestination
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
+import org.fedsal.finance.ui.common.navigation.hasRoute
 import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
 import org.fedsal.finance.ui.home.composables.SelectCategoryModalContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -42,11 +46,16 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            DateFilterHeader(
-                onPreviousClicked = { DateManager.decrementMonth() },
-                onNextClicked = { DateManager.incrementMonth() },
-                dateString = DateManager.selectedMonth.value.name.uppercase()
-            )
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val showHeader = navBackStackEntry.hasRoute(HomeDestination.HomeGraph)
+            val month= DateManager.selectedMonth.collectAsState()
+            if (showHeader) {
+                DateFilterHeader(
+                    onPreviousClicked = { DateManager.decrementMonth() },
+                    onNextClicked = { DateManager.incrementMonth() },
+                    dateString = month.value.name.uppercase()
+                )
+            }
         },
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         bottomBar = {
@@ -54,12 +63,12 @@ fun HomeScreen(
                 showBottomSheet = true
             }
         }
-    ) { paddingValues ->
+    ) { padding ->
         if (showBottomSheet) {
             ButtonBottomSheet(sheetState, onDismissRequest = { showBottomSheet = false })
         }
         SimpleFinanceNavigation(
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding(), bottom = 72.dp),
+            modifier = Modifier.padding(top = padding.calculateTopPadding(), bottom = 72.dp),
             navController = navController
         )
     }
