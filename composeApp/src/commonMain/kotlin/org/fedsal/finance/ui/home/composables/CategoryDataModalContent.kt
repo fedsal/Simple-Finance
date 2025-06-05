@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,18 +45,26 @@ import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.opaqueColor
 import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
 import org.koin.compose.koinInject
+import kotlin.math.roundToInt
 
 @Composable
-fun CreateCategoryModalContent(
-    createCategoryViewModel: CreateCategoryViewModel = koinInject(),
-    onCategoryCreated: (Long) -> Unit
- ) {
+fun CategoryDataModalContent(
+    categoryDataViewModel: CategoryDataViewModel = koinInject(),
+    mode: DisplayInfoMode = DisplayInfoMode.CREATE,
+    categoryId: Long = -1L,
+    onSuccess: (Long) -> Unit
+) {
+    LaunchedEffect(Unit) {
+        categoryDataViewModel.initViewModel(mode, categoryId)
+    }
+
     Box(Modifier.fillMaxSize()) {
 
-        val uiState = createCategoryViewModel.uiState.collectAsState()
+        val uiState = categoryDataViewModel.uiState.collectAsState()
 
         if (uiState.value.shouldContinue) {
-            onCategoryCreated(uiState.value.categoryId)
+            onSuccess(uiState.value.categoryId)
+            uiState.value.shouldContinue = false
         }
 
         var categoryTitle by remember { mutableStateOf("") }
@@ -66,6 +75,15 @@ fun CreateCategoryModalContent(
         var titleError by remember { mutableStateOf(false) }
         var budgetError by remember { mutableStateOf(false) }
 
+        LaunchedEffect(uiState.value.category) {
+            uiState.value.category.takeIf { it.id > 0 }?.let {
+                categoryTitle = it.title
+                categoryBudget = it.budget.roundToInt().toString()
+                selectedColor = AppColors.fromHex(it.color) ?: AppColors.entries.first()
+                selectedIcon = AppIcons.fromName(it.iconId) ?: AppIcons.entries.first()
+            }
+        }
+
         // Save button
         Icon(
             imageVector = Icons.Default.Done,
@@ -75,10 +93,12 @@ fun CreateCategoryModalContent(
                 .size(60.dp)
                 .padding(end = 24.dp)
                 .clickable {
-                    if (categoryTitle.isBlank()) { titleError = true }
-                    else if (categoryBudget.isBlank()) { budgetError = true }
-                    else {
-                        createCategoryViewModel.createCategory(
+                    if (categoryTitle.isBlank()) {
+                        titleError = true
+                    } else if (categoryBudget.isBlank()) {
+                        budgetError = true
+                    } else {
+                        categoryDataViewModel.execute(
                             title = categoryTitle,
                             budget = categoryBudget.toDoubleOrNull() ?: 0.0,
                             color = selectedColor,
@@ -214,4 +234,9 @@ fun CreateCategoryModalContent(
             }
         }
     }
+}
+
+enum class DisplayInfoMode {
+    CREATE,
+    EDIT
 }

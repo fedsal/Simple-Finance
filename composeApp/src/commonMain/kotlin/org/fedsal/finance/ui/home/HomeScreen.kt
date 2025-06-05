@@ -30,7 +30,7 @@ import org.fedsal.finance.ui.common.navigation.HomeDestination
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.common.navigation.hasRoute
 import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
-import org.fedsal.finance.ui.home.composables.CreateCategoryModalContent
+import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
 import org.fedsal.finance.ui.home.composables.SelectCategoryModalContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -113,7 +113,7 @@ fun ButtonBottomSheet(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
             ) {
-                CreateCategoryModalContent(onCategoryCreated = {
+                CategoryDataModalContent(onSuccess = {
                     categoryId = it
                     creatingCategory = false
                 })

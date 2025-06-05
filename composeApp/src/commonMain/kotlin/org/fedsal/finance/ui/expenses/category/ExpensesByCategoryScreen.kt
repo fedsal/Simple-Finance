@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -40,6 +41,8 @@ import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.expenses.category.composables.CategoryHeader
+import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
+import org.fedsal.finance.ui.home.composables.DisplayInfoMode
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,6 +60,7 @@ fun ExpensesByCategoryScreen(
     val uiState = viewModel.uiState.collectAsState()
 
     var showContextualMenu by remember { mutableStateOf(false) }
+    var showCategoryInfo by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -64,16 +68,37 @@ fun ExpensesByCategoryScreen(
     Box(
         modifier = Modifier.safeDrawingPadding(),
     ) {
+        // Contextual menu for editing or deleting expenses
         if (showContextualMenu) {
             EditSelectorBottomSheet(
                 sheetState, onDismissRequest = { showContextualMenu = false },
                 onEditSelected = {
                     showContextualMenu = false
+                    showCategoryInfo = true
                 },
                 onDeleteSelected = {
                     showContextualMenu = false
                 }
             )
+        }
+
+        // Category information modal
+        if (showCategoryInfo) {
+            ModalBottomSheet(
+                onDismissRequest = { showCategoryInfo = false },
+                sheetState = sheetState,
+            ) {
+                Box(modifier = Modifier.height(600.dp)) {
+                    CategoryDataModalContent(
+                        categoryId = uiState.value.category.id.toLong(),
+                        mode = DisplayInfoMode.EDIT,
+                        onSuccess = {
+                            showCategoryInfo = false
+                            viewModel.initViewModel(categoryId)
+                        }
+                    )
+                }
+            }
         }
 
         Column(
