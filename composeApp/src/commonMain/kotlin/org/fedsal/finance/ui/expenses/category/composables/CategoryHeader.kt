@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,11 +37,11 @@ fun CategoryHeader(
     iconTint: Color,
     totalSpent: Double,
     availableAmount: Double,
-    onEditPressed: () -> Unit,
+    onOptionsPressed: () -> Unit,
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
         Surface(
-            modifier = Modifier.padding(top = 20.dp).fillMaxWidth().height(254.dp),
+            modifier = Modifier.padding(top = 20.dp).fillMaxWidth(),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             shape = RoundedCornerShape(20.dp)
         ) {
@@ -51,8 +51,8 @@ fun CategoryHeader(
             ) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     Icon(
-                        modifier = Modifier.clickable { onEditPressed.invoke() },
-                        imageVector = Icons.Default.Edit,
+                        modifier = Modifier.clickable { onOptionsPressed.invoke() },
+                        imageVector = Icons.Default.MoreHoriz,
                         contentDescription = "Editar",
                         tint = MaterialTheme.colorScheme.onSurface
                     )
