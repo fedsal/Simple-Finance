@@ -11,6 +11,7 @@ class ExpenseRepository(
     suspend fun getAllExpenses() = expenseLocalDataSource.read()
     suspend fun updateExpense(expense: Expense) = expenseLocalDataSource.update(expense)
     suspend fun deleteExpense(expense: Expense) = expenseLocalDataSource.delete(expense)
+    suspend fun getExpenseById(id: Long) = expenseLocalDataSource.getById(id)
 
     fun getExpensesByCategory(categoryId: Int, month: Month, year: Int): Flow<List<Expense>> {
         return expenseLocalDataSource.getExpensesByCategory(categoryId, month, year)

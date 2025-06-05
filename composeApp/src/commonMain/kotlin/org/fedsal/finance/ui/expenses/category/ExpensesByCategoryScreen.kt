@@ -41,6 +41,7 @@ import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.expenses.category.composables.CategoryHeader
+import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
 import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
 import org.fedsal.finance.ui.home.composables.DisplayInfoMode
 import org.koin.compose.koinInject
@@ -61,6 +62,9 @@ fun ExpensesByCategoryScreen(
 
     var showContextualMenu by remember { mutableStateOf(false) }
     var showCategoryInfo by remember { mutableStateOf(false) }
+    var showExpenseInfo by remember { mutableStateOf(false) }
+    var showingExpenseId by remember { mutableStateOf(-1L) }
+    var expenseContextualInfo by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -74,7 +78,8 @@ fun ExpensesByCategoryScreen(
                 sheetState, onDismissRequest = { showContextualMenu = false },
                 onEditSelected = {
                     showContextualMenu = false
-                    showCategoryInfo = true
+                    if (expenseContextualInfo) showExpenseInfo = true
+                    else showCategoryInfo = true
                 },
                 onDeleteSelected = {
                     showContextualMenu = false
@@ -94,6 +99,25 @@ fun ExpensesByCategoryScreen(
                         mode = DisplayInfoMode.EDIT,
                         onSuccess = {
                             showCategoryInfo = false
+                            viewModel.initViewModel(categoryId)
+                        }
+                    )
+                }
+            }
+        }
+
+        if (showExpenseInfo) {
+            ModalBottomSheet(
+                onDismissRequest = { showCategoryInfo = false },
+                sheetState = sheetState,
+            ) {
+                Box(modifier = Modifier.height(600.dp)) {
+                    AddExpenseModalContent(
+                        categoryId = uiState.value.category.id.toLong(),
+                        mode = DisplayInfoMode.EDIT,
+                        expenseId = showingExpenseId,
+                        onDismissRequest = {
+                            showExpenseInfo = false
                             viewModel.initViewModel(categoryId)
                         }
                     )
@@ -168,8 +192,10 @@ fun ExpensesByCategoryScreen(
                         ExpenseItem(
                             modifier = Modifier.padding(horizontal = 10.dp).pointerInput(Unit) {
                                 detectTapGestures(
-                                    onLongPress = {
+                                    onLongPress = { _ ->
                                         showContextualMenu = true
+                                        expenseContextualInfo = true
+                                        showingExpenseId = it.id.toLong()
                                     }
                                 )
                             },

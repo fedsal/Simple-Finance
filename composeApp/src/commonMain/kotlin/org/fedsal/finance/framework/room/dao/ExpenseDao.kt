@@ -22,6 +22,8 @@ interface ExpenseDao {
     @Delete
     suspend fun delete(entity: ExpenseEntity)
 
+    @Query("SELECT * FROM expenses WHERE id = :id")
+    suspend fun getById(id: Long): ExpenseEntity?
 
     @Query(
         "SELECT * FROM expenses WHERE strftime('%m', date) = :month AND " +

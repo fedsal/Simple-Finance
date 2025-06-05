@@ -43,15 +43,18 @@ import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
 import org.koin.compose.koinInject
+import kotlin.math.roundToInt
 
 @Composable
 fun AddExpenseModalContent(
     addExpenseModalViewModel: AddExpenseModalViewModel = koinInject(),
     categoryId: Long,
     onDismissRequest: () -> Unit,
+    mode: DisplayInfoMode = DisplayInfoMode.CREATE,
+    expenseId: Long = -1
 ) {
     LaunchedEffect(Unit) {
-        addExpenseModalViewModel.initViewModel(categoryId)
+        addExpenseModalViewModel.initViewModel(categoryId, mode, expenseId)
     }
     val uiState = addExpenseModalViewModel.uiState.collectAsState()
     if (uiState.value.shouldContinue) {
@@ -70,6 +73,16 @@ fun AddExpenseModalContent(
         var selectedMethod by remember { mutableStateOf(-1) }
         var description by remember { mutableStateOf("") }
 
+        LaunchedEffect(uiState.value.expense) {
+            if (mode == DisplayInfoMode.EDIT) {
+                title = uiState.value.expense.title
+                importAmount = uiState.value.expense.amount.roundToInt().toString()
+                date = uiState.value.expense.date
+                description = uiState.value.expense.description
+                selectedMethod = paymentMethods.indexOfFirst { it.id == uiState.value.expense.paymentMethod.id }
+            }
+        }
+
         Icon(
             imageVector = Icons.Default.Done,
             contentDescription = "Done",
@@ -79,7 +92,7 @@ fun AddExpenseModalContent(
                 .padding(end = 24.dp)
                 .clickable {
                     if (selectedMethod >= 0)
-                        addExpenseModalViewModel.addExpense(
+                        addExpenseModalViewModel.execute(
                             category = uiState.value.category,
                             title = title,
                             amount = importAmount.toDoubleOrNull() ?: 0.0,

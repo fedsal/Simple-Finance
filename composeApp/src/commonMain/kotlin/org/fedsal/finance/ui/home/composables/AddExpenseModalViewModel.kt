@@ -28,15 +28,34 @@ class AddExpenseModalViewModel(
         val shouldContinue: Boolean = false,
         val paymentMethods: List<PaymentMethod> = emptyList(),
         val category: Category = Category(),
+        val expense: Expense = Expense(),
         val error: String? = null
     )
 
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> get() = _uiState
+    private lateinit var mode: DisplayInfoMode
+    private var expenseId: Long = -1
 
-    fun initViewModel(categoryId: Long) {
+    fun initViewModel(categoryId: Long, mode: DisplayInfoMode, expenseId: Long) {
         getPaymentMethods()
         getCategory(categoryId)
+        this.mode = mode
+        this.expenseId = expenseId
+
+        if(mode == DisplayInfoMode.EDIT && expenseId != -1L) {
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true) }
+                runCatching {
+                    expenseRepository.getExpenseById(expenseId).let { expense ->
+                        _uiState.update { it.copy(isLoading = false, expense = expense) }
+                    }
+                }.onFailure { exception ->
+                    _uiState.update { it.copy(isLoading = false, error = exception.message) }
+                    exception.printStackTrace()
+                }
+            }
+        }
     }
 
     private fun getPaymentMethods() = viewModelScope.launch {
@@ -63,6 +82,21 @@ class AddExpenseModalViewModel(
         }
     }
 
+    fun execute(
+        category: Category,
+        title: String,
+        amount: Double,
+        date: String,
+        paymentMethod: PaymentMethod,
+        description: String
+    ) {
+        if (mode == DisplayInfoMode.CREATE) {
+            addExpense(category, title, amount, date, paymentMethod, description)
+        } else if (mode == DisplayInfoMode.EDIT) {
+            editExpense(expenseId, title, amount, date, paymentMethod, description, category)
+        }
+    }
+
     /**
      * Adds an expense to the repository.
      *
@@ -73,7 +107,7 @@ class AddExpenseModalViewModel(
      * @param paymentMethod The payment method used for the expense.
      * @param description A description of the expense.
      */
-    fun addExpense(
+    private fun addExpense(
         category: Category,
         title: String,
         amount: Double,
@@ -92,6 +126,37 @@ class AddExpenseModalViewModel(
             description = description
         )
         runCatching { expenseRepository.createExpense(expense) }
+            .onSuccess { _uiState.update { it.copy(isLoading = false, shouldContinue = true) } }
+            .onFailure { exception ->
+                _uiState.update { it.copy(isLoading = false, error = exception.message) }
+                exception.printStackTrace()
+            }
+    }
+
+    /**
+     * Edits an existing expense in the repository.
+     */
+    private fun editExpense(
+        expenseId: Long,
+        title: String,
+        amount: Double,
+        date: String,
+        paymentMethod: PaymentMethod,
+        description: String,
+        category: Category
+    ) = viewModelScope.launch {
+        val year = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
+        // Logic to edit expense using the repository
+        val expense = Expense(
+            id = expenseId.toInt(),
+            title = title,
+            amount = amount,
+            date = convertToIso("$date$year"),
+            paymentMethod = paymentMethod,
+            description = description,
+            category = category
+        )
+        runCatching { expenseRepository.updateExpense(expense) }
             .onSuccess { _uiState.update { it.copy(isLoading = false, shouldContinue = true) } }
             .onFailure { exception ->
                 _uiState.update { it.copy(isLoading = false, error = exception.message) }

@@ -28,6 +28,11 @@ class ExpenseRoomDataSource(
         expenseDao.delete(expense.toEntity())
     }
 
+    override suspend fun getById(id: Long): Expense {
+        return expenseDao.getById(id)?.toDomain()
+            ?: throw NoSuchElementException("Expense with id $id not found")
+    }
+
     override fun getExpensesByCategory(
         categoryId: Int,
         month: Month,
