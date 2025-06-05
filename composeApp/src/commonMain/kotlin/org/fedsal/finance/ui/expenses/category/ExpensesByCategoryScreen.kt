@@ -108,7 +108,12 @@ fun ExpensesByCategoryScreen(
 
         if (showExpenseInfo) {
             ModalBottomSheet(
-                onDismissRequest = { showCategoryInfo = false },
+                onDismissRequest = {
+                    showCategoryInfo = false
+                    showExpenseInfo = false
+                    expenseContextualInfo = false
+                    showingExpenseId = -1L
+                },
                 sheetState = sheetState,
             ) {
                 Box(modifier = Modifier.height(600.dp)) {
