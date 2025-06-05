@@ -36,4 +36,14 @@ object DateManager {
         }
         _selectedMonth.value = newMonth
     }
+
+    fun getCurrentDate(): String {
+        val day = if (currentInstant.dayOfMonth < 10) { "0${currentInstant.dayOfMonth}" } else {
+            currentInstant.dayOfMonth.toString()
+        }
+        val month = if (currentInstant.monthNumber < 10) { "0${currentInstant.monthNumber}" } else {
+            currentInstant.monthNumber.toString()
+        }
+        return "$day$month"
+    }
 }

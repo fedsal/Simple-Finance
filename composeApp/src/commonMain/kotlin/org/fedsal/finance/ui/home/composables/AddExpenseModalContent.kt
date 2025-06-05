@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
+import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.CategoryIcon
@@ -58,12 +59,14 @@ fun AddExpenseModalContent(
         addExpenseModalViewModel.dispose()
     }
 
+    val currentDate by remember { mutableStateOf(DateManager.getCurrentDate()) }
+
     val paymentMethods = uiState.value.paymentMethods
 
     Box(Modifier.fillMaxSize()) {
         var title by remember { mutableStateOf("") }
         var importAmount by remember { mutableStateOf("") }
-        var date by remember { mutableStateOf("") }
+        var date by remember { mutableStateOf(currentDate) }
         var selectedMethod by remember { mutableStateOf(-1) }
         var description by remember { mutableStateOf("") }
 
