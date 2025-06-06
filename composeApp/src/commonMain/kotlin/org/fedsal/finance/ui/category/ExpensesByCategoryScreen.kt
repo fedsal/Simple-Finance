@@ -54,7 +54,6 @@ fun ExpensesByCategoryScreen(
     viewModel: ExpensesByCategoryViewModel = koinInject(),
     onNavigateBack: () -> Unit
 ) {
-
     LaunchedEffect(Unit) {
         viewModel.initViewModel(categoryId)
     }

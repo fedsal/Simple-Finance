@@ -53,8 +53,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
-            implementation("io.fluidsonic.currency:fluid-currency:0.13.0")
+            implementation(libs.kotlinx.datetime)
             implementation(libs.navigation.compose)
 
             // Ktor
@@ -97,7 +96,8 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
