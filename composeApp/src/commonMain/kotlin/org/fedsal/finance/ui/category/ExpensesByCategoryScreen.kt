@@ -71,7 +71,7 @@ fun ExpensesByCategoryScreen(
     )
 
     Surface(
-        modifier = Modifier.safeDrawingPadding(),
+        modifier = Modifier.safeDrawingPadding().padding(top = 20.dp, bottom = 10.dp),
     ) {
         // Contextual menu for editing or deleting expenses
         if (showContextualMenu) {
