@@ -14,7 +14,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import org.fedsal.finance.domain.models.AppIcons
 
 fun Double.formatDecimal(): String {
-    val rounded = (this * 100).toLong()
+    val isNegative = this < 0
+    val rounded = (kotlin.math.abs(this) * 100).toLong()
     val integerPart = (rounded / 100).toString()
     val decimalRaw = (rounded % 100).toInt()
 
@@ -22,11 +23,13 @@ fun Double.formatDecimal(): String {
         integerPart.reversed().chunked(3).joinToString(".").reversed().forEach { append(it) }
     }
 
-    return if (decimalRaw == 0) formattedInteger
+    val result = if (decimalRaw == 0) formattedInteger
     else {
         val decimalPart = decimalRaw.toString().padStart(2, '0')
         "$formattedInteger,$decimalPart"
     }
+
+    return if (isNegative) "-$result" else result
 }
 
 fun getIcon(name: String): ImageVector {
