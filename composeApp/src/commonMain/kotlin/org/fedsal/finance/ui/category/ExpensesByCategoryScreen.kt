@@ -43,6 +43,7 @@ import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
+import org.fedsal.finance.ui.common.convertFromIso
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.koin.compose.koinInject
@@ -208,7 +209,9 @@ fun ExpensesByCategoryScreen(
                             amount = it.amount,
                             paymentMethod = it.paymentMethod,
                             icon = getIcon(uiState.value.category.iconId),
-                            iconTint = hexToColor(uiState.value.category.color)
+                            iconTint = hexToColor(uiState.value.category.color),
+                            showIcon = false,
+                            date = convertFromIso(it.date)
                         )
                     }
                 }

@@ -1,6 +1,7 @@
 package org.fedsal.finance.ui.common.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +36,9 @@ fun ExpenseItem(
     amount: Double,
     paymentMethod: PaymentMethod,
     icon: ImageVector,
-    iconTint: Color
+    iconTint: Color,
+    showIcon: Boolean = true,
+    date: String,
 ) {
     Surface(
         modifier = modifier.height(84.dp),
@@ -46,19 +49,24 @@ fun ExpenseItem(
             modifier = Modifier.fillMaxSize().padding(vertical = 10.dp, horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                Modifier.background(shape = RoundedCornerShape(5.dp), color = opaqueColor(iconTint))
-                    .size(50.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = title,
-                    tint = iconTint
-                )
+            if (showIcon) {
+                Box(
+                    Modifier.background(
+                        shape = RoundedCornerShape(5.dp),
+                        color = opaqueColor(iconTint)
+                    )
+                        .size(50.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = title,
+                        tint = iconTint
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
             }
-            Spacer(Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f).padding(4.dp)) {
+            Column(modifier = Modifier.weight(1f).padding(start = 4.dp, end = 8.dp, top = 4.dp, bottom = 6.dp)) {
                 Text(
                     text = title,
                     maxLines = 1,
@@ -81,10 +89,22 @@ fun ExpenseItem(
                     )
                 }
             }
-            Text(
-                text = "$ ${amount.formatDecimal()}",
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    text = "$ ${amount.formatDecimal()}",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                )
+                Text(
+                    text = "${date.take(2)}/${date.takeLast(2)}",
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f)
+                    ),
+                )
+            }
         }
     }
 }
