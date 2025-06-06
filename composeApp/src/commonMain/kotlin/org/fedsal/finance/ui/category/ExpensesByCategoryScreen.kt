@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -35,15 +36,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.fedsal.finance.ui.category.composables.CategoryHeader
 import org.fedsal.finance.ui.common.composables.EditSelectorBottomSheet
 import org.fedsal.finance.ui.common.composables.ExpenseItem
 import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
-import org.fedsal.finance.ui.common.getIcon
-import org.fedsal.finance.ui.common.hexToColor
-import org.fedsal.finance.ui.category.composables.CategoryHeader
-import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
+import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
+import org.fedsal.finance.ui.common.getIcon
+import org.fedsal.finance.ui.common.hexToColor
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +70,7 @@ fun ExpensesByCategoryScreen(
         skipPartiallyExpanded = true
     )
 
-    Box(
+    Surface(
         modifier = Modifier.safeDrawingPadding(),
     ) {
         // Contextual menu for editing or deleting expenses
