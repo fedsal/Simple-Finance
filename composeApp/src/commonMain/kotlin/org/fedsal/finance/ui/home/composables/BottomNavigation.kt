@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import org.fedsal.finance.ui.home.navigation.HomeDestination
 import org.fedsal.finance.ui.home.navigation.ItemsBottomNav
 import org.fedsal.finance.ui.home.navigation.hasRoute
 
@@ -35,27 +34,24 @@ fun BottomNavigation(
     navHostController: NavHostController,
     onButtonClicked: () -> Unit,
 ) {
-    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-    val showBottomBar = navBackStackEntry.hasRoute(HomeDestination.HomeGraph)
-    if (showBottomBar) {
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            CustomAppBar(navHostController)
-            FloatingActionButton(
-                modifier = Modifier.size(65.dp).offset(y = (-30).dp),
-                onClick = { onButtonClicked.invoke() },
-                shape = RoundedCornerShape(16.dp),
-                containerColor = MaterialTheme.colorScheme.primary,
-                elevation = FloatingActionButtonDefaults.elevation(0.dp)
-            ) {
-                Icon(
-                    modifier = Modifier.size(42.dp),
-                    imageVector = Icons.Rounded.Add,
-                    tint = MaterialTheme.colorScheme.primaryContainer,
-                    contentDescription = ""
-                )
-            }
+    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        CustomAppBar(navHostController)
+        FloatingActionButton(
+            modifier = Modifier.size(65.dp).offset(y = (-30).dp),
+            onClick = { onButtonClicked.invoke() },
+            shape = RoundedCornerShape(16.dp),
+            containerColor = MaterialTheme.colorScheme.primary,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp)
+        ) {
+            Icon(
+                modifier = Modifier.size(42.dp),
+                imageVector = Icons.Rounded.Add,
+                tint = MaterialTheme.colorScheme.primaryContainer,
+                contentDescription = ""
+            )
         }
     }
+
 }
 
 @Composable

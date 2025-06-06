@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import org.fedsal.finance.ui.category.ExpensesByCategoryScreen
 import org.fedsal.finance.ui.common.navigation.animatedComposable
