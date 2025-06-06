@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.common.composables.visualtransformations
+package org.fedsal.finance.ui.common
 
 // commonMain
 expect fun formatCurrency(amount: Int, currencyCode: String): String

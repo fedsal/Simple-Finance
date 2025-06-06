@@ -11,6 +11,3 @@ sealed class HomeDestination {
     @Serializable
     data object Balance : HomeDestination()
 }
-
-@Serializable
-data class CategoryExpenses(val id: Int)

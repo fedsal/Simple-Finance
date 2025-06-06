@@ -32,13 +32,15 @@ import org.fedsal.finance.ui.home.navigation.hasRoute
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryModalContent
+import org.fedsal.finance.ui.main.navigation.AppDestinations
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavHostController
+    onNavigateOuterHome: (AppDestinations) -> Unit
 ) {
+    val navController = rememberNavController()
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -69,17 +71,13 @@ fun HomeScreen(
         }
         HomeNavigation(
             modifier = Modifier.padding(top = padding.calculateTopPadding(), bottom = 72.dp),
-            navController = navController
+            navController = navController,
+            onNavigateOuterHome = onNavigateOuterHome
         )
     }
 }
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(rememberNavController())
-}
-
+// Home bottom sheet
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ButtonBottomSheet(

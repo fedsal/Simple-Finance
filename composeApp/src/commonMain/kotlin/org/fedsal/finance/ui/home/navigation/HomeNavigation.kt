@@ -8,13 +8,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.navOptions
 import org.fedsal.finance.ui.home.allcategories.ExpensesScreen
+import org.fedsal.finance.ui.main.navigation.AppDestinations
 
 @Composable
 fun HomeNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    onNavigateOuterHome: (AppDestinations) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -26,10 +27,7 @@ fun HomeNavigation(
                 enterTransition = { EnterTransition.None }
             ) {
                 ExpensesScreen(onNavigateToCategory = { categoryId ->
-                    navController.navigate(
-                        route = CategoryExpenses(categoryId),
-                        navOptions = navOptions { launchSingleTop = true }
-                    )
+                    onNavigateOuterHome(AppDestinations.Category(categoryId))
                 })
             }
             composable<HomeDestination.Balance>(
