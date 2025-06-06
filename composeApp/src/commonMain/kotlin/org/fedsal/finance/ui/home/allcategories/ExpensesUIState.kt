@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.allcategories
+package org.fedsal.finance.ui.home.allcategories
 
 import kotlinx.datetime.Month
 import org.fedsal.finance.domain.models.ExpensesByCategory

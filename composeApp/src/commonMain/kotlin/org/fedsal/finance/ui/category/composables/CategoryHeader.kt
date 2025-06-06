@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.category.composables
+package org.fedsal.finance.ui.category.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

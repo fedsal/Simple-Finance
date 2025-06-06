@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.composables
+package org.fedsal.finance.ui.common.composables.modals.categorydata
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,7 +43,7 @@ import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.opaqueColor
-import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
+import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 

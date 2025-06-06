@@ -15,8 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import androidx.navigation.toRoute
-import org.fedsal.finance.ui.expenses.allcategories.ExpensesScreen
-import org.fedsal.finance.ui.expenses.category.ExpensesByCategoryScreen
+import org.fedsal.finance.ui.home.allcategories.ExpensesScreen
+import org.fedsal.finance.ui.category.ExpensesByCategoryScreen
 
 @Composable
 fun SimpleFinanceNavigation(

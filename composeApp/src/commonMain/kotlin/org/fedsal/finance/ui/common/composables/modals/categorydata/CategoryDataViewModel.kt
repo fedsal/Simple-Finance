@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.composables
+package org.fedsal.finance.ui.common.composables.modals.categorydata
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

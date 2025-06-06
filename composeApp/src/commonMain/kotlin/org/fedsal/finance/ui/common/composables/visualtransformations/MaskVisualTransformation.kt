@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.common
+package org.fedsal.finance.ui.common.composables.visualtransformations
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping

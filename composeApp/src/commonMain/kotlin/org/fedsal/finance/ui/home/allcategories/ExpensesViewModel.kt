@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.allcategories
+package org.fedsal.finance.ui.home.allcategories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

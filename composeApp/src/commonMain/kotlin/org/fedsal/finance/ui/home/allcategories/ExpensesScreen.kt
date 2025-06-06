@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.allcategories
+package org.fedsal.finance.ui.home.allcategories
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import org.fedsal.finance.ui.common.composables.SpentHeader
 import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
-import org.fedsal.finance.ui.expenses.allcategories.composables.ExpenseCategoryItem
+import org.fedsal.finance.ui.home.allcategories.composables.ExpenseCategoryItem
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
 

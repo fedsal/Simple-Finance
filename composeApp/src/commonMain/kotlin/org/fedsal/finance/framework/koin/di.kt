@@ -18,11 +18,11 @@ import org.fedsal.finance.framework.room.datasource.CategoryRoomDataSource
 import org.fedsal.finance.framework.room.datasource.DebtRoomDataSource
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
 import org.fedsal.finance.framework.room.datasource.PaymentMethodRoomDataSource
-import org.fedsal.finance.ui.expenses.allcategories.ExpensesViewModel
-import org.fedsal.finance.ui.expenses.category.ExpensesByCategoryViewModel
-import org.fedsal.finance.ui.home.composables.ExpenseInfoModalViewModel
-import org.fedsal.finance.ui.home.composables.CategoryDataViewModel
-import org.fedsal.finance.ui.home.composables.SelectCategoryViewModel
+import org.fedsal.finance.ui.home.allcategories.ExpensesViewModel
+import org.fedsal.finance.ui.category.ExpensesByCategoryViewModel
+import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalViewModel
+import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataViewModel
+import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module

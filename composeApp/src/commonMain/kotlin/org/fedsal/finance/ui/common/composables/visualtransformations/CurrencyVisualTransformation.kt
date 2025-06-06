@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.common
+package org.fedsal.finance.ui.common.composables.visualtransformations
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

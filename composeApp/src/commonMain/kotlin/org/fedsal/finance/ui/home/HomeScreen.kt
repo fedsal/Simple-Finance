@@ -29,9 +29,9 @@ import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.navigation.HomeDestination
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.common.navigation.hasRoute
-import org.fedsal.finance.ui.home.composables.ExpenseInfoModalContent
-import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
-import org.fedsal.finance.ui.home.composables.SelectCategoryModalContent
+import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
+import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
+import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryModalContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.composables
+package org.fedsal.finance.ui.common.composables.modals.selectcategory
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.composables
+package org.fedsal.finance.ui.common.composables.modals.expenseinfo
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,13 +35,14 @@ import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.ExpenseDefaults
-import org.fedsal.finance.ui.common.MaskVisualTransformation
+import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.PaymentMethodChip
+import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
-import org.fedsal.finance.ui.common.rememberCurrencyVisualTransformation
+import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 

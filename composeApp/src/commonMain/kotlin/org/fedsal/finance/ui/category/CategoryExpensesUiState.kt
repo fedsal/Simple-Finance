@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.category
+package org.fedsal.finance.ui.category
 
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.Expense

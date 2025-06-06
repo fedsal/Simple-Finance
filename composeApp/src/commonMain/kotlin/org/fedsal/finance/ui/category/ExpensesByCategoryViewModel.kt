@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.category
+package org.fedsal.finance.ui.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

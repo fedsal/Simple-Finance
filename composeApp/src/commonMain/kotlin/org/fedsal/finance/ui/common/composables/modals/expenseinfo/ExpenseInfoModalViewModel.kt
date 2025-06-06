@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.composables
+package org.fedsal.finance.ui.common.composables.modals.expenseinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +15,7 @@ import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.domain.models.PaymentMethod
+import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
 import org.fedsal.finance.ui.common.convertFromIso
 import org.fedsal.finance.ui.common.convertToIso
 

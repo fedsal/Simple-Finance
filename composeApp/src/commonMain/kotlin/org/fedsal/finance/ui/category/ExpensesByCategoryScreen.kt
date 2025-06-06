@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.expenses.category
+package org.fedsal.finance.ui.category
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -40,10 +40,10 @@ import org.fedsal.finance.ui.common.composables.ExpenseItem
 import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
-import org.fedsal.finance.ui.expenses.category.composables.CategoryHeader
-import org.fedsal.finance.ui.home.composables.ExpenseInfoModalContent
-import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
-import org.fedsal.finance.ui.home.composables.DisplayInfoMode
+import org.fedsal.finance.ui.category.composables.CategoryHeader
+import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
+import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
+import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
