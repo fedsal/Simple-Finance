@@ -41,7 +41,7 @@ import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.expenses.category.composables.CategoryHeader
-import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
+import org.fedsal.finance.ui.home.composables.ExpenseInfoModalContent
 import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
 import org.fedsal.finance.ui.home.composables.DisplayInfoMode
 import org.koin.compose.koinInject
@@ -117,7 +117,7 @@ fun ExpensesByCategoryScreen(
                 sheetState = sheetState,
             ) {
                 Box(modifier = Modifier.height(600.dp)) {
-                    AddExpenseModalContent(
+                    ExpenseInfoModalContent(
                         categoryId = uiState.value.category.id.toLong(),
                         mode = DisplayInfoMode.EDIT,
                         expenseId = showingExpenseId,

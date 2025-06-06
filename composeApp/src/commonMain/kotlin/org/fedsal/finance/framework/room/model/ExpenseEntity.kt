@@ -38,6 +38,7 @@ fun ExpenseEntity.toDomain(): Expense {
 
 fun Expense.toEntity(): ExpenseEntity {
     return ExpenseEntity(
+        id = id,
         title = title,
         amount = amount,
         date = date,

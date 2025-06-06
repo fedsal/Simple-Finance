@@ -29,7 +29,7 @@ import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.navigation.HomeDestination
 import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
 import org.fedsal.finance.ui.common.navigation.hasRoute
-import org.fedsal.finance.ui.home.composables.AddExpenseModalContent
+import org.fedsal.finance.ui.home.composables.ExpenseInfoModalContent
 import org.fedsal.finance.ui.home.composables.CategoryDataModalContent
 import org.fedsal.finance.ui.home.composables.SelectCategoryModalContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -101,7 +101,7 @@ fun ButtonBottomSheet(
                 ),
             ) {
                 categoryId?.let { safeCategory ->
-                    AddExpenseModalContent(
+                    ExpenseInfoModalContent(
                         categoryId = safeCategory,
                         onDismissRequest = onDismissRequest
                     )

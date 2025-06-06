@@ -95,6 +95,17 @@ fun convertToIso(input: String): String {
     return "$year-$month-$day"
 }
 
+fun convertFromIso(input: String): String {
+    val parts = input.split("-")
+    if (parts.size != 3) return ""
+
+    val year = parts[0]
+    val month = parts[1]
+    val day = parts[2]
+
+    return "$day$month"
+}
+
 object DateDefaults {
     const val DATE_MASK = "##/##"
     const val DATE_LENGTH = 4

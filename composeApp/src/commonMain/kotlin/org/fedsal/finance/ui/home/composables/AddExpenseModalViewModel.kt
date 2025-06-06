@@ -15,6 +15,7 @@ import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.domain.models.PaymentMethod
+import org.fedsal.finance.ui.common.convertFromIso
 import org.fedsal.finance.ui.common.convertToIso
 
 class AddExpenseModalViewModel(
@@ -43,17 +44,26 @@ class AddExpenseModalViewModel(
         this.mode = mode
         this.expenseId = expenseId
 
-        if(mode == DisplayInfoMode.EDIT && expenseId != -1L) {
-            viewModelScope.launch {
-                _uiState.update { it.copy(isLoading = true) }
-                runCatching {
-                    expenseRepository.getExpenseById(expenseId).let { expense ->
-                        _uiState.update { it.copy(isLoading = false, expense = expense) }
+        if (mode == DisplayInfoMode.EDIT && expenseId != -1L) {
+            getExpenseInfo(expenseId)
+        }
+    }
+
+    private fun getExpenseInfo(expenseId: Long) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            runCatching {
+                expenseRepository.getExpenseById(expenseId).let { expense ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            expense = expense.copy(date = convertFromIso(expense.date))
+                        )
                     }
-                }.onFailure { exception ->
-                    _uiState.update { it.copy(isLoading = false, error = exception.message) }
-                    exception.printStackTrace()
                 }
+            }.onFailure { exception ->
+                _uiState.update { it.copy(isLoading = false, error = exception.message) }
+                exception.printStackTrace()
             }
         }
     }

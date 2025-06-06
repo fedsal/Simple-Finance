@@ -46,7 +46,7 @@ import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 
 @Composable
-fun AddExpenseModalContent(
+fun ExpenseInfoModalContent(
     addExpenseModalViewModel: AddExpenseModalViewModel = koinInject(),
     categoryId: Long,
     onDismissRequest: () -> Unit,
