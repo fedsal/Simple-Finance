@@ -71,7 +71,7 @@ fun PaymentMethodFilter(
 }
 
 @Composable
-fun PaymentMethodChip(
+private fun PaymentMethodChip(
     paymentMethod: PaymentMethod,
     isSelected: Boolean,
     baseColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,

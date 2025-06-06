@@ -1,5 +1,6 @@
 package org.fedsal.finance.ui.common.composables.modals.expenseinfo
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,10 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,22 +30,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.ExpenseDefaults
-import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
-import org.fedsal.finance.ui.common.composables.PaymentMethodChip
 import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
+import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
+import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
-import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 
@@ -80,7 +84,8 @@ fun ExpenseInfoModalContent(
                 importAmount = uiState.value.expense.amount.roundToInt().toString()
                 date = uiState.value.expense.date
                 description = uiState.value.expense.description
-                selectedMethod = paymentMethods.indexOfFirst { it.id == uiState.value.expense.paymentMethod.id }
+                selectedMethod =
+                    paymentMethods.indexOfFirst { it.id == uiState.value.expense.paymentMethod.id }
             }
         }
 
@@ -135,7 +140,8 @@ fun ExpenseInfoModalContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "USD")
+                val currencyVisualTransformation =
+                    rememberCurrencyVisualTransformation(currency = "USD")
                 CustomEditText(
                     modifier = Modifier.width(180.dp),
                     value = importAmount,
@@ -186,8 +192,6 @@ fun ExpenseInfoModalContent(
                     PaymentMethodChip(
                         paymentMethod = paymentMethods[index],
                         isSelected = index == selectedMethod,
-                        baseColor = MaterialTheme.colorScheme.surfaceBright,
-                        selectedColor = MaterialTheme.colorScheme.surfaceContainer,
                         onClick = { selectedMethod = index }
                     )
                 }
@@ -200,6 +204,44 @@ fun ExpenseInfoModalContent(
                 onValueChange = { description = it },
                 label = "Descripción",
                 placeHolder = "Ingrese la descripción",
+            )
+        }
+    }
+}
+
+@Composable
+fun PaymentMethodChip(
+    paymentMethod: PaymentMethod,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val color = if (isSelected) MaterialTheme.colorScheme.onSurface
+    else MaterialTheme.colorScheme.onSurface.copy(alpha = .5f)
+    Surface(
+        modifier = Modifier.clickable(onClick = onClick).height(50.dp).width(120.dp),
+        border = BorderStroke(
+            width = 2.dp,
+            color = color
+        ),
+        shape = RoundedCornerShape(16.dp),
+        color = Color.Transparent
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = getIcon(paymentMethod.iconId),
+                contentDescription = paymentMethod.name,
+                tint = color
+            )
+            Spacer(Modifier.width(4.dp))
+            Text(
+                text = paymentMethod.name,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = color
+                ),
             )
         }
     }
