@@ -24,11 +24,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.ui.common.DateManager
-import org.fedsal.finance.ui.common.composables.BottomNavigation
+import org.fedsal.finance.ui.home.composables.BottomNavigation
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
-import org.fedsal.finance.ui.common.navigation.HomeDestination
-import org.fedsal.finance.ui.common.navigation.SimpleFinanceNavigation
-import org.fedsal.finance.ui.common.navigation.hasRoute
+import org.fedsal.finance.ui.home.navigation.HomeDestination
+import org.fedsal.finance.ui.home.navigation.HomeNavigation
+import org.fedsal.finance.ui.home.navigation.hasRoute
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryModalContent
@@ -67,7 +67,7 @@ fun HomeScreen(
         if (showBottomSheet) {
             ButtonBottomSheet(sheetState, onDismissRequest = { showBottomSheet = false })
         }
-        SimpleFinanceNavigation(
+        HomeNavigation(
             modifier = Modifier.padding(top = padding.calculateTopPadding(), bottom = 72.dp),
             navController = navController
         )

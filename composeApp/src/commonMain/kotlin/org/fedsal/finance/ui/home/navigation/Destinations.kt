@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.common.navigation
+package org.fedsal.finance.ui.home.navigation
 
 import kotlinx.serialization.Serializable
 
