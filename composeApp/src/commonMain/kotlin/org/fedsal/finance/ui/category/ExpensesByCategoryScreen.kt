@@ -172,7 +172,9 @@ fun ExpensesByCategoryScreen(
             // Payment method filter
             PaymentMethodFilter(
                 items = uiState.value.paymentMethods,
-                onItemSelected = {}
+                onItemSelected = {
+                    viewModel.filterExpensesByPaymentMethod(it)
+                }
             )
             Spacer(Modifier.height(20.dp))
 

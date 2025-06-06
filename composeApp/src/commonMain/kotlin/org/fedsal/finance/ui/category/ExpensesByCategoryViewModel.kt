@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
+import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.ui.common.DateManager
 import kotlin.properties.Delegates
 
@@ -28,7 +30,7 @@ class ExpensesByCategoryViewModel(
         loadPaymentMethods()
     }
 
-    private fun loadExpenses() = viewModelScope.launch {
+    private fun loadExpenses(filter: PaymentMethod? = null) = viewModelScope.launch {
         _uiState.value = uiState.value.copy(isLoading = true)
         runCatching {
             val category =
@@ -43,7 +45,11 @@ class ExpensesByCategoryViewModel(
                 _uiState.value = uiState.value.copy(
                     isLoading = false,
                     category = category,
-                    expenses = expenses.sortedByDescending { it.date },
+                    expenses = expenses.filter {
+                        if (filter != null) {
+                            it.paymentMethod.id == filter.id
+                        } else true
+                    }.sortedByDescending { it.date },
                     totalSpent = expenses.sumOf { it.amount },
                     availableAmount = category.budget - expenses.sumOf { it.amount }
                 )
@@ -70,5 +76,9 @@ class ExpensesByCategoryViewModel(
                 error = e.message ?: "Failed to load payment methods"
             )
         }
+    }
+
+    fun filterExpensesByPaymentMethod(paymentMethod: PaymentMethod?) {
+        loadExpenses(paymentMethod)
     }
 }
