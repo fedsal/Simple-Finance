@@ -1,16 +1,11 @@
 package org.fedsal.finance.ui.home
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,10 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
-import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
-import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
-import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryModalContent
 import org.fedsal.finance.ui.home.composables.BottomNavigation
+import org.fedsal.finance.ui.home.composables.ButtonBottomSheet
 import org.fedsal.finance.ui.home.navigation.HomeNavigation
 import org.fedsal.finance.ui.main.navigation.AppDestinations
 
@@ -66,56 +59,5 @@ fun HomeScreen(
             navController = navController,
             onNavigateOuterHome = onNavigateOuterHome
         )
-    }
-}
-
-// Home bottom sheet
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ButtonBottomSheet(
-    sheetState: SheetState,
-    onDismissRequest: () -> Unit,
-) {
-    var creatingCategory by remember { mutableStateOf(false) }
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-    ) {
-        Box(modifier = Modifier.height(600.dp)) {
-            var categoryId: Long? by remember { mutableStateOf(null) }
-
-            androidx.compose.animation.AnimatedVisibility(
-                visible = categoryId != null,
-                enter = slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth }
-                ),
-            ) {
-                categoryId?.let { safeCategory ->
-                    ExpenseInfoModalContent(
-                        categoryId = safeCategory,
-                        onDismissRequest = onDismissRequest
-                    )
-                }
-            }
-            androidx.compose.animation.AnimatedVisibility(
-                visible = creatingCategory,
-                enter = slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth }
-                ),
-            ) {
-                CategoryDataModalContent(onSuccess = {
-                    categoryId = it
-                    creatingCategory = false
-                })
-            }
-
-            if (categoryId == null && !creatingCategory) {
-                // Show the category selection modal content
-                SelectCategoryModalContent(
-                    onCategoryClicked = { categoryId = it.id.toLong() },
-                    onNewCategoryClicked = { creatingCategory = true },
-                )
-            }
-        }
     }
 }
