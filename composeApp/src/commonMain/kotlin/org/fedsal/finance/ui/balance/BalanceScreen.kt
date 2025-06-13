@@ -19,7 +19,7 @@ fun BalanceScreen() {
             Debt(
                 id = 1,
                 title = "Credit Card",
-                amount = 1700.0,
+                amount = 180200.0,
                 date = "2023-10-01",
                 category = DefaultCategories.FUN,
                 installments = 1,
@@ -29,7 +29,7 @@ fun BalanceScreen() {
             Debt(
                 id = 1,
                 title = "Cash",
-                amount = 1500.0,
+                amount = 1500000.0,
                 date = "2023-10-01",
                 category = DefaultCategories.FUN,
                 installments = 1,

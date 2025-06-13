@@ -119,7 +119,7 @@ fun PieChart(
                 // draw each Arc for each data entry in Pie Chart
                 floatValue.forEachIndexed { index, value ->
                     drawArc(
-                        color = hexToColor(data[index].paymentMethod.color),
+                        color = hexToColor(data[index].paymentMethod.color).copy(alpha = .7f),
                         lastValue,
                         value,
                         useCenter = false,
