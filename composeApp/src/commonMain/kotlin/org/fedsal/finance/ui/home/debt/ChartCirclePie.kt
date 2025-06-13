@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.fedsal.finance.domain.models.Debt
+import org.fedsal.finance.domain.models.DebtBySource
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
@@ -37,19 +37,19 @@ import org.fedsal.finance.ui.common.hexToColor
 
 @Composable
 fun PieChart(
-    data: List<Debt>,
+    data: List<DebtBySource>,
     radiusOuter: Dp = 140.dp,
     chartBarWidth: Dp = 20.dp,
     animDuration: Int = 1000,
 ) {
 
-    val totalSum = data.sumOf { it.amount }
+    val totalSum = data.sumOf { it.totalDebt }
     val floatValue = mutableListOf<Float>()
 
     // To set the value of each Arc according to
     // the value given in the data, we have used a simple formula.
     data.forEachIndexed { index, values ->
-        floatValue.add(index, 360 * values.amount.toFloat() / totalSum.toFloat())
+        floatValue.add(index, 360 * values.totalDebt.toFloat() / totalSum.toFloat())
     }
 
     var animationPlayed by remember { mutableStateOf(false) }
@@ -119,7 +119,7 @@ fun PieChart(
                 // draw each Arc for each data entry in Pie Chart
                 floatValue.forEachIndexed { index, value ->
                     drawArc(
-                        color = hexToColor(data[index].paymentMethod.color).copy(alpha = .7f),
+                        color = hexToColor(data[index].source.color).copy(alpha = .7f),
                         lastValue,
                         value,
                         useCenter = false,
@@ -139,7 +139,7 @@ fun PieChart(
 
 @Composable
 fun DetailsPieChart(
-    data: List<Debt>
+    data: List<DebtBySource>
 ) {
     Column(
         modifier = Modifier
@@ -149,7 +149,7 @@ fun DetailsPieChart(
     ) {
         // create the data items
         data.forEach { debt ->
-            val percentage = (debt.amount / data.sumOf { it.amount } * 100)
+            val percentage = (debt.totalDebt / data.sumOf { it.totalDebt } * 100)
             DetailsPieChartItem(
                 data = debt,
                 percentage = percentage
@@ -160,7 +160,7 @@ fun DetailsPieChart(
 }
 
 @Composable
-fun DetailsPieChartItem(data: Debt, percentage: Double) {
+fun DetailsPieChartItem(data: DebtBySource, percentage: Double) {
     Surface(
         modifier = Modifier.height(84.dp),
         shape = RoundedCornerShape(16.dp),
@@ -172,13 +172,13 @@ fun DetailsPieChartItem(data: Debt, percentage: Double) {
         ) {
             CategoryIcon(
                 modifier = Modifier.size(50.dp),
-                icon = getIcon(data.paymentMethod.iconId),
-                iconTint = hexToColor(data.paymentMethod.color)
+                icon = getIcon(data.source.iconId),
+                iconTint = hexToColor(data.source.color)
             )
 
             Column(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(
-                    text = data.title,
+                    text = data.source.name,
                     maxLines = 1,
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.SemiBold,
@@ -197,7 +197,7 @@ fun DetailsPieChartItem(data: Debt, percentage: Double) {
             }
 
             Text(
-                text = "$ ${data.amount.formatDecimal()}",
+                text = "$ ${data.totalDebt.formatDecimal()}",
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
             )
         }

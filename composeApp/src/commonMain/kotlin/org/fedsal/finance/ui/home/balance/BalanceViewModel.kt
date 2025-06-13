@@ -11,7 +11,7 @@ import org.fedsal.finance.domain.models.DebtBySource
 import org.fedsal.finance.domain.usecases.GetDebtBySourceUseCase
 import org.fedsal.finance.ui.common.DateManager
 
-class BalanceScreenViewModel(
+class BalanceViewModel(
     private val getDebtBySourceUseCase: GetDebtBySourceUseCase
 ) : ViewModel() {
     data class BalanceUiState(

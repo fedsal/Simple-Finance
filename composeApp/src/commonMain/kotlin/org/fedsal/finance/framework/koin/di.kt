@@ -24,7 +24,7 @@ import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryViewModel
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalViewModel
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataViewModel
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel
-import org.fedsal.finance.ui.home.balance.BalanceScreenViewModel
+import org.fedsal.finance.ui.home.balance.BalanceViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -87,5 +87,5 @@ val provideViewModelModule = module {
     single { ExpenseInfoModalViewModel(get(), get(), get()) }
     single { SelectCategoryViewModel(get()) }
     single { CategoryDataViewModel(get()) }
-    single { BalanceScreenViewModel(get()) }
+    single { BalanceViewModel(get()) }
 }

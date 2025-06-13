@@ -1,45 +1,53 @@
 package org.fedsal.finance.ui.home.balance
 
 import PieChart
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Celebration
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.fedsal.finance.domain.models.Debt
-import org.fedsal.finance.domain.models.DefaultCategories
-import org.fedsal.finance.domain.models.DefaultPaymentMethods
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun BalanceScreen() {
+fun BalanceScreen(
+    viewModel: BalanceViewModel = koinViewModel()
+) {
+    val uiState = viewModel.uiState.collectAsState()
     Surface(modifier = Modifier.safeDrawingPadding()) {
-        val items = listOf(
-            Debt(
-                id = 1,
-                title = "Credit Card",
-                amount = 180200.0,
-                date = "2023-10-01",
-                category = DefaultCategories.FUN,
-                installments = 1,
-                paymentMethod = DefaultPaymentMethods.CREDIT_CARD,
-                description = "Monthly credit card payment"
-            ),
-            Debt(
-                id = 1,
-                title = "Cash",
-                amount = 1500000.0,
-                date = "2023-10-01",
-                category = DefaultCategories.FUN,
-                installments = 1,
-                paymentMethod = DefaultPaymentMethods.CASH,
-                description = "Monthly credit card payment"
-            ),
-        )
+
+        if (uiState.value.debts.isEmpty()) {
+            Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Default.Celebration,
+                    contentDescription = "No debts",
+                    modifier = Modifier.size(140.dp)
+                )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = "No tenes ninguna deuda!",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            return@Surface
+        }
         Column(Modifier.padding(top = 50.dp, start = 16.dp, end = 16.dp)) {
             PieChart(
-                data = items
+                data = uiState.value.debts
             )
         }
     }
