@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import org.fedsal.finance.ui.balance.BalanceScreen
+import org.fedsal.finance.ui.home.balance.BalanceScreen
 import org.fedsal.finance.ui.home.allcategories.ExpensesScreen
 import org.fedsal.finance.ui.main.navigation.AppDestinations
 

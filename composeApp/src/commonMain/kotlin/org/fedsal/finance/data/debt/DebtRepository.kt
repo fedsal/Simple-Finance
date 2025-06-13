@@ -1,5 +1,7 @@
 package org.fedsal.finance.data.debt
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Month
 import org.fedsal.finance.domain.models.Debt
 
 class DebtRepository(
@@ -19,5 +21,13 @@ class DebtRepository(
 
     suspend fun delete(debt: Debt) {
         localDataSource.delete(debt)
+    }
+
+    suspend fun getDebtsByPaymentMethod(
+        paymentMethodId: Int,
+        month: Month,
+        year: Int
+    ): Flow<List<Debt>> {
+        return localDataSource.getDebtsByPaymentMethod(paymentMethodId, month, year)
     }
 }

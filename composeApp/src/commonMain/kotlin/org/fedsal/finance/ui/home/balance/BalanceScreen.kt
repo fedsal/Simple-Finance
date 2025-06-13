@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.balance
+package org.fedsal.finance.ui.home.balance
 
 import PieChart
 import androidx.compose.foundation.layout.Column
