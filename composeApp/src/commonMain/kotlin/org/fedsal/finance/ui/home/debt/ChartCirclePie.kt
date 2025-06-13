@@ -92,6 +92,25 @@ fun PieChart(
             modifier = Modifier.size(animateSize.dp),
             contentAlignment = Alignment.Center
         ) {
+            Column(
+                modifier = Modifier.padding(bottom = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    "Deuda total",
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                )
+                Text(
+                    "$ ${totalSum.formatDecimal()}",
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 36.sp
+                    ),
+                )
+            }
             Canvas(
                 modifier = Modifier
                     .size(radiusOuter * 2f)
