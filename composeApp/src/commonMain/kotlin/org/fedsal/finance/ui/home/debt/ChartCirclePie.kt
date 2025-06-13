@@ -48,8 +48,6 @@ fun PieChart(
 
     // To set the value of each Arc according to
     // the value given in the data, we have used a simple formula.
-    // For a detailed explanation check out the Medium Article.
-    // The link is in the about section and readme file of this GitHub Repository
     data.forEachIndexed { index, values ->
         floatValue.add(index, 360 * values.amount.toFloat() / totalSum.toFloat())
     }
@@ -131,9 +129,11 @@ fun DetailsPieChart(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // create the data items
-        data.forEach {
+        data.forEach { debt ->
+            val percentage = (debt.amount / data.sumOf { it.amount } * 100)
             DetailsPieChartItem(
-                data = it
+                data = debt,
+                percentage = percentage
             )
         }
 
@@ -141,7 +141,7 @@ fun DetailsPieChart(
 }
 
 @Composable
-fun DetailsPieChartItem(data: Debt) {
+fun DetailsPieChartItem(data: Debt, percentage: Double) {
     Surface(
         modifier = Modifier.height(84.dp),
         shape = RoundedCornerShape(16.dp),
@@ -157,20 +157,30 @@ fun DetailsPieChartItem(data: Debt) {
                 iconTint = hexToColor(data.paymentMethod.color)
             )
 
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(
-                    modifier = Modifier.padding(start = 15.dp),
                     text = data.title,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 22.sp,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 22.sp
+                    ),
                 )
                 Text(
-                    modifier = Modifier.padding(start = 15.dp),
-                    text = "$ ${data.amount.formatDecimal()}",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 22.sp,
+                    text = "% ${percentage.formatDecimal()}",
+                    maxLines = 1,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    ),
                 )
             }
+
+            Text(
+                text = "$ ${data.amount.formatDecimal()}",
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+            )
         }
     }
 }
