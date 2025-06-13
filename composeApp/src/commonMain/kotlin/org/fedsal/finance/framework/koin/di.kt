@@ -19,7 +19,7 @@ import org.fedsal.finance.framework.room.datasource.DebtRoomDataSource
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
 import org.fedsal.finance.framework.room.datasource.PaymentMethodRoomDataSource
 import org.fedsal.finance.ui.home.allcategories.ExpensesViewModel
-import org.fedsal.finance.ui.category.ExpensesByCategoryViewModel
+import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryViewModel
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalViewModel
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataViewModel
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel

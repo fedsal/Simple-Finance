@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import org.fedsal.finance.ui.category.ExpensesByCategoryScreen
+import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryScreen
 import org.fedsal.finance.ui.common.navigation.animatedComposable
 import org.fedsal.finance.ui.home.HomeScreen
 

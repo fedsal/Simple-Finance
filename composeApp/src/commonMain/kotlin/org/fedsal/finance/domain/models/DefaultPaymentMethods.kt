@@ -5,13 +5,13 @@ object DefaultPaymentMethods {
         name = "Efectivo",
         iconId = AppIcons.CASH.name,
         type = PaymentMethodType.CASH,
-        color = "#FF00A300"
+        color = AppColors.GREEN.hexString
     )
 
     val CREDIT_CARD = PaymentMethod(
         name = "Credito",
         iconId = AppIcons.CARD.name,
         type = PaymentMethodType.CREDIT,
-        color = "#FF00A300"
+        color = AppColors.ORANGE.hexString
     )
 }

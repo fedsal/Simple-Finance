@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.category
+package org.fedsal.finance.ui.categoryExpenses
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -36,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.fedsal.finance.ui.category.composables.CategoryHeader
+import org.fedsal.finance.ui.categoryExpenses.composables.CategoryHeader
 import org.fedsal.finance.ui.common.composables.EditSelectorBottomSheet
 import org.fedsal.finance.ui.common.composables.ExpenseItem
 import org.fedsal.finance.ui.common.composables.PaymentMethodFilter

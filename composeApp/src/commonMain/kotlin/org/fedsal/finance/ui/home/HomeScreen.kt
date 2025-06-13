@@ -55,7 +55,7 @@ fun HomeScreen(
             ButtonBottomSheet(sheetState, onDismissRequest = { showBottomSheet = false })
         }
         HomeNavigation(
-            modifier = Modifier.padding(top = padding.calculateTopPadding(), bottom = 72.dp),
+            modifier = Modifier.padding(padding),
             navController = navController,
             onNavigateOuterHome = onNavigateOuterHome
         )

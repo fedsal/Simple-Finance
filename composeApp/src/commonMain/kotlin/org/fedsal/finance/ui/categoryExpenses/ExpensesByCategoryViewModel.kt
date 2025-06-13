@@ -1,11 +1,10 @@
-package org.fedsal.finance.ui.category
+package org.fedsal.finance.ui.categoryExpenses
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.expense.ExpenseRepository
