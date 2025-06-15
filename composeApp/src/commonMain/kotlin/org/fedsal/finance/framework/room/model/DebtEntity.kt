@@ -16,6 +16,7 @@ data class DebtEntity(
     val date: String,
     val categoryId: Long,
     val installments: Int,
+    val paidInstallments: Int = 0,
     val paymentMethodId: Int,
     val description: String,
 )
@@ -28,6 +29,7 @@ fun DebtEntity.toDomain(): Debt {
         date = date,
         category = Category(id = categoryId.toInt()),
         installments = installments,
+        paidInstallments = paidInstallments,
         paymentMethod = PaymentMethod(
             id = paymentMethodId,
             name = "",
@@ -46,6 +48,7 @@ fun Debt.toEntity(): DebtEntity {
         date = date,
         categoryId = category.id.toLong(),
         installments = installments,
+        paidInstallments = paidInstallments,
         paymentMethodId = paymentMethod.id,
         description = description
     )

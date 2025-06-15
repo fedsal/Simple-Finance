@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d6e70bb16a803375f6b2f51bb81de64c",
+    "identityHash": "1a7e2890b528af7719523c174c7ee207",
     "entities": [
       {
         "tableName": "expenses",
@@ -60,7 +60,7 @@
       },
       {
         "tableName": "debts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `amount` REAL NOT NULL, `date` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, `installments` INTEGER NOT NULL, `paymentMethodId` INTEGER NOT NULL, `description` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `amount` REAL NOT NULL, `date` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, `installments` INTEGER NOT NULL, `paidInstallments` INTEGER NOT NULL, `paymentMethodId` INTEGER NOT NULL, `description` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -95,6 +95,12 @@
           {
             "fieldPath": "installments",
             "columnName": "installments",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paidInstallments",
+            "columnName": "paidInstallments",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -205,7 +211,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6e70bb16a803375f6b2f51bb81de64c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1a7e2890b528af7719523c174c7ee207')"
     ]
   }
 }

@@ -7,6 +7,7 @@ data class Debt(
     val date: String,
     val category: Category,
     val installments: Int,
+    val paidInstallments: Int = 0,
     val paymentMethod: PaymentMethod,
     val description: String,
 )

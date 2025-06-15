@@ -106,6 +106,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 date TEXT NOT NULL,
                 categoryId INTEGER NOT NULL,
                 installments INTEGER NOT NULL,
+                paidInstallments INTEGER NOT NULL,
                 paymentMethodId INTEGER NOT NULL,
                 description TEXT NOT NULL
             )
