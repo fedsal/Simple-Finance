@@ -2,7 +2,6 @@ package org.fedsal.finance.framework.room.datasource
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Month
 import org.fedsal.finance.data.debt.DebtLocalDataSource
 import org.fedsal.finance.domain.models.Debt
 import org.fedsal.finance.framework.room.dao.DebtDao
@@ -32,11 +31,7 @@ class DebtRoomDataSource(
         return debtDao.getDebtById(debtId)?.toDomain()
     }
 
-    override suspend fun getDebtsByPaymentMethod(
-        paymentMethodId: Int,
-        month: Month,
-        year: Int
-    ): Flow<List<Debt>> {
+    override suspend fun getDebtsByPaymentMethod(paymentMethodId: Int): Flow<List<Debt>> {
         return debtDao.getDebtsByPaymentMethod(paymentMethodId)
             .map { debtEntities -> debtEntities.map { it.toDomain() } }
     }

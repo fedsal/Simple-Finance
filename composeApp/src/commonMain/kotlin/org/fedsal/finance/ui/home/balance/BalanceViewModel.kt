@@ -6,10 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Month
 import org.fedsal.finance.domain.models.DebtBySource
 import org.fedsal.finance.domain.usecases.GetDebtBySourceUseCase
-import org.fedsal.finance.ui.common.DateManager
 
 class BalanceViewModel(
     private val getDebtBySourceUseCase: GetDebtBySourceUseCase
@@ -25,16 +23,12 @@ class BalanceViewModel(
     val uiState: StateFlow<BalanceUiState> get() = _uiState
 
     fun initViewModel() {
-        viewModelScope.launch {
-            DateManager.selectedMonth.collectLatest { month ->
-                fetchDebts(month)
-            }
-        }
+        fetchDebts()
     }
 
-    private fun fetchDebts(month: Month) {
+    private fun fetchDebts() {
         getDebtBySourceUseCase.invoke(
-            params = month,
+            params = GetDebtBySourceUseCase.Params,
             onError = {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
