@@ -14,13 +14,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.home.composables.BottomNavigation
 import org.fedsal.finance.ui.home.composables.ButtonBottomSheet
+import org.fedsal.finance.ui.home.navigation.HomeDestination
 import org.fedsal.finance.ui.home.navigation.HomeNavigation
+import org.fedsal.finance.ui.home.navigation.hasRoute
 import org.fedsal.finance.ui.main.navigation.AppDestinations
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +54,9 @@ fun HomeScreen(
         }
     ) { padding ->
         if (showBottomSheet) {
-            ButtonBottomSheet(sheetState, onDismissRequest = { showBottomSheet = false })
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val isOnBalance = navBackStackEntry.hasRoute(HomeDestination.Balance)
+            ButtonBottomSheet(sheetState, isOnBalance, onDismissRequest = { showBottomSheet = false })
         }
         HomeNavigation(
             modifier = Modifier.padding(padding),

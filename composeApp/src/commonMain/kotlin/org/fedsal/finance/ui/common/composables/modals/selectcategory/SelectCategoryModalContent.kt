@@ -28,6 +28,7 @@ import org.koin.compose.koinInject
 @Composable
 fun SelectCategoryModalContent(
     selectCategoryViewModel: SelectCategoryViewModel = koinInject(),
+    isOnBalance: Boolean = false,
     onCategoryClicked: (category: Category) -> Unit,
     onNewCategoryClicked: () -> Unit,
 ) {
@@ -40,7 +41,7 @@ fun SelectCategoryModalContent(
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Top) {
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = "Agregar un gasto",
+            text = if (isOnBalance) "Agregar una deuda" else "Agregar un gasto",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )

@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
+import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryModalContent
 
@@ -22,6 +23,7 @@ import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCate
 @Composable
 fun ButtonBottomSheet(
     sheetState: SheetState,
+    isOnBalance: Boolean,
     onDismissRequest: () -> Unit,
 ) {
     var creatingCategory by remember { mutableStateOf(false) }
@@ -32,6 +34,7 @@ fun ButtonBottomSheet(
         Box(modifier = Modifier.height(600.dp)) {
             var categoryId: Long? by remember { mutableStateOf(null) }
 
+            // Show the expense info modal content if a category is selected
             androidx.compose.animation.AnimatedVisibility(
                 visible = categoryId != null,
                 enter = slideInHorizontally(
@@ -39,12 +42,21 @@ fun ButtonBottomSheet(
                 ),
             ) {
                 categoryId?.let { safeCategory ->
-                    ExpenseInfoModalContent(
-                        categoryId = safeCategory,
-                        onDismissRequest = onDismissRequest
-                    )
+                    if (isOnBalance) {
+                        DebtDataModalContent(
+                            categoryId = safeCategory,
+                            onDismissRequest = onDismissRequest
+                        )
+                    } else {
+                        ExpenseInfoModalContent(
+                            categoryId = safeCategory,
+                            onDismissRequest = onDismissRequest
+                        )
+                    }
                 }
             }
+
+            // Create category modal content
             androidx.compose.animation.AnimatedVisibility(
                 visible = creatingCategory,
                 enter = slideInHorizontally(
@@ -60,6 +72,7 @@ fun ButtonBottomSheet(
             if (categoryId == null && !creatingCategory) {
                 // Show the category selection modal content
                 SelectCategoryModalContent(
+                    isOnBalance = isOnBalance,
                     onCategoryClicked = { categoryId = it.id.toLong() },
                     onNewCategoryClicked = { creatingCategory = true },
                 )
