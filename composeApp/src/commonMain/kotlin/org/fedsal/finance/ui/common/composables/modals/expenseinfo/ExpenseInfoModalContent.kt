@@ -39,10 +39,10 @@ import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
+import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
-import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
 import org.fedsal.finance.ui.common.getIcon

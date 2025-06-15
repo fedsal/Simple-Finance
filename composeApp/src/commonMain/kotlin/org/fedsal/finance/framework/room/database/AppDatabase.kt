@@ -5,13 +5,15 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
+
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import androidx.sqlite.execSQL
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.DefaultCategories
 import org.fedsal.finance.domain.models.DefaultPaymentMethods
 import org.fedsal.finance.framework.room.dao.CategoryDao
@@ -28,7 +30,7 @@ object INSTANCE {
     var database: AppDatabase? = null
 }
 
-@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, PaymentMethodEntity::class], version = 1)
+@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, PaymentMethodEntity::class], version = 2)
 @TypeConverters(Converters::class)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase: RoomDatabase() {
@@ -74,6 +76,7 @@ fun getRoomDatabase(
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .addCallback(InitialDataCallback())
+        .addMigrations(MIGRATION_1_2)
         .build()
     INSTANCE.database = db
     return db
@@ -86,3 +89,26 @@ fun getDebtDao(database: AppDatabase) = database.debtDao()
 fun getPaymentMethodDao(database: AppDatabase) = database.paymentMethodDao()
 
 fun getCategoryDao(database: AppDatabase) = database.categoryDao()
+
+
+// MIGRATIONS
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(connection: SQLiteConnection) {
+        // Drop the old debts table
+        connection.execSQL("DROP TABLE IF EXISTS debts")
+
+        // Recreate with new schema
+        connection.execSQL("""
+            CREATE TABLE debts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                title TEXT NOT NULL,
+                amount REAL NOT NULL,
+                date TEXT NOT NULL,
+                categoryId INTEGER NOT NULL,
+                installments INTEGER NOT NULL,
+                paymentMethodId INTEGER NOT NULL,
+                description TEXT NOT NULL
+            )
+        """.trimIndent())
+    }
+}

@@ -10,6 +10,7 @@ interface DebtLocalDataSource {
     suspend fun getAllDebts(): List<Debt>
     suspend fun update(debt: Debt)
     suspend fun delete(debt: Debt)
+    suspend fun getDebtById(debtId: Long): Debt?
     suspend fun getDebtsByPaymentMethod(
         paymentMethodId: Int,
         month: Month,

@@ -2,6 +2,7 @@ package org.fedsal.finance.domain.usecases
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -19,7 +20,7 @@ class GetDebtBySourceUseCase(
 ): BaseUseCase<Month, Flow<List<DebtBySource>>>() {
 
     override suspend fun execute(params: Month): Flow<List<DebtBySource>> {
-        val paymentMethods = paymentMethodRepository.read().filter { it.type == PaymentMethodType.CREDIT }
+        val paymentMethods = paymentMethodRepository.read().filter { it.type == PaymentMethodType.CREDIT || it.type == PaymentMethodType.LOAN }
         val date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
         val flows = paymentMethods.map { paymentMethod ->
@@ -27,7 +28,7 @@ class GetDebtBySourceUseCase(
                 paymentMethod.id,
                 params,
                 date.year
-            ).map { debts ->
+            ).filter { it.isNotEmpty() }.map { debts ->
                 val totalDebt = debts.sumOf { it.amount }
 
                 DebtBySource(

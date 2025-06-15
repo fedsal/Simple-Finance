@@ -37,11 +37,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.categoryExpenses.composables.CategoryHeader
+import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.composables.EditSelectorBottomSheet
 import org.fedsal.finance.ui.common.composables.ExpenseItem
 import org.fedsal.finance.ui.common.composables.PaymentMethodFilter
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
-import org.fedsal.finance.ui.common.composables.modals.categorydata.DisplayInfoMode
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
 import org.fedsal.finance.ui.common.convertFromIso
 import org.fedsal.finance.ui.common.getIcon

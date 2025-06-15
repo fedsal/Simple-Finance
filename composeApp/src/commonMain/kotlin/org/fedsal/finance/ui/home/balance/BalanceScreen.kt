@@ -16,7 +16,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,10 +28,15 @@ import org.koin.compose.viewmodel.koinViewModel
 fun BalanceScreen(
     viewModel: BalanceViewModel = koinViewModel()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.initViewModel()
+    }
+
     Surface(modifier = Modifier.safeDrawingPadding()) {
 
-        if (uiState.value.debts.isEmpty()) {
+        if (uiState.debts.isEmpty()) {
             Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
                     imageVector = Icons.Default.Celebration,
@@ -47,7 +54,7 @@ fun BalanceScreen(
         }
         Column(Modifier.padding(top = 50.dp, start = 16.dp, end = 16.dp)) {
             PieChart(
-                data = uiState.value.debts
+                data = uiState.debts
             )
         }
     }

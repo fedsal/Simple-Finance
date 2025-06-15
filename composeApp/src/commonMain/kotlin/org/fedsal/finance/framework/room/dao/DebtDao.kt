@@ -22,13 +22,13 @@ interface DebtDao {
     @Delete
     suspend fun delete(entity: DebtEntity)
 
+    @Query("SELECT * FROM debts WHERE id = :debtId LIMIT 1")
+    suspend fun getDebtById(debtId: Long): DebtEntity?
+
     @Query(
-        "SELECT * FROM debts WHERE strftime('%m', date) = :month AND " +
-                "strftime('%Y', date) = :year AND paymentMethodId = :paymentMethodId ORDER BY date DESC"
+        "SELECT * FROM debts WHERE paymentMethodId = :paymentMethodId"
     )
     fun getDebtsByPaymentMethod(
-        paymentMethodId: Int,
-        month: String,
-        year: String
+        paymentMethodId: Int
     ): Flow<List<DebtEntity>>
 }

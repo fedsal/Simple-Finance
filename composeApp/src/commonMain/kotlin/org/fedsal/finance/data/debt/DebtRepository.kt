@@ -23,6 +23,10 @@ class DebtRepository(
         localDataSource.delete(debt)
     }
 
+    suspend fun getDebtById(debtId: Long): Debt? {
+        return localDataSource.getDebtById(debtId)
+    }
+
     suspend fun getDebtsByPaymentMethod(
         paymentMethodId: Int,
         month: Month,

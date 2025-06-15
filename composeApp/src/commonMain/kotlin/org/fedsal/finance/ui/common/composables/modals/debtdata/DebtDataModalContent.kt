@@ -1,5 +1,6 @@
 package org.fedsal.finance.ui.common.composables.modals.debtdata
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,37 +14,55 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.DefaultPaymentMethods
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
+import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.PaymentMethodChip
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
+import org.fedsal.finance.ui.common.opaqueColor
+import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.roundToInt
 
 @Composable
-fun DebtDataModalContent(categoryId: Long, onDismissRequest: () -> Unit) {
+fun DebtDataModalContent(
+    viewModel: DebtDataViewModel = koinViewModel(),
+    mode: DisplayInfoMode = DisplayInfoMode.CREATE,
+    categoryId: Long = -1,
+    onDismissRequest: () -> Unit
+) {
+    LaunchedEffect(Unit) {
+        viewModel.initViewModel(mode, categoryId)
+    }
+
+
     Box {
         val currentDate by remember { mutableStateOf(DateManager.getCurrentDate()) }
-        val paymentMethods = listOf(DefaultPaymentMethods.CREDIT_CARD)
 
         // Component state variables
         var title by remember { mutableStateOf("") }
@@ -53,11 +72,32 @@ fun DebtDataModalContent(categoryId: Long, onDismissRequest: () -> Unit) {
         var installments by remember { mutableStateOf("") }
         var description by remember { mutableStateOf("") }
 
+        val uiState by viewModel.uiState.collectAsState()
+
+        if (uiState.shouldContinue) {
+            onDismissRequest()
+            viewModel.dispose()
+        }
+
+        LaunchedEffect(uiState.debt) {
+            uiState.debt?.let { debt ->
+                if (mode == DisplayInfoMode.EDIT) {
+                    title = debt.title
+                    importAmount = debt.amount.roundToInt().toString()
+                    date = debt.date
+                    description = debt.description
+                    selectedMethod =
+                        uiState.paymentMethods.indexOfFirst { it.id == debt.paymentMethod.id }
+                }
+            }
+        }
+
         // Errors
         var titleError by remember { mutableStateOf(false) }
         var importError by remember { mutableStateOf(false) }
         var dateError by remember { mutableStateOf(false) }
         var installmentsError by remember { mutableStateOf(false) }
+        var paymentMethodError by remember { mutableStateOf(false) }
 
         // Done button to close the modal
         Icon(
@@ -68,11 +108,49 @@ fun DebtDataModalContent(categoryId: Long, onDismissRequest: () -> Unit) {
                 .size(60.dp)
                 .padding(end = 24.dp, bottom = 20.dp)
                 .clickable {
-                    onDismissRequest()
+                    // Validate inputs
+                    titleError = title.isBlank()
+                    importError = importAmount.isBlank() || importAmount.toDoubleOrNull() == null
+                    dateError = date.isBlank() || date.length != DATE_LENGTH
+                    installmentsError = installments.isBlank() || installments.toIntOrNull() == null
+                    paymentMethodError =
+                        selectedMethod < 0 || selectedMethod >= uiState.paymentMethods.size
+
+                    if (titleError || importError || dateError || installmentsError || paymentMethodError) return@clickable
+                    viewModel.createOrUpdateDebt(
+                        title = title,
+                        amount = importAmount.toDoubleOrNull() ?: 0.0,
+                        date = date,
+                        installments = installments.toIntOrNull() ?: 0,
+                        paymentMethod = uiState.paymentMethods[selectedMethod],
+                        description = description,
+                        category = Category(id = categoryId.toInt())
+                    )
                 }
         )
 
         Column(Modifier.fillMaxSize().padding(20.dp)) {
+            // Error toase
+            if (paymentMethodError) {
+                Box(
+                    modifier = Modifier.padding(top = 20.dp, bottom = 12.dp).fillMaxWidth()
+                        .height(30.dp)
+                        .background(
+                            opaqueColor(Color.Red).copy(alpha = .3f),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "Seleccione un metodo de pago",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Red.copy(alpha = .7f)
+                        )
+                    )
+                }
+            }
+            // Content
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Agregar una deuda",
@@ -150,9 +228,9 @@ fun DebtDataModalContent(categoryId: Long, onDismissRequest: () -> Unit) {
             Spacer(Modifier.height(8.dp))
             // Payment methods list
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                items(paymentMethods.size) { index ->
+                items(uiState.paymentMethods.size) { index ->
                     PaymentMethodChip(
-                        paymentMethod = paymentMethods[index],
+                        paymentMethod = uiState.paymentMethods[index],
                         isSelected = index == selectedMethod,
                         onClick = { selectedMethod = index }
                     )

@@ -23,6 +23,7 @@ import org.fedsal.finance.ui.home.allcategories.ExpensesViewModel
 import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryViewModel
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalViewModel
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataViewModel
+import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataViewModel
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel
 import org.fedsal.finance.ui.home.balance.BalanceViewModel
 import org.koin.core.KoinApplication
@@ -31,7 +32,6 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-
 
 fun initializeKoin(
     config: (KoinApplication.() -> Unit)? = null,
@@ -88,4 +88,5 @@ val provideViewModelModule = module {
     single { SelectCategoryViewModel(get()) }
     single { CategoryDataViewModel(get()) }
     single { BalanceViewModel(get()) }
+    single { DebtDataViewModel(get(), get()) }
 }

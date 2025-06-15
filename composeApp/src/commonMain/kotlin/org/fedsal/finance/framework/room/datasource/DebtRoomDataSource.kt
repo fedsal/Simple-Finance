@@ -28,13 +28,16 @@ class DebtRoomDataSource(
         debtDao.delete(debt.toEntity())
     }
 
+    override suspend fun getDebtById(debtId: Long): Debt? {
+        return debtDao.getDebtById(debtId)?.toDomain()
+    }
+
     override suspend fun getDebtsByPaymentMethod(
         paymentMethodId: Int,
         month: Month,
         year: Int
     ): Flow<List<Debt>> {
-        val paddedMonth = (month.ordinal + 1).toString().padStart(2, '0')
-        return debtDao.getDebtsByPaymentMethod(paymentMethodId, paddedMonth, year.toString())
+        return debtDao.getDebtsByPaymentMethod(paymentMethodId)
             .map { debtEntities -> debtEntities.map { it.toDomain() } }
     }
 }
