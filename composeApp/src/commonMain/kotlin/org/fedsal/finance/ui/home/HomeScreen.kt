@@ -35,9 +35,12 @@ fun HomeScreen(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val isOnBalance = navBackStackEntry.hasRoute(HomeDestination.Balance)
 
     Scaffold(
         topBar = {
+            if (isOnBalance) return@Scaffold
             val month = DateManager.selectedMonth.collectAsState()
             DateFilterHeader(
                 onPreviousClicked = { DateManager.decrementMonth() },
@@ -54,8 +57,6 @@ fun HomeScreen(
         }
     ) { padding ->
         if (showBottomSheet) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val isOnBalance = navBackStackEntry.hasRoute(HomeDestination.Balance)
             ButtonBottomSheet(sheetState, isOnBalance, onDismissRequest = { showBottomSheet = false })
         }
         HomeNavigation(
