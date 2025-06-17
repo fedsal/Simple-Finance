@@ -90,5 +90,5 @@ val provideViewModelModule = module {
     single { CategoryDataViewModel(get()) }
     single { BalanceViewModel(get()) }
     single { DebtDataViewModel(get(), get()) }
-    single { DebtDetailViewModel(get(), get()) }
+    single { DebtDetailViewModel(get(), get(), get()) }
 }

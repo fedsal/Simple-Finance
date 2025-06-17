@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.debt.DebtRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Debt
@@ -14,7 +16,8 @@ import org.fedsal.finance.domain.models.PaymentMethod
 
 class DebtDetailViewModel(
     private val debtRepository: DebtRepository,
-    private val paymentMethodRepository: PaymentMethodRepository
+    private val paymentMethodRepository: PaymentMethodRepository,
+    private val categoryRepository: CategoryRepository,
 ) : ViewModel() {
 
     data class UIState(
@@ -61,7 +64,14 @@ class DebtDetailViewModel(
 
         runCatching {
             viewModelScope.launch {
-                debtRepository.getDebtsByPaymentMethod(sourceId).collectLatest { debts ->
+                debtRepository.getDebtsByPaymentMethod(sourceId).map { debt ->
+                    debt.map { item ->
+                        item.copy(
+                            category = categoryRepository.getById(item.category.id)
+                                ?: item.category,
+                        )
+                    }
+                }.collectLatest { debts ->
                     _uiState.update {
                         UIState(
                             isLoading = false,
