@@ -55,7 +55,10 @@ fun BalanceScreen(
         }
         Column(Modifier.padding(top = 50.dp, start = 16.dp, end = 16.dp)) {
             PieChart(
-                data = uiState.debts
+                data = uiState.debts,
+                onItemClicked = { paymentMethod ->
+                    onDebtClick(paymentMethod.id)
+                },
             )
         }
     }

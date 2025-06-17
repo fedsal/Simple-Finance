@@ -2,6 +2,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.fedsal.finance.domain.models.DebtBySource
+import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
@@ -41,6 +43,7 @@ fun PieChart(
     radiusOuter: Dp = 140.dp,
     chartBarWidth: Dp = 20.dp,
     animDuration: Int = 1000,
+    onItemClicked: (PaymentMethod) -> Unit
 ) {
 
     val totalSum = data.sumOf { it.totalDebt }
@@ -132,14 +135,15 @@ fun PieChart(
 
         // To see the data in more structured way
         // Compose Function in which Items are showing data
-        DetailsPieChart(data = data)
+        DetailsPieChart(data = data, onItemClicked = onItemClicked)
     }
 
 }
 
 @Composable
 fun DetailsPieChart(
-    data: List<DebtBySource>
+    data: List<DebtBySource>,
+    onItemClicked: (PaymentMethod) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -152,7 +156,8 @@ fun DetailsPieChart(
             val percentage = (debt.totalDebt / data.sumOf { it.totalDebt } * 100)
             DetailsPieChartItem(
                 data = debt,
-                percentage = percentage
+                percentage = percentage,
+                onItemClicked = onItemClicked
             )
         }
 
@@ -160,9 +165,9 @@ fun DetailsPieChart(
 }
 
 @Composable
-fun DetailsPieChartItem(data: DebtBySource, percentage: Double) {
+fun DetailsPieChartItem(data: DebtBySource, percentage: Double, onItemClicked: (PaymentMethod) -> Unit) {
     Surface(
-        modifier = Modifier.height(84.dp),
+        modifier = Modifier.height(84.dp).clickable { onItemClicked(data.source) },
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
     ) {
