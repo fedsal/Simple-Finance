@@ -9,10 +9,10 @@ import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.DebtBySource
 import org.fedsal.finance.domain.models.PaymentMethodType
 
-class GetDebtBySourceUseCase(
+class GetAllDebtBySourceUseCase(
     private val debtRepository: DebtRepository,
     private val paymentMethodRepository: PaymentMethodRepository
-) : BaseUseCase<GetDebtBySourceUseCase.Params, Flow<List<DebtBySource>>>() {
+) : BaseUseCase<GetAllDebtBySourceUseCase.Params, Flow<List<DebtBySource>>>() {
     data object Params
 
     override suspend fun execute(params: Params): Flow<List<DebtBySource>> {

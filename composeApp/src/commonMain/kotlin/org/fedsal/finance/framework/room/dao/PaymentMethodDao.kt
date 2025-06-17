@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.framework.room.model.PaymentMethodEntity
 
 @Dao
@@ -23,7 +24,7 @@ interface PaymentMethodDao {
     suspend fun delete(entity: PaymentMethodEntity)
 
     @Query("SELECT * FROM payment_methods WHERE id = :id")
-    suspend fun getPaymentMethodById(id: Int): PaymentMethodEntity?
+    fun getPaymentMethodById(id: Int): Flow<PaymentMethodEntity?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg methods: PaymentMethodEntity)

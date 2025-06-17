@@ -10,5 +10,5 @@ interface DebtLocalDataSource {
     suspend fun update(debt: Debt)
     suspend fun delete(debt: Debt)
     suspend fun getDebtById(debtId: Long): Debt?
-    suspend fun getDebtsByPaymentMethod(paymentMethodId: Int): Flow<List<Debt>>
+    fun getDebtsByPaymentMethod(paymentMethodId: Int): Flow<List<Debt>>
 }

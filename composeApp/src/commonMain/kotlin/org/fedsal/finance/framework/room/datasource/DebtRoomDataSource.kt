@@ -31,7 +31,7 @@ class DebtRoomDataSource(
         return debtDao.getDebtById(debtId)?.toDomain()
     }
 
-    override suspend fun getDebtsByPaymentMethod(paymentMethodId: Int): Flow<List<Debt>> {
+    override fun getDebtsByPaymentMethod(paymentMethodId: Int): Flow<List<Debt>> {
         return debtDao.getDebtsByPaymentMethod(paymentMethodId)
             .map { debtEntities -> debtEntities.map { it.toDomain() } }
     }

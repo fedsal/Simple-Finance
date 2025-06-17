@@ -8,7 +8,7 @@ import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodLocalDataSource
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
-import org.fedsal.finance.domain.usecases.GetDebtBySourceUseCase
+import org.fedsal.finance.domain.usecases.GetAllDebtBySourceUseCase
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
 import org.fedsal.finance.framework.room.database.getCategoryDao
 import org.fedsal.finance.framework.room.database.getDebtDao
@@ -26,6 +26,7 @@ import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryData
 import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataViewModel
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel
 import org.fedsal.finance.ui.home.balance.BalanceViewModel
+import org.fedsal.finance.ui.home.balance.debtdetail.DebtDetailViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -78,7 +79,7 @@ val provideDatabaseModule = module {
 
 val useCaseModule = module {
     single { GetExpensesByCategoryUseCase(get(), get()) }
-    single { GetDebtBySourceUseCase(get(), get()) }
+    single { GetAllDebtBySourceUseCase(get(), get()) }
 }
 
 val provideViewModelModule = module {
@@ -89,4 +90,5 @@ val provideViewModelModule = module {
     single { CategoryDataViewModel(get()) }
     single { BalanceViewModel(get()) }
     single { DebtDataViewModel(get(), get()) }
+    single { DebtDetailViewModel(get(), get())}
 }

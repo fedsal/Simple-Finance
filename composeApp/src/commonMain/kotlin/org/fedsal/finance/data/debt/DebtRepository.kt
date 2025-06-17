@@ -26,7 +26,7 @@ class DebtRepository(
         return localDataSource.getDebtById(debtId)
     }
 
-    suspend fun getDebtsByPaymentMethod(
+    fun getDebtsByPaymentMethod(
         paymentMethodId: Int
     ): Flow<List<Debt>> {
         return localDataSource.getDebtsByPaymentMethod(paymentMethodId)

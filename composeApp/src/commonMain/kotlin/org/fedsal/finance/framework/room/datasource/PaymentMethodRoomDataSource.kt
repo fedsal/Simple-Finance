@@ -1,5 +1,7 @@
 package org.fedsal.finance.framework.room.datasource
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.fedsal.finance.data.paymentmethod.PaymentMethodLocalDataSource
 import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.framework.room.dao.PaymentMethodDao
@@ -19,5 +21,9 @@ class PaymentMethodRoomDataSource(
 
     override suspend fun delete(paymentMethod: PaymentMethod) {
         return paymentMethodDao.delete(paymentMethod.toEntity())
+    }
+
+    override fun getById(paymentMethodId: Int): Flow<PaymentMethod?> {
+        return paymentMethodDao.getPaymentMethodById(paymentMethodId).map { it?.toDomain() }
     }
 }

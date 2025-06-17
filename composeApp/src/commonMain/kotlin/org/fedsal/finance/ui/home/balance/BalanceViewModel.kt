@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.fedsal.finance.domain.models.DebtBySource
-import org.fedsal.finance.domain.usecases.GetDebtBySourceUseCase
+import org.fedsal.finance.domain.usecases.GetAllDebtBySourceUseCase
 
 class BalanceViewModel(
-    private val getDebtBySourceUseCase: GetDebtBySourceUseCase
+    private val getDebtBySourceUseCase: GetAllDebtBySourceUseCase
 ) : ViewModel() {
     data class BalanceUiState(
         val totalBalance: Double = 0.0,
@@ -28,7 +28,7 @@ class BalanceViewModel(
 
     private fun fetchDebts() {
         getDebtBySourceUseCase.invoke(
-            params = GetDebtBySourceUseCase.Params,
+            params = GetAllDebtBySourceUseCase.Params,
             onError = {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
