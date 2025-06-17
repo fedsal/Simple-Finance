@@ -8,8 +8,6 @@ sealed class AppDestinations{
     data object Home: AppDestinations()
     @Serializable
     data class Category(val id: Int): AppDestinations()
+    @Serializable
+    data class DebtDetail(val id: Int): AppDestinations()
 }
-
-
-@Serializable
-data class CategoryExpenses(val id: Int)

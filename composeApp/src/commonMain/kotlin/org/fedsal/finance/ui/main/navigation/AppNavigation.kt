@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryScreen
 import org.fedsal.finance.ui.common.navigation.animatedComposable
+import org.fedsal.finance.ui.debtdetail.DebtDetailScreen
 import org.fedsal.finance.ui.home.HomeScreen
 
 @Composable
@@ -32,6 +33,14 @@ fun AppNavigation(
             ExpensesByCategoryScreen(categoryExpenses.id) {
                 navController.navigateUp()
             }
+        }
+        // Debt detail destination
+        animatedComposable<AppDestinations.DebtDetail> { backStackEntry ->
+            val debtDetail: AppDestinations.DebtDetail = backStackEntry.toRoute()
+            DebtDetailScreen(
+                sourceId = debtDetail.id,
+                onNavigateBack = { navController.navigateUp() }
+            )
         }
     }
 

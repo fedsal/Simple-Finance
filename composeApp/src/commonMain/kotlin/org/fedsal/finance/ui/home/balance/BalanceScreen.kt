@@ -26,7 +26,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BalanceScreen(
-    viewModel: BalanceViewModel = koinViewModel()
+    viewModel: BalanceViewModel = koinViewModel(),
+    onDebtClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

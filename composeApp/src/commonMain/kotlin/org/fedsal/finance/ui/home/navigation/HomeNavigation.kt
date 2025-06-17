@@ -32,7 +32,9 @@ fun HomeNavigation(
             }
             composable<HomeDestination.Balance>(
                 enterTransition = { EnterTransition.None }
-            ) { BalanceScreen() }
+            ) { BalanceScreen {
+                onNavigateOuterHome(AppDestinations.DebtDetail(it))
+            } }
         }
     }
 }

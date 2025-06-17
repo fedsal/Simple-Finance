@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.balance.debtdetail
+package org.fedsal.finance.ui.debtdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

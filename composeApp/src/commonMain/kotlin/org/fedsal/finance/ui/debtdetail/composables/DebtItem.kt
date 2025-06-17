@@ -1,4 +1,4 @@
-package org.fedsal.finance.ui.home.balance.debtdetail.composables
+package org.fedsal.finance.ui.debtdetail.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
