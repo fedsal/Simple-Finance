@@ -1,6 +1,7 @@
 package org.fedsal.finance.ui.debtdetail.modal
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,9 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -33,21 +37,30 @@ import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebtDetailModal(
+    viewModel: DebtDetailModalViewModel = koinInject(),
     debt: Debt,
     sheetState: SheetState,
     onDismissRequest: () -> Unit
 ) {
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(debt) {
+        viewModel.init(debt.id)
+    }
+
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismissRequest
     ) {
         Column(modifier = Modifier.padding(horizontal = 20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                debt.title,
+                uiState.debt.title,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
             )
             Spacer(Modifier.height(20.dp))
@@ -65,7 +78,7 @@ fun DebtDetailModal(
                         width = 3.dp,
                         color = MaterialTheme.colorScheme.onSurface,
                         shape = CircleShape
-                    ),
+                    ).clickable { viewModel.onMinusInstallment() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -76,7 +89,7 @@ fun DebtDetailModal(
                 // Installments label
                 Text(
                     modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 40.dp),
-                    text = "${debt.paidInstallments+1} de ${debt.installments}",
+                    text = "${uiState.debt.paidInstallments+1} de ${uiState.debt.installments}",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                 )
                 // Plus button
@@ -85,7 +98,7 @@ fun DebtDetailModal(
                         width = 3.dp,
                         color = MaterialTheme.colorScheme.onSurface,
                         shape = CircleShape
-                    ),
+                    ).clickable { viewModel.onPlusInstallment() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -104,7 +117,7 @@ fun DebtDetailModal(
                     rememberCurrencyVisualTransformation(currency = "USD")
                 CustomEditText(
                     modifier = Modifier.width(180.dp),
-                    value = debt.amount.toString(),
+                    value = uiState.debt.amount.toString(),
                     onValueChange = {},
                     label = "Importe",
                     placeHolder = "$ --- ---",
@@ -115,7 +128,7 @@ fun DebtDetailModal(
                 )
                 CustomEditText(
                     modifier = Modifier.width(180.dp),
-                    value = debt.date,
+                    value = uiState.debt.date,
                     onValueChange = {},
                     visualTransformation = MaskVisualTransformation(DATE_MASK),
                     label = "Fecha",
@@ -129,7 +142,7 @@ fun DebtDetailModal(
             // Description
             CustomEditText(
                 modifier = Modifier.fillMaxWidth(),
-                value = debt.description,
+                value = uiState.debt.description,
                 onValueChange = {},
                 label = "Descripcion",
                 placeHolder = "Descripción",

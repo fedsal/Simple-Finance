@@ -27,6 +27,7 @@ import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataViewMode
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel
 import org.fedsal.finance.ui.home.balance.BalanceViewModel
 import org.fedsal.finance.ui.debtdetail.DebtDetailViewModel
+import org.fedsal.finance.ui.debtdetail.modal.DebtDetailModalViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -91,4 +92,5 @@ val provideViewModelModule = module {
     single { BalanceViewModel(get()) }
     single { DebtDataViewModel(get(), get()) }
     single { DebtDetailViewModel(get(), get(), get()) }
+    single { DebtDetailModalViewModel(get()) }
 }

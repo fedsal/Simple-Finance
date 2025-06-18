@@ -43,6 +43,7 @@ fun DebtEntity.toDomain(): Debt {
 
 fun Debt.toEntity(): DebtEntity {
     return DebtEntity(
+        id = id,
         title = title,
         amount = amount,
         date = date,
