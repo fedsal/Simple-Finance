@@ -2,6 +2,10 @@ package org.fedsal.finance.ui.debtdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -28,6 +32,8 @@ class DebtDetailViewModel(
         val source: PaymentMethod = PaymentMethod()
     )
 
+    private val ioDispatchers = SupervisorJob() + Dispatchers.IO
+
     private var _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> get() = _uiState
 
@@ -36,17 +42,15 @@ class DebtDetailViewModel(
         loadDebts(sourceId)
     }
 
-    private fun getPaymentMethod(sourceId: Int) {
+    private fun getPaymentMethod(sourceId: Int) = viewModelScope.launch(ioDispatchers) {
         _uiState.update { it.copy(isLoading = true) }
         runCatching {
-            viewModelScope.launch {
-                paymentMethodRepository.getById(sourceId).collectLatest { paymentMethod ->
-                    _uiState.update {
-                        it.copy(
-                            source = paymentMethod
-                                ?: throw IllegalArgumentException("Payment method not found")
-                        )
-                    }
+            paymentMethodRepository.getById(sourceId).collectLatest { paymentMethod ->
+                _uiState.update {
+                    it.copy(
+                        source = paymentMethod
+                            ?: throw IllegalArgumentException("Payment method not found")
+                    )
                 }
             }
         }.onFailure { error ->
@@ -59,29 +63,28 @@ class DebtDetailViewModel(
         }
     }
 
-    private fun loadDebts(sourceId: Int) {
+    private fun loadDebts(sourceId: Int) = viewModelScope.launch(ioDispatchers) {
         _uiState.update { it.copy(isLoading = true) }
 
         runCatching {
-            viewModelScope.launch {
-                debtRepository.getDebtsByPaymentMethod(sourceId).map { debt ->
-                    debt.map { item ->
-                        item.copy(
-                            category = categoryRepository.getById(item.category.id)
-                                ?: item.category,
-                        )
-                    }
-                }.collectLatest { debts ->
-                    _uiState.update {
-                        UIState(
-                            isLoading = false,
-                            debts = debts,
-                            totalDebt = debts.sumOf { items -> items.amount },
-                            source = it.source
-                        )
-                    }
+            debtRepository.getDebtsByPaymentMethod(sourceId).map { debt ->
+                debt.map { item ->
+                    item.copy(
+                        category = categoryRepository.getById(item.category.id)
+                            ?: item.category,
+                    )
+                }
+            }.collectLatest { debts ->
+                _uiState.update {
+                    UIState(
+                        isLoading = false,
+                        debts = debts,
+                        totalDebt = debts.sumOf { items -> items.amount },
+                        source = it.source
+                    )
                 }
             }
+
         }.onFailure { error ->
             _uiState.update {
                 it.copy(

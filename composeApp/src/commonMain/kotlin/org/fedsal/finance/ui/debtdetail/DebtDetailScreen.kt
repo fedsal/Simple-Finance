@@ -22,11 +22,12 @@ fun DebtDetailScreen(
     sourceId: Int,
     onNavigateBack: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     LaunchedEffect(Unit) {
         viewModel.init(sourceId)
     }
 
-    val uiState by viewModel.uiState.collectAsState()
     Surface(Modifier.fillMaxSize().safeDrawingPadding().padding(20.dp)) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(uiState.debts) {
