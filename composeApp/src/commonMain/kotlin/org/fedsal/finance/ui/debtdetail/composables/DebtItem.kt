@@ -77,7 +77,8 @@ fun DebtItem(
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     fontWeight = FontWeight.SemiBold
-                )
+                ),
+                maxLines = 1
             )
         }
 
