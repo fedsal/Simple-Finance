@@ -70,10 +70,9 @@ fun DebtItem(
                 modifier = Modifier.padding(vertical = 2.dp)
             )
             // Installments
-            val currentInstallment = debt.paidInstallments + 1
             val installmentImport = debt.amount / debt.installments
             Text(
-                text = "Cuota $currentInstallment de ${debt.installments}. ($ ${installmentImport.formatDecimal()})",
+                text = "Cuota ${debt.paidInstallments} de ${debt.installments}. ($ ${installmentImport.formatDecimal()})",
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     fontWeight = FontWeight.SemiBold

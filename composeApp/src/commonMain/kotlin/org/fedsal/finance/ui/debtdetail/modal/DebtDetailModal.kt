@@ -89,7 +89,7 @@ fun DebtDetailModal(
                 // Installments label
                 Text(
                     modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 40.dp),
-                    text = "${uiState.debt.paidInstallments+1} de ${uiState.debt.installments}",
+                    text = "${uiState.debt.paidInstallments} de ${uiState.debt.installments}",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                 )
                 // Plus button
