@@ -23,7 +23,10 @@ class GetAllDebtBySourceUseCase(
             debtRepository.getDebtsByPaymentMethod(
                 paymentMethod.id,
             ).filter { it.isNotEmpty() }.map { debts ->
-                val totalDebt = debts.sumOf { it.amount }
+                val totalDebt = debts.sumOf { debt ->
+                    val installmentImport = debt.amount/debt.installments
+                    debt.amount - (installmentImport * debt.paidInstallments)
+                }
 
                 DebtBySource(
                     source = paymentMethod,

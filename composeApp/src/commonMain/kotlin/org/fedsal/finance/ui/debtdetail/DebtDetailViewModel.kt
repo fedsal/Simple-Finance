@@ -78,7 +78,10 @@ class DebtDetailViewModel(
                     UIState(
                         isLoading = false,
                         debts = debts,
-                        totalDebt = debts.sumOf { items -> items.amount },
+                        totalDebt = debts.sumOf { item ->
+                            val installmentImport = item.amount / item.installments
+                            item.amount - (installmentImport * item.paidInstallments)
+                        },
                         source = it.source
                     )
                 }
