@@ -33,7 +33,8 @@ fun CustomEditText(
     style: TextStyle = MaterialTheme.typography.titleMedium,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    isError: Boolean = false
+    isError: Boolean = false,
+    enabled: Boolean = true
 ) {
     Box(modifier = modifier) {
         OutlinedTextField(
@@ -51,7 +52,10 @@ fun CustomEditText(
             singleLine = true,
             maxLines = 1,
             visualTransformation = visualTransformation,
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType, capitalization = KeyboardCapitalization.Sentences),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                capitalization = KeyboardCapitalization.Sentences
+            ),
             textStyle = style.copy(textAlign = textAlign),
             shape = RoundedCornerShape(20.dp),
             isError = isError,
@@ -64,7 +68,8 @@ fun CustomEditText(
                 focusedLabelColor = MaterialTheme.colorScheme.onSurface,
                 unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                 focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-            )
+            ),
+            enabled = enabled,
         )
         Text(
             label,
