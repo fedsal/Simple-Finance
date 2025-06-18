@@ -97,7 +97,7 @@ class DebtDataViewModel(
             if (mode == DisplayInfoMode.EDIT) {
                 debtRepository.update(debt)
             } else {
-                debtRepository.createDebt(debt)
+                debtRepository.createDebt(debt.copy(id = 0))
             }
             _uiState.update { it.copy(isLoading = false, shouldContinue = true) }
         }.onFailure { exception ->
