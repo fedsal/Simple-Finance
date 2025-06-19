@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SelectableChip(
     text: String,
-    icon: ImageVector,
+    icon: ImageVector? = null,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -42,11 +42,13 @@ fun SelectableChip(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = text,
-                tint = color
-            )
+            icon?.let { icon ->
+                Icon(
+                    imageVector = icon,
+                    contentDescription = text,
+                    tint = color
+                )
+            }
             Spacer(Modifier.width(4.dp))
             Text(
                 text = text,

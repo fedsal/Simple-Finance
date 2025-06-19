@@ -19,12 +19,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddCategoryButton(onClick: () -> Unit) {
+fun DashedChip(modifier: Modifier = Modifier,onClick: () -> Unit) {
     val tint = MaterialTheme.colorScheme.onSurface.copy(alpha = .4f)
     Box(
-        modifier = Modifier
-            .width(190.dp)
-            .height(70.dp)
+        modifier = modifier
             .drawBehind {
                 val pathEffect = PathEffect.dashPathEffect(floatArrayOf(30f, 30f), 0f)
                 drawRoundRect(

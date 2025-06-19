@@ -41,6 +41,7 @@ import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.composables.CustomEditText
+import org.fedsal.finance.ui.common.composables.DashedChip
 import org.fedsal.finance.ui.common.composables.SelectableChip
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
@@ -54,12 +55,12 @@ fun DebtDataModalContent(
     viewModel: DebtDataViewModel = koinViewModel(),
     mode: DisplayInfoMode = DisplayInfoMode.CREATE,
     categoryId: Long = -1,
+    onNewPaymentMethodClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.initViewModel(mode, categoryId)
     }
-
 
     Box {
         val currentDate by remember { mutableStateOf(DateManager.getCurrentDate()) }
@@ -235,6 +236,9 @@ fun DebtDataModalContent(
                         isSelected = index == selectedMethod,
                         onClick = { selectedMethod = index }
                     )
+                }
+                item {
+                    DashedChip(modifier = Modifier.height(50.dp).width(120.dp)) { onNewPaymentMethodClicked() }
                 }
             }
             Spacer(Modifier.height(20.dp))

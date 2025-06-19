@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -19,8 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Category
-import org.fedsal.finance.ui.common.composables.AddCategoryButton
 import org.fedsal.finance.ui.common.composables.CategoryItem
+import org.fedsal.finance.ui.common.composables.DashedChip
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.koin.compose.koinInject
@@ -65,7 +66,7 @@ fun SelectCategoryModalContent(
                 )
             }
             item {
-                AddCategoryButton {
+                DashedChip(Modifier.width(190.dp).height(70.dp)) {
                     onNewCategoryClicked()
                 }
             }

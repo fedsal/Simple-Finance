@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataModalContent
 import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoModalContent
+import org.fedsal.finance.ui.common.composables.modals.paymentmethod.CreatePaymentMethodContent
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryModalContent
 
 // Home bottom sheet
@@ -27,6 +28,7 @@ fun ButtonBottomSheet(
     onDismissRequest: () -> Unit,
 ) {
     var creatingCategory by remember { mutableStateOf(false) }
+    var creatingPaymentMethod by remember { mutableStateOf(false) }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
@@ -36,7 +38,7 @@ fun ButtonBottomSheet(
 
             // Show the expense info modal content if a category is selected
             androidx.compose.animation.AnimatedVisibility(
-                visible = categoryId != null,
+                visible = categoryId != null && !creatingPaymentMethod && !creatingCategory,
                 enter = slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
@@ -45,6 +47,9 @@ fun ButtonBottomSheet(
                     if (isOnBalance) {
                         DebtDataModalContent(
                             categoryId = safeCategory,
+                            onNewPaymentMethodClicked = {
+                                creatingPaymentMethod = true
+                            },
                             onDismissRequest = onDismissRequest
                         )
                     } else {
@@ -53,6 +58,18 @@ fun ButtonBottomSheet(
                             onDismissRequest = onDismissRequest
                         )
                     }
+                }
+            }
+
+            // Create payment method modal content
+            androidx.compose.animation.AnimatedVisibility(
+                visible = creatingPaymentMethod,
+                enter = slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth }
+                ),
+            ) {
+                CreatePaymentMethodContent {
+                    creatingPaymentMethod = false
                 }
             }
 

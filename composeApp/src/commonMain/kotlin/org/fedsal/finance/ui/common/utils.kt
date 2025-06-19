@@ -6,7 +6,9 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
@@ -43,6 +45,8 @@ fun getIcon(name: String): ImageVector {
             AppIcons.CAR -> Icons.Filled.DirectionsCar
             AppIcons.HOME -> Icons.Filled.Home
             AppIcons.SHOPPING_BAG -> Icons.Filled.ShoppingBag
+            AppIcons.PERSON -> Icons.Outlined.Person
+            AppIcons.BANK -> Icons.Outlined.AccountBalance
         }
     } catch (e: IllegalArgumentException) {
         return Icons.Filled.Paid

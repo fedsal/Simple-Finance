@@ -1,7 +1,7 @@
 package org.fedsal.finance.domain.models
 
 enum class AppIcons {
-    CARD, CASH, SHOPPING_CART, PIN, CAR, HOME, SHOPPING_BAG;
+    CARD, CASH, SHOPPING_CART, PIN, CAR, HOME, SHOPPING_BAG, PERSON, BANK;
 
     companion object {
         fun fromName(name: String): AppIcons? {
