@@ -57,7 +57,7 @@ fun PaymentMethodFilter(
             }
             items(items.size) { index ->
                 val item = items[index]
-                PaymentMethodChip(
+                SelectableChip(
                     paymentMethod = item,
                     isSelected = selectedItem == index,
                     onClick = {
@@ -71,7 +71,7 @@ fun PaymentMethodFilter(
 }
 
 @Composable
-private fun PaymentMethodChip(
+private fun SelectableChip(
     paymentMethod: PaymentMethod,
     isSelected: Boolean,
     baseColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,

@@ -35,16 +35,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Category
-import org.fedsal.finance.domain.models.DefaultPaymentMethods
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.composables.CustomEditText
-import org.fedsal.finance.ui.common.composables.modals.expenseinfo.PaymentMethodChip
+import org.fedsal.finance.ui.common.composables.SelectableChip
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
+import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.opaqueColor
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
@@ -229,8 +229,9 @@ fun DebtDataModalContent(
             // Payment methods list
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(uiState.paymentMethods.size) { index ->
-                    PaymentMethodChip(
-                        paymentMethod = uiState.paymentMethods[index],
+                    SelectableChip(
+                        text = uiState.paymentMethods[index].name,
+                        icon = getIcon(uiState.paymentMethods[index].iconId),
                         isSelected = index == selectedMethod,
                         onClick = { selectedMethod = index }
                     )
