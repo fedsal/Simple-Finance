@@ -29,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.AppIcons
-import org.fedsal.finance.domain.models.PaymentMethod
 import org.fedsal.finance.domain.models.PaymentMethodType
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.SelectableChip
@@ -38,7 +37,8 @@ import org.fedsal.finance.ui.common.opaqueColor
 
 @Composable
 fun CreatePaymentMethodContent(
-    onCreated: (PaymentMethod) -> Unit,
+    showCreditOnly: Boolean = false,
+    onDismissRequest: () -> Unit,
 ) {
     val iconData = listOf(
         AppIcons.PERSON to "Persona",
@@ -65,11 +65,15 @@ fun CreatePaymentMethodContent(
                 .clickable {
                     // Validate inputs
                     titleError = paymentMethodName.isBlank()
-                    error =
-                        if (selectedPaymentMethodType == null) "Debe seleccionar un tipo de pago" else ""
-                    error = if (selectedIcon == null) "Debe seleccionar un icono" else ""
+                    error = when {
+                        selectedPaymentMethodType == null -> "Debe seleccionar un tipo de pago"
+                        selectedIcon == null -> "Debe seleccionar un icono"
+                        else -> ""
+                    }
 
-                    if (titleError || error.isEmpty()) return@clickable
+                    if (!titleError && error.isEmpty()) {
+                        onDismissRequest()
+                    }
                 }
         )
 
@@ -126,7 +130,7 @@ fun CreatePaymentMethodContent(
             )
             Spacer(Modifier.height(20.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                PaymentMethodType.entries.forEach { paymentMethodType ->
+                PaymentMethodType.entries.filter { it != PaymentMethodType.CASH }.forEach { paymentMethodType ->
                     SelectableChip(
                         text = paymentMethodType.name,
                         isSelected = paymentMethodType == selectedPaymentMethodType,

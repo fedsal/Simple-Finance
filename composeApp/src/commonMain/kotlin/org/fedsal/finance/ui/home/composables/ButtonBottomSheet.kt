@@ -68,7 +68,7 @@ fun ButtonBottomSheet(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
             ) {
-                CreatePaymentMethodContent {
+                CreatePaymentMethodContent(showCreditOnly = isOnBalance) {
                     creatingPaymentMethod = false
                 }
             }
