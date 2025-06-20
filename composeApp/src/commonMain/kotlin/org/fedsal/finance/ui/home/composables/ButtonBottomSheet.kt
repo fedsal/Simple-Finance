@@ -55,7 +55,10 @@ fun ButtonBottomSheet(
                     } else {
                         ExpenseInfoModalContent(
                             categoryId = safeCategory,
-                            onDismissRequest = onDismissRequest
+                            onDismissRequest = onDismissRequest,
+                            onNewPaymentMethodClicked = {
+                                creatingPaymentMethod = true
+                            }
                         )
                     }
                 }

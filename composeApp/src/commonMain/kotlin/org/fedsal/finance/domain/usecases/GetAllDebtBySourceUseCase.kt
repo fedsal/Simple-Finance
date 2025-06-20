@@ -22,7 +22,7 @@ class GetAllDebtBySourceUseCase(
         val flows = paymentMethods.map { paymentMethod ->
             debtRepository.getDebtsByPaymentMethod(
                 paymentMethod.id,
-            ).filter { it.isNotEmpty() }.map { debts ->
+            ).map { debts ->
                 val totalDebt = debts.sumOf { debt ->
                     val installmentImport = debt.amount/debt.installments
                     debt.amount - (installmentImport * debt.paidInstallments)

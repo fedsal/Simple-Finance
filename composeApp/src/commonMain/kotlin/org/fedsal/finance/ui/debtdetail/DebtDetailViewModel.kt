@@ -96,4 +96,18 @@ class DebtDetailViewModel(
             }
         }
     }
+
+    fun deleteDebt(debt: Debt) = viewModelScope.launch(ioDispatchers) {
+        runCatching {
+            debtRepository.delete(debt)
+        }.onSuccess {
+            _uiState.update { it.copy(debts = it.debts - debt) }
+        }.onFailure { error ->
+            _uiState.update {
+                it.copy(
+                    error = error.message ?: "Failed to delete debt"
+                )
+            }
+        }
+    }
 }

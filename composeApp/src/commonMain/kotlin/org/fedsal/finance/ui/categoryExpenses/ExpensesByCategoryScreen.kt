@@ -125,6 +125,8 @@ fun ExpensesByCategoryScreen(
                         onDismissRequest = {
                             showExpenseInfo = false
                             viewModel.initViewModel(categoryId)
+                        },
+                        onNewPaymentMethodClicked = {
                         }
                     )
                 }

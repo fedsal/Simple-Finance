@@ -38,10 +38,11 @@ class BalanceViewModel(
             onSuccess = { debts ->
                 viewModelScope.launch {
                     debts.collectLatest { debtList ->
-                        val totalBalance = debtList.sumOf { it.totalDebt }
+                        val filteredDebt = debtList.filter { it.totalDebt > 0 }
+                        val totalBalance = filteredDebt.sumOf { it.totalDebt }
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
-                            debts = debtList,
+                            debts = filteredDebt,
                             totalBalance = totalBalance
                         )
                     }

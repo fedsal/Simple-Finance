@@ -38,6 +38,7 @@ import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.ExpenseDefaults
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.CustomEditText
+import org.fedsal.finance.ui.common.composables.DashedChip
 import org.fedsal.finance.ui.common.composables.SelectableChip
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
@@ -52,7 +53,8 @@ fun ExpenseInfoModalContent(
     categoryId: Long,
     onDismissRequest: () -> Unit,
     mode: DisplayInfoMode = DisplayInfoMode.CREATE,
-    expenseId: Long = -1
+    expenseId: Long = -1,
+    onNewPaymentMethodClicked: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         addExpenseModalViewModel.initViewModel(categoryId, mode, expenseId)
@@ -191,6 +193,9 @@ fun ExpenseInfoModalContent(
                         isSelected = index == selectedMethod,
                         onClick = { selectedMethod = index }
                     )
+                }
+                item {
+                    DashedChip(modifier = Modifier.height(50.dp).width(120.dp)) { onNewPaymentMethodClicked() }
                 }
             }
             // Description
