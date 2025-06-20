@@ -18,6 +18,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +36,26 @@ import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.SelectableChip
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.opaqueColor
+import org.koin.compose.koinInject
 
 @Composable
 fun CreatePaymentMethodContent(
+    viewModel: CreatePaymentMethodViewModel = koinInject(),
     showCreditOnly: Boolean = false,
     onDismissRequest: () -> Unit,
 ) {
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    if (uiState.shouldContinue) {
+        onDismissRequest()
+    }
+
     val iconData = listOf(
         AppIcons.PERSON to "Persona",
         AppIcons.CARD to "Tarjeta",
@@ -72,7 +88,11 @@ fun CreatePaymentMethodContent(
                     }
 
                     if (!titleError && error.isEmpty()) {
-                        onDismissRequest()
+                        viewModel.create(
+                            name = paymentMethodName,
+                            paymentMethodType = selectedPaymentMethodType!!,
+                            iconId = selectedIcon!!
+                        )
                     }
                 }
         )
@@ -120,6 +140,13 @@ fun CreatePaymentMethodContent(
             )
             Spacer(Modifier.height(30.dp))
             // Payment method type
+
+            val filteredEntries = if (showCreditOnly) {
+                PaymentMethodType.entries.filter { it == PaymentMethodType.CREDIT || it == PaymentMethodType.LOAN}
+            } else {
+                PaymentMethodType.entries
+            }
+
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Tipo de pago:",
@@ -130,7 +157,7 @@ fun CreatePaymentMethodContent(
             )
             Spacer(Modifier.height(20.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                PaymentMethodType.entries.filter { it != PaymentMethodType.CASH }.forEach { paymentMethodType ->
+                filteredEntries.forEach { paymentMethodType ->
                     SelectableChip(
                         text = paymentMethodType.name,
                         isSelected = paymentMethodType == selectedPaymentMethodType,
