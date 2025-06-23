@@ -83,9 +83,14 @@ fun ExpensesByCategoryScreen(
                     else showCategoryInfo = true
                 },
                 onDeleteSelected = {
-                    viewModel.deleteExpense(showingExpenseId)
+                    if (expenseContextualInfo) {
+                        viewModel.deleteExpense(showingExpenseId)
+                        showingExpenseId = -1L
+                    } else {
+                        viewModel.deleteCategory()
+                        onNavigateBack()
+                    }
                     showContextualMenu = false
-                    showingExpenseId = -1L
                 }
             )
         }

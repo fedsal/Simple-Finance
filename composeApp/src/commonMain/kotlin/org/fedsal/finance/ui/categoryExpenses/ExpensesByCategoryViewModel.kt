@@ -88,6 +88,17 @@ class ExpensesByCategoryViewModel(
         }
     }
 
+    fun deleteCategory() = viewModelScope.launch {
+        runCatching {
+            val category = uiState.value.category
+            categoryRepository.delete(category)
+        }.onFailure { e ->
+            _uiState.value = uiState.value.copy(
+                error = e.message ?: "Failed to delete category"
+            )
+        }
+    }
+
     fun filterExpensesByPaymentMethod(paymentMethod: PaymentMethod?) {
         loadExpenses(paymentMethod)
     }
