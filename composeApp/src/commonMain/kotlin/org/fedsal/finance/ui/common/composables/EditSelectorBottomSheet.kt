@@ -73,7 +73,7 @@ fun EditSelectorBottomSheet(
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             Row(
                 modifier = Modifier.fillMaxWidth().height(50.dp)
-                    .clickable(onClick = onEditSelected),
+                    .clickable(onClick = onDeleteSelected),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(

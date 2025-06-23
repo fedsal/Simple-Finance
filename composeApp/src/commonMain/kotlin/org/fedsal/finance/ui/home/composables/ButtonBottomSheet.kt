@@ -46,7 +46,7 @@ fun ButtonBottomSheet(
                 categoryId?.let { safeCategory ->
                     if (isOnBalance) {
                         DebtDataModalContent(
-                            categoryId = safeCategory,
+                            debtId = safeCategory,
                             onNewPaymentMethodClicked = {
                                 creatingPaymentMethod = true
                             },

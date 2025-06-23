@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -38,7 +39,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.Debt
+import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.composables.CategoryIcon
+import org.fedsal.finance.ui.common.composables.EditSelectorBottomSheet
+import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataModalContent
 import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
@@ -55,9 +59,15 @@ fun DebtDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedDebt: Debt? by remember { mutableStateOf(null) }
+    var showContextualMenu by remember { mutableStateOf(false) }
+    var showDebtEdit by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.init(sourceId)
+    }
+
+    if (uiState.debts.isEmpty()) {
+        onNavigateBack()
     }
 
     Surface(Modifier.fillMaxSize().safeDrawingPadding().padding(top = 20.dp, bottom = 10.dp)) {
@@ -67,12 +77,47 @@ fun DebtDetailScreen(
         val sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true
         )
-        if (selectedDebt != null) {
+        if (selectedDebt != null && !showContextualMenu && !showDebtEdit) {
             DebtDetailModal(
                 debt = selectedDebt!!,
                 sheetState = sheetState,
                 onDismissRequest = { selectedDebt = null },
             )
+        }
+
+        // Contextual menu for editing or deleting expenses
+        if (showContextualMenu) {
+            EditSelectorBottomSheet(
+                sheetState, onDismissRequest = { showContextualMenu = false },
+                onEditSelected = {
+                    showContextualMenu = false
+                    showDebtEdit = true
+                },
+                onDeleteSelected = {
+                    selectedDebt?.let { viewModel.deleteDebt(it) }
+                    showContextualMenu = false
+                    selectedDebt = null
+                }
+            )
+        }
+        // Debt edit modal
+        if (showDebtEdit) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showDebtEdit = false
+                    selectedDebt = null
+                },
+                sheetState = sheetState,
+            ) {
+                Box(modifier = Modifier.height(600.dp)) {
+                    DebtDataModalContent(
+                        mode = DisplayInfoMode.EDIT,
+                        debtId = selectedDebt?.id?.toLong() ?: -1L,
+                        onDismissRequest = { showDebtEdit = false },
+                        onNewPaymentMethodClicked = { }
+                    )
+                }
+            }
         }
 
         Column {
@@ -144,12 +189,14 @@ fun DebtDetailScreen(
             ) {
                 items(uiState.debts) {
                     DebtItem(
-                        modifier = Modifier.clickable {
-                            selectedDebt = it
-                        }.pointerInput(Unit) {
+                        modifier = Modifier.pointerInput(Unit) {
                             detectTapGestures(
                                 onLongPress = { _ ->
-                                    viewModel.deleteDebt(it)
+                                    selectedDebt = it
+                                    showContextualMenu = true
+                                },
+                                onTap = { _ ->
+                                    selectedDebt = it
                                 }
                             )
                         },

@@ -54,12 +54,12 @@ import kotlin.math.roundToInt
 fun DebtDataModalContent(
     viewModel: DebtDataViewModel = koinViewModel(),
     mode: DisplayInfoMode = DisplayInfoMode.CREATE,
-    categoryId: Long = -1,
+    debtId: Long = -1,
     onNewPaymentMethodClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
     LaunchedEffect(Unit) {
-        viewModel.initViewModel(mode, categoryId)
+        viewModel.initViewModel(mode, debtId)
     }
 
     Box {
@@ -87,6 +87,7 @@ fun DebtDataModalContent(
                     importAmount = debt.amount.roundToInt().toString()
                     date = debt.date
                     description = debt.description
+                    installments = debt.installments.toString()
                     selectedMethod =
                         uiState.paymentMethods.indexOfFirst { it.id == debt.paymentMethod.id }
                 }
@@ -125,7 +126,7 @@ fun DebtDataModalContent(
                         installments = installments.toIntOrNull() ?: 0,
                         paymentMethod = uiState.paymentMethods[selectedMethod],
                         description = description,
-                        category = Category(id = categoryId.toInt())
+                        category = Category(id = debtId.toInt())
                     )
                 }
         )
@@ -250,7 +251,6 @@ fun DebtDataModalContent(
                 label = "Descripcion",
                 placeHolder = "Ingrese la descripción",
                 keyboardType = KeyboardType.Number,
-                isError = installmentsError
             )
         }
     }
