@@ -2,6 +2,8 @@ package org.fedsal.finance.ui.common.composables.modals.expenseinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -180,5 +182,15 @@ class ExpenseInfoModalViewModel(
      */
     fun dispose() {
         _uiState.value = UIState()
+    }
+
+    fun deletePaymentMethod(paymentMethod: PaymentMethod) = viewModelScope.launch(Dispatchers.IO) {
+        runCatching {
+            paymentMethodRepository.delete(paymentMethod)
+            _uiState.update { it.copy(paymentMethods = it.paymentMethods - paymentMethod) }
+        }.onFailure { exception ->
+            _uiState.update { it.copy(error = exception.message) }
+            exception.printStackTrace()
+        }
     }
 }

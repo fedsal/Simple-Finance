@@ -235,7 +235,8 @@ fun DebtDataModalContent(
                         text = uiState.paymentMethods[index].name,
                         icon = getIcon(uiState.paymentMethods[index].iconId),
                         isSelected = index == selectedMethod,
-                        onClick = { selectedMethod = index }
+                        onClick = { selectedMethod = index },
+                        onDelete = { viewModel.deletePaymentMethod(uiState.paymentMethods[index]) }
                     )
                 }
                 item {
