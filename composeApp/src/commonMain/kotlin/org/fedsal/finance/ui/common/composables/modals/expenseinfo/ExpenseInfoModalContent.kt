@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
