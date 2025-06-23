@@ -83,7 +83,9 @@ fun ExpensesByCategoryScreen(
                     else showCategoryInfo = true
                 },
                 onDeleteSelected = {
+                    viewModel.deleteExpense(showingExpenseId)
                     showContextualMenu = false
+                    showingExpenseId = -1L
                 }
             )
         }
