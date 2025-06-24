@@ -1,5 +1,6 @@
 package org.fedsal.finance.ui.home.composables
 
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -42,6 +43,7 @@ fun ButtonBottomSheet(
                 enter = slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
+                exit = fadeOut()
             ) {
                 categoryId?.let { safeCategory ->
                     if (isOnBalance) {
@@ -70,6 +72,7 @@ fun ButtonBottomSheet(
                 enter = slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
+                exit = fadeOut()
             ) {
                 CreatePaymentMethodContent(showCreditOnly = isOnBalance) {
                     creatingPaymentMethod = false
@@ -82,6 +85,7 @@ fun ButtonBottomSheet(
                 enter = slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth }
                 ),
+                exit = fadeOut()
             ) {
                 CategoryDataModalContent(onSuccess = {
                     categoryId = it
