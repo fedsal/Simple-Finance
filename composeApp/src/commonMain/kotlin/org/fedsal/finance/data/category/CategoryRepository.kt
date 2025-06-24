@@ -1,5 +1,6 @@
 package org.fedsal.finance.data.category
 
+import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.domain.models.Category
 
 class CategoryRepository(
@@ -10,7 +11,7 @@ class CategoryRepository(
         return localDataSource.create(category)
     }
 
-    suspend fun read(): List<Category> {
+    fun read(): Flow<List<Category>> {
         return localDataSource.read()
     }
 

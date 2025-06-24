@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.framework.room.model.CategoryEntity
 
 @Dao
@@ -14,7 +15,7 @@ interface CategoryDao {
     suspend fun create(category: CategoryEntity): Long
 
     @Query("SELECT * FROM categories ORDER BY title ASC")
-    suspend fun readAll(): List<CategoryEntity>
+    fun readAll(): Flow<List<CategoryEntity>>
 
     @Update
     suspend fun update(category: CategoryEntity)

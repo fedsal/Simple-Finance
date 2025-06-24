@@ -1,12 +1,13 @@
 package org.fedsal.finance.data.category
 
+import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.domain.models.Category
 
 interface CategoryLocalDataSource {
 
     // CRUD
     suspend fun create(category: Category): Long
-    suspend fun read(): List<Category>
+    fun read(): Flow<List<Category>>
     suspend fun update(category: Category)
     suspend fun delete(category: Category)
 

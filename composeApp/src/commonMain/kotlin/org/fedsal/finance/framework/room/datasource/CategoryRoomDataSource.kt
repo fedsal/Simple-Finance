@@ -1,5 +1,7 @@
 package org.fedsal.finance.framework.room.datasource
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.fedsal.finance.data.category.CategoryLocalDataSource
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.framework.room.dao.CategoryDao
@@ -13,8 +15,8 @@ class CategoryRoomDataSource(
         return categoryDao.create(category.toEntity())
     }
 
-    override suspend fun read(): List<Category> {
-        return categoryDao.readAll().map { it.toDomain() }
+    override fun read(): Flow<List<Category>> {
+        return categoryDao.readAll().map { categoryEntities -> categoryEntities.map { it.toDomain() }  }
     }
 
     override suspend fun update(category: Category) {
