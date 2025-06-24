@@ -54,10 +54,11 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebtDetailScreen(
-    viewModel: DebtDetailViewModel = koinViewModel(),
     sourceId: Int,
     onNavigateBack: () -> Unit
 ) {
+    val viewModel: DebtDetailViewModel = koinViewModel(key = sourceId.toString())
+
     val uiState by viewModel.uiState.collectAsState()
     var selectedDebt: Debt? by remember { mutableStateOf(null) }
     var showContextualMenu by remember { mutableStateOf(false) }
@@ -129,7 +130,7 @@ fun DebtDetailScreen(
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp)
-                        .clickable { onNavigateBack() },
+                        .clickable { onNavigateBack(); viewModel.dispose() },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
