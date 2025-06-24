@@ -78,7 +78,7 @@ fun CategoryHeader(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Te queda",
+                    text = "Te quedan",
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                 )
                 Spacer(Modifier.height(4.dp))

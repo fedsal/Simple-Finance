@@ -15,16 +15,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.fedsal.finance.ui.common.composables.DateFilterHeader
 import org.fedsal.finance.ui.common.composables.SpentHeader
 import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.home.allcategories.composables.ExpenseCategoryItem
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.math.roundToInt
 
 @Composable
 fun ExpensesScreen(
@@ -35,7 +34,7 @@ fun ExpensesScreen(
         viewModel.initViewModel()
     }
 
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
@@ -48,15 +47,19 @@ fun ExpensesScreen(
             )
         ) {
             Spacer(Modifier.height(10.dp))
-            // TODO: Handle decimal values
-            SpentHeader(totalSpent = "$ ${uiState.value.totalSpent.formatDecimal()}")
-            Spacer(Modifier.height(20.dp))
+            SpentHeader(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                totalSpent = "$ ${uiState.totalSpent.formatDecimal()}",
+                spentBudget = uiState.spentBudget,
+                totalBudget = uiState.totalBudget
+            )
+            Spacer(Modifier.height(12.dp))
             LazyVerticalGrid(
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                items(uiState.value.expenses) {
+                items(uiState.expenses) {
                     ExpenseCategoryItem(
                         categoryName = it.category.title,
                         totalSpent = it.totalSpent,

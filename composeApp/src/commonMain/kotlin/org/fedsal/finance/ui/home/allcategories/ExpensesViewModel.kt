@@ -37,10 +37,14 @@ class ExpensesViewModel(
                     viewModelScope.launch {
                         categories.collectLatest { expensesByCategory ->
                             val totalSpent = expensesByCategory.sumOf { it.totalSpent }
+                            val totalBudget = expensesByCategory.sumOf { it.category.budget }
+                            val spentBudget = totalBudget - totalSpent
                             _uiState.value = uiState.value.copy(
                                 isLoading = false,
                                 expenses = expensesByCategory,
                                 totalSpent = totalSpent,
+                                totalBudget = totalBudget,
+                                spentBudget = spentBudget,
                                 selectedMonth = month
                             )
                         }
