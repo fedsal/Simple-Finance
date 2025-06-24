@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.datetime.LocalDate
 import org.fedsal.finance.domain.models.AppIcons
 
 fun Double.formatDecimal(): String {
@@ -109,6 +110,10 @@ fun convertFromIso(input: String): String {
 
     return "$day$month"
 }
+
+expect fun getLocalizedMonthName(date: LocalDate, locale: String): String
+
+expect fun getCurrentLocale(): String
 
 object DateDefaults {
     const val DATE_MASK = "##/##"

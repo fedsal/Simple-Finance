@@ -16,8 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.datetime.LocalDate
 import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.composables.DateFilterHeader
+import org.fedsal.finance.ui.common.getCurrentLocale
+import org.fedsal.finance.ui.common.getLocalizedMonthName
 import org.fedsal.finance.ui.home.composables.BottomNavigation
 import org.fedsal.finance.ui.home.composables.ButtonBottomSheet
 import org.fedsal.finance.ui.home.navigation.HomeDestination
@@ -41,11 +44,12 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             if (isOnBalance) return@Scaffold
-            val month = DateManager.selectedMonth.collectAsState()
+            val month by DateManager.selectedMonth.collectAsState()
+            val localDate = LocalDate(DateManager.year, month, 1)
             DateFilterHeader(
                 onPreviousClicked = { DateManager.decrementMonth() },
                 onNextClicked = { DateManager.incrementMonth() },
-                dateString = month.value.name.uppercase()
+                dateString = getLocalizedMonthName(localDate, getCurrentLocale()).uppercase()
             )
 
         },
