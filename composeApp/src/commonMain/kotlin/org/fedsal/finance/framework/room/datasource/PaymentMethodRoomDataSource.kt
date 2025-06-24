@@ -19,6 +19,12 @@ class PaymentMethodRoomDataSource(
         return paymentMethodDao.readAll().map { it.toDomain() }
     }
 
+    override fun readWithFlow(): Flow<List<PaymentMethod>> {
+        return paymentMethodDao.readAllWithFlow().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
     override suspend fun delete(paymentMethod: PaymentMethod) {
         return paymentMethodDao.delete(paymentMethod.toEntity())
     }

@@ -17,6 +17,9 @@ interface PaymentMethodDao {
     @Query("SELECT * FROM payment_methods ORDER BY name ASC")
     suspend fun readAll(): List<PaymentMethodEntity>
 
+    @Query("SELECT * FROM payment_methods ORDER BY name ASC")
+    fun readAllWithFlow(): Flow<List<PaymentMethodEntity>>
+
     @Update
     suspend fun update(paymentMethod: PaymentMethodEntity)
 
