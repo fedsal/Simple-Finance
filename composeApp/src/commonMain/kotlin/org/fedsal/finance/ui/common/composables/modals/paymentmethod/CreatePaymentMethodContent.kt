@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.domain.models.AppIcons
 import org.fedsal.finance.domain.models.PaymentMethodType
+import org.fedsal.finance.domain.models.PaymentMethodType.Companion.getName
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.SelectableChip
 import org.fedsal.finance.ui.common.getIcon
@@ -159,7 +160,7 @@ fun CreatePaymentMethodContent(
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 filteredEntries.forEach { paymentMethodType ->
                     SelectableChip(
-                        text = paymentMethodType.name,
+                        text = paymentMethodType.getName(),
                         isSelected = paymentMethodType == selectedPaymentMethodType,
                         onClick = {
                             selectedPaymentMethodType = paymentMethodType
