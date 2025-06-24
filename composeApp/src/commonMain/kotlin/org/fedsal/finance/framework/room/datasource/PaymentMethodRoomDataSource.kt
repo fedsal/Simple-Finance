@@ -29,6 +29,10 @@ class PaymentMethodRoomDataSource(
         return paymentMethodDao.delete(paymentMethod.toEntity())
     }
 
+    override suspend fun update(paymentMethod: PaymentMethod) {
+        return paymentMethodDao.update(paymentMethod.toEntity())
+    }
+
     override fun getById(paymentMethodId: Int): Flow<PaymentMethod?> {
         return paymentMethodDao.getPaymentMethodById(paymentMethodId).map { it?.toDomain() }
     }

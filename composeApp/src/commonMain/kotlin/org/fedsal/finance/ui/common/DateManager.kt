@@ -22,7 +22,7 @@ object DateManager {
         val newMonth = if (currentMonth == 0) {
             Month.entries.first()
         } else {
-            Month.entries[currentMonth - 1]
+            Month.entries[currentMonth + 1]
         }
         _selectedMonth.value = newMonth
     }
@@ -32,7 +32,7 @@ object DateManager {
         val newMonth = if (currentMonth == Month.entries.lastIndex) {
             Month.entries.last()
         } else {
-            Month.entries[currentMonth + 1]
+            Month.entries[currentMonth -1]
         }
         _selectedMonth.value = newMonth
     }

@@ -8,6 +8,7 @@ class PaymentMethodRepository(private val dataSource: PaymentMethodLocalDataSour
     suspend fun read(): List<PaymentMethod> = dataSource.read()
     fun readWithFlow(): Flow<List<PaymentMethod>> = dataSource.readWithFlow()
     suspend fun delete(paymentMethod: PaymentMethod) = dataSource.delete(paymentMethod)
+    suspend fun update(paymentMethod: PaymentMethod) = dataSource.update(paymentMethod)
 
     fun getById(paymentMethodId: Int): Flow<PaymentMethod?> {
         return dataSource.getById(paymentMethodId)

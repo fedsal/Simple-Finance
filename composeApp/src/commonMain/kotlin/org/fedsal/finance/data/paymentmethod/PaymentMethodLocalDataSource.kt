@@ -8,5 +8,6 @@ interface PaymentMethodLocalDataSource {
     suspend fun read(): List<PaymentMethod>
     fun readWithFlow(): Flow<List<PaymentMethod>>
     suspend fun delete(paymentMethod: PaymentMethod)
+    suspend fun update(paymentMethod: PaymentMethod)
     fun getById(paymentMethodId: Int): Flow<PaymentMethod?>
 }
