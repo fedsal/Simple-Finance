@@ -90,13 +90,12 @@ fun DebtDetailScreen(
             EditSelectorBottomSheet(
                 sheetState, onDismissRequest = { showContextualMenu = false },
                 onEditSelected = {
-                    selectedDebt = null
                     showContextualMenu = false
                     showDebtEdit = true
                 },
                 onDeleteSelected = {
-                    selectedDebt = null
                     selectedDebt?.let { viewModel.deleteDebt(it) }
+                    selectedDebt = null
                     showContextualMenu = false
                 }
             )
