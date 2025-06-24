@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -16,6 +17,7 @@ import org.fedsal.finance.data.debt.DebtRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Debt
 import org.fedsal.finance.domain.models.PaymentMethod
+import kotlin.coroutines.CoroutineContext
 
 class DebtDetailViewModel(
     private val debtRepository: DebtRepository,
@@ -24,19 +26,20 @@ class DebtDetailViewModel(
 ) : ViewModel() {
 
     data class UIState(
-        val isLoading: Boolean = false,
+        val isLoading: Boolean = true,
         val error: String? = null,
         val debts: List<Debt> = emptyList(),
         val totalDebt: Double = 0.0,
         val source: PaymentMethod = PaymentMethod()
     )
 
-    private val ioDispatchers = SupervisorJob() + Dispatchers.IO
+    private lateinit var ioDispatchers: CoroutineContext
 
     private var _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> get() = _uiState
 
     fun init(sourceId: Int) {
+        ioDispatchers = SupervisorJob() + Dispatchers.IO
         getPaymentMethod(sourceId)
         loadDebts(sourceId)
     }
@@ -109,5 +112,10 @@ class DebtDetailViewModel(
                 )
             }
         }
+    }
+
+    fun dispose() {
+        ioDispatchers.cancel()
+        _uiState.value = UIState() // Reset state
     }
 }

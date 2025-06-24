@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -66,8 +67,10 @@ fun DebtDetailScreen(
         viewModel.init(sourceId)
     }
 
-    if (uiState.debts.isEmpty()) {
-        onNavigateBack()
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.dispose()
+        }
     }
 
     Surface(Modifier.fillMaxSize().safeDrawingPadding().padding(top = 20.dp, bottom = 10.dp)) {
