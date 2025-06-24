@@ -132,8 +132,8 @@ fun DebtDataModalContent(
         )
 
         Column(Modifier.fillMaxSize().padding(20.dp)) {
-            // Error toase
-            if (paymentMethodError) {
+            // Error toast
+            if (paymentMethodError || uiState.error.isNullOrEmpty().not()) {
                 Box(
                     modifier = Modifier.padding(top = 20.dp, bottom = 12.dp).fillMaxWidth()
                         .height(30.dp)
@@ -144,7 +144,7 @@ fun DebtDataModalContent(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "Seleccione un metodo de pago",
+                        uiState.error ?: "Seleccione un metodo de pago",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Red.copy(alpha = .7f)

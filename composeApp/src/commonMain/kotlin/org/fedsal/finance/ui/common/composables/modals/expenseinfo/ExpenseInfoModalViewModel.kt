@@ -103,11 +103,49 @@ class ExpenseInfoModalViewModel(
         paymentMethod: PaymentMethod,
         description: String
     ) {
+        if (!validateFields(title, amount, date, paymentMethod, description)) return
         if (mode == DisplayInfoMode.CREATE) {
             addExpense(category, title, amount, date, paymentMethod, description)
         } else if (mode == DisplayInfoMode.EDIT) {
             editExpense(expenseId, title, amount, date, paymentMethod, description, category)
         }
+    }
+
+    /**
+     * Validates the input fields for creating or editing an expense.
+     *
+     * @param title The title of the expense.
+     * @param amount The amount of the expense.
+     * @param date The date of the expense.
+     * @param paymentMethod The payment method used for the expense.
+     * @param description A description of the expense.
+     */
+    private fun validateFields(
+        title: String,
+        amount: Double,
+        date: String,
+        paymentMethod: PaymentMethod,
+        description: String
+    ): Boolean {
+        _uiState.update { it.copy(isLoading = true) }
+        if (title.isBlank()) {
+            _uiState.update { it.copy(isLoading = false, error = "Title cannot be empty") }
+            return false
+        }
+        if (amount <= 0) {
+            _uiState.update { it.copy(isLoading = false, error = "Amount must be greater than zero") }
+            return false
+        }
+        if (date.isBlank()) {
+            _uiState.update { it.copy(isLoading = false, error = "Date cannot be empty") }
+            return false
+        }
+        if (paymentMethod.id <= 0) {
+            _uiState.update { it.copy(isLoading = false, error = "Payment method must be selected") }
+            return false
+        }
+        _uiState.update { it.copy(isLoading = false, error = null) }
+        return true
     }
 
     /**

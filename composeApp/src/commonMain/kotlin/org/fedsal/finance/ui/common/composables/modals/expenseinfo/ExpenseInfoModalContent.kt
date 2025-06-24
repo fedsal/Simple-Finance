@@ -1,5 +1,6 @@
 package org.fedsal.finance.ui.common.composables.modals.expenseinfo
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -44,6 +47,7 @@ import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisual
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
+import org.fedsal.finance.ui.common.opaqueColor
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 
@@ -95,15 +99,14 @@ fun ExpenseInfoModalContent(
                 .size(60.dp)
                 .padding(end = 24.dp)
                 .clickable {
-                    if (selectedMethod >= 0)
-                        addExpenseModalViewModel.execute(
-                            category = uiState.value.category,
-                            title = title,
-                            amount = importAmount.toDoubleOrNull() ?: 0.0,
-                            date = date,
-                            paymentMethod = paymentMethods[selectedMethod],
-                            description = description
-                        )
+                    addExpenseModalViewModel.execute(
+                        category = uiState.value.category,
+                        title = title,
+                        amount = importAmount.toDoubleOrNull() ?: 0.0,
+                        date = date,
+                        paymentMethod = paymentMethods[selectedMethod],
+                        description = description
+                    )
                 },
         )
 
@@ -112,6 +115,26 @@ fun ExpenseInfoModalContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
+            // Error toast
+            if (uiState.value.error.isNullOrEmpty().not()) {
+                Box(
+                    modifier = Modifier.padding(top = 20.dp, bottom = 12.dp).fillMaxWidth()
+                        .height(30.dp)
+                        .background(
+                            opaqueColor(Color.Red).copy(alpha = .3f),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = uiState.value.error ?: "Error desconocido",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Red.copy(alpha = .7f)
+                        )
+                    )
+                }
+            }
             CategoryIcon(
                 modifier = Modifier.size(50.dp),
                 icon = getIcon(uiState.value.category.iconId),
@@ -198,7 +221,9 @@ fun ExpenseInfoModalContent(
                     )
                 }
                 item {
-                    DashedChip(modifier = Modifier.height(50.dp).width(120.dp)) { onNewPaymentMethodClicked() }
+                    DashedChip(
+                        modifier = Modifier.height(50.dp).width(120.dp)
+                    ) { onNewPaymentMethodClicked() }
                 }
             }
             // Description
