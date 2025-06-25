@@ -191,7 +191,7 @@ fun DetailsPieChartItem(data: DebtBySource, percentage: Double, onItemClicked: (
                     ),
                 )
                 Text(
-                    text = "% ${percentage.formatDecimal()}",
+                    text = "${percentage.formatDecimal()}%",
                     maxLines = 1,
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.SemiBold,
