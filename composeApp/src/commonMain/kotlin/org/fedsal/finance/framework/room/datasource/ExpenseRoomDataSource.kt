@@ -16,8 +16,8 @@ class ExpenseRoomDataSource(
         expenseDao.create(expense.toEntity())
     }
 
-    override suspend fun read(): List<Expense> {
-        return expenseDao.readAll().map { it.toDomain() }
+    override fun read(): Flow<List<Expense>> {
+        return expenseDao.readAll().map { outer -> outer.map { it.toDomain() } }
     }
 
     override suspend fun update(expense: Expense) {

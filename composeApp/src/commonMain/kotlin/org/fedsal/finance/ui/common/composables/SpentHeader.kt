@@ -26,11 +26,11 @@ fun SpentHeader(
     modifier: Modifier = Modifier,
     totalSpent: String,
     totalBudget: Double,
-    spentBudget: Double,
+    remainBudget: Double,
     onClick: () -> Unit = {}
 ) {
     Surface(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick, interactionSource = null, indication = null),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -76,9 +76,9 @@ fun SpentHeader(
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "$ ${spentBudget.formatDecimal()}",
+                        text = "$ ${remainBudget.formatDecimal()}",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = if (spentBudget <= totalBudget) Color.Green else Color.Red
+                        color = if (remainBudget > 0) Color.Green else Color.Red
                     )
                 }
             }

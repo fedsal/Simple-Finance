@@ -14,7 +14,7 @@ interface ExpenseDao {
     suspend fun create(expense: ExpenseEntity)
 
     @Query("SELECT * FROM expenses ORDER BY date DESC")
-    suspend fun readAll(): List<ExpenseEntity>
+    fun readAll(): Flow<List<ExpenseEntity>>
 
     @Update
     suspend fun update(expense: ExpenseEntity)

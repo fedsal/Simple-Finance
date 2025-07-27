@@ -36,6 +36,7 @@ fun PaymentMethodFilter(
 ) {
     var selectedItem by remember { mutableStateOf(-1) }
     LazyRow(
+        modifier = modifier,
         horizontalArrangement = spacedBy(8.dp),
         content = {
             item {

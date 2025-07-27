@@ -85,7 +85,7 @@ val useCaseModule = module {
 }
 
 val provideViewModelModule = module {
-    single { ExpensesViewModel(get()) }
+    single { ExpensesViewModel(get(), get()) }
     single { ExpensesByCategoryViewModel(get(), get(), get()) }
     single { ExpenseInfoModalViewModel(get(), get(), get()) }
     single { SelectCategoryViewModel(get()) }

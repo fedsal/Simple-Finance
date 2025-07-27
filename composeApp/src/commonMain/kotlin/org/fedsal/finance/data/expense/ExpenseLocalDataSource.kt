@@ -6,7 +6,7 @@ import org.fedsal.finance.domain.models.Expense
 
 interface ExpenseLocalDataSource {
     suspend fun create(expense: Expense)
-    suspend fun read(): List<Expense>
+    fun read(): Flow<List<Expense>>
     suspend fun update(expense: Expense)
     suspend fun delete(expense: Expense)
     suspend fun getById(id: Long): Expense

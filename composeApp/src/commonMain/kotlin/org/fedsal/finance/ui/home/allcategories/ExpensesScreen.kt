@@ -16,6 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.fedsal.finance.ui.common.composables.SpentHeader
@@ -23,6 +26,7 @@ import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.home.allcategories.composables.ExpenseCategoryItem
+import org.fedsal.finance.ui.home.allexpenses.AllExpensesScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -35,6 +39,7 @@ fun ExpensesScreen(
     }
 
     val uiState by viewModel.uiState.collectAsState()
+    var showAllExpenses by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
@@ -50,26 +55,35 @@ fun ExpensesScreen(
             SpentHeader(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 totalSpent = "$ ${uiState.totalSpent.formatDecimal()}",
-                spentBudget = uiState.spentBudget,
-                totalBudget = uiState.totalBudget
+                remainBudget = uiState.spentBudget,
+                totalBudget = uiState.totalBudget,
+                onClick = { showAllExpenses = !showAllExpenses }
             )
             Spacer(Modifier.height(12.dp))
-            LazyVerticalGrid(
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-            ) {
-                items(uiState.expenses) {
-                    ExpenseCategoryItem(
-                        categoryName = it.category.title,
-                        totalSpent = it.totalSpent,
-                        availableAmount = it.availableAmount,
-                        icon = getIcon(it.category.iconId),
-                        iconTint = hexToColor(it.category.color),
-                        onClick = {
-                            onNavigateToCategory.invoke(it.category.id)
-                        }
-                    )
+            if (showAllExpenses) {
+                AllExpensesScreen(
+                    Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
+                    uiState.simpleExpenses,
+                    uiState.paymentMethods
+                )
+            } else {
+                LazyVerticalGrid(
+                    modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                ) {
+                    items(uiState.expenses) {
+                        ExpenseCategoryItem(
+                            categoryName = it.category.title,
+                            totalSpent = it.totalSpent,
+                            availableAmount = it.availableAmount,
+                            icon = getIcon(it.category.iconId),
+                            iconTint = hexToColor(it.category.color),
+                            onClick = {
+                                onNavigateToCategory.invoke(it.category.id)
+                            }
+                        )
+                    }
                 }
             }
         }
