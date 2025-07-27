@@ -24,8 +24,8 @@ class ExpensesViewModel(
             DateManager.selectedMonth.collectLatest { month ->
                 getExpensesByCategory(month)
             }
-            getPaymentMethods()
         }
+        getPaymentMethods()
     }
 
     private fun getExpensesByCategory(month: Month) {
