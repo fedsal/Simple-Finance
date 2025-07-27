@@ -26,7 +26,7 @@ import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.home.allcategories.composables.ExpenseCategoryItem
-import org.fedsal.finance.ui.home.allexpenses.AllExpensesScreen
+import org.fedsal.finance.ui.home.allexpenses.AllExpensesView
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -61,7 +61,7 @@ fun ExpensesScreen(
             )
             Spacer(Modifier.height(12.dp))
             if (showAllExpenses) {
-                AllExpensesScreen(
+                AllExpensesView(
                     Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
                     uiState.simpleExpenses,
                     uiState.paymentMethods

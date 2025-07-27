@@ -29,7 +29,7 @@ import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 
 @Composable
-fun AllExpensesScreen(
+fun AllExpensesView(
     modifier: Modifier = Modifier,
     expenses: List<Expense>,
     paymentMethods: List<PaymentMethod>
