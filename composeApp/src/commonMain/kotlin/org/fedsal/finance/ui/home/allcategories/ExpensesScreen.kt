@@ -64,7 +64,9 @@ fun ExpensesScreen(
                 AllExpensesView(
                     Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp),
                     uiState.simpleExpenses,
-                    uiState.paymentMethods
+                    uiState.paymentMethods,
+                    onExpenseEdited = { viewModel.updateExpense(it) },
+                    onExpenseDeleted = { viewModel.deleteExpense(it) },
                 )
             } else {
                 LazyVerticalGrid(

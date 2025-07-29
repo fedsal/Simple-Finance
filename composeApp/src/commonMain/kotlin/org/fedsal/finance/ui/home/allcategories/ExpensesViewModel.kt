@@ -7,12 +7,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Month
+import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
+import org.fedsal.finance.domain.models.Expense
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
 import org.fedsal.finance.ui.common.DateManager
 
 class ExpensesViewModel(
     private val getExpensesByCategoryUseCase: GetExpensesByCategoryUseCase,
+    private val expenseRepository: ExpenseRepository,
     private val paymentMethodRepository: PaymentMethodRepository,
 ) : ViewModel() {
 
@@ -66,6 +69,34 @@ class ExpensesViewModel(
                 isLoading = false,
                 error = e.message
             )
+        }
+    }
+
+    // Edit expense
+    fun updateExpense(expense: Expense) {
+        viewModelScope.launch {
+            runCatching {
+                expenseRepository.updateExpense(expense)
+            }.onSuccess {
+                getExpensesByCategory(uiState.value.selectedMonth)
+            }.onFailure { e ->
+                e.printStackTrace()
+                _uiState.value = uiState.value.copy(error = e.message)
+            }
+        }
+    }
+
+    // Delete expense
+    fun deleteExpense(expense: Expense) {
+        viewModelScope.launch {
+            runCatching {
+                expenseRepository.deleteExpense(expense)
+            }.onSuccess {
+                getExpensesByCategory(uiState.value.selectedMonth)
+            }.onFailure { e ->
+                e.printStackTrace()
+                _uiState.value = uiState.value.copy(error = e.message)
+            }
         }
     }
 
