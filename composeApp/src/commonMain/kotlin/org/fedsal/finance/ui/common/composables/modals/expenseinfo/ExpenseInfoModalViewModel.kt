@@ -133,7 +133,12 @@ class ExpenseInfoModalViewModel(
             return false
         }
         if (amount <= 0) {
-            _uiState.update { it.copy(isLoading = false, error = "Amount must be greater than zero") }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    error = "Amount must be greater than zero"
+                )
+            }
             return false
         }
         if (date.isBlank()) {
@@ -141,7 +146,12 @@ class ExpenseInfoModalViewModel(
             return false
         }
         if (paymentMethod.id <= 0) {
-            _uiState.update { it.copy(isLoading = false, error = "Payment method must be selected") }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    error = "Payment method must be selected"
+                )
+            }
             return false
         }
         _uiState.update { it.copy(isLoading = false, error = null) }
@@ -166,22 +176,23 @@ class ExpenseInfoModalViewModel(
         paymentMethod: PaymentMethod,
         description: String
     ) = viewModelScope.launch {
-        val year = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
         // Logic to add expense using the repository
-        val expense = Expense(
-            title = title,
-            category = category,
-            amount = amount,
-            date = convertToIso("$date$year"),
-            paymentMethod = paymentMethod,
-            description = description
-        )
-        runCatching { expenseRepository.createExpense(expense) }
-            .onSuccess { _uiState.update { it.copy(isLoading = false, shouldContinue = true) } }
-            .onFailure { exception ->
-                _uiState.update { it.copy(isLoading = false, error = exception.message) }
-                exception.printStackTrace()
-            }
+        runCatching {
+            val expense = Expense(
+                title = title,
+                category = category,
+                amount = amount,
+                date = convertToIso(date),
+                paymentMethod = paymentMethod,
+                description = description
+            )
+            expenseRepository.createExpense(expense)
+        }.onSuccess {
+            _uiState.update { it.copy(isLoading = false, shouldContinue = true) }
+        }.onFailure { exception ->
+            _uiState.update { it.copy(isLoading = false, error = exception.message) }
+            exception.printStackTrace()
+        }
     }
 
     /**

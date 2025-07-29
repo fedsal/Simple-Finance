@@ -13,7 +13,10 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.fedsal.finance.domain.models.AppIcons
 
 fun Double.formatDecimal(): String {
@@ -50,6 +53,7 @@ fun getIcon(name: String): ImageVector {
             AppIcons.BANK -> Icons.Outlined.AccountBalance
         }
     } catch (e: IllegalArgumentException) {
+        e.printStackTrace()
         return Icons.Filled.Paid
     }
 }
@@ -89,26 +93,41 @@ fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
 }
 
 fun convertToIso(input: String): String {
-    val digits = input.filter { it.isDigit() }
+    try {
+        val digits = input.filter { it.isDigit() }
+        if (digits.length != 4) return ""
 
-    if (digits.length != 8) return ""
+        val day = digits.substring(0, 2)
+        val month = digits.substring(2, 4)
 
-    val day = digits.substring(0, 2)
-    val month = digits.substring(2, 4)
-    val year = digits.substring(4, 8)
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val year = now.year
+        val hour = now.hour.toString().padStart(2, '0')
+        val minute = now.minute.toString().padStart(2, '0')
+        val second = now.second.toString().padStart(2, '0')
 
-    return "$year-$month-$day"
+        return "$year-$month-${day}T$hour:$minute:$second"
+    } catch (e: Exception) {
+        e.printStackTrace()
+        throw e
+    }
 }
 
 fun convertFromIso(input: String): String {
-    val parts = input.split("-")
-    if (parts.size != 3) return ""
+    return try {
+        val datePart = input.substringBefore('T')
+        val parts = datePart.split("-")
+        if (parts.size != 3) return ""
 
-    val year = parts[0]
-    val month = parts[1]
-    val day = parts[2]
+        val year = parts[0]
+        val month = parts[1]
+        val day = parts[2]
 
-    return "$day$month"
+        "$day$month"
+    } catch (e: Exception) {
+        e.printStackTrace()
+        ""
+    }
 }
 
 expect fun getLocalizedMonthName(date: LocalDate, locale: String): String
