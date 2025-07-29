@@ -207,7 +207,7 @@ fun ExpensesByCategoryScreen(
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     items(uiState.value.expenses) {
                         ExpenseItem(
-                            modifier = Modifier.padding(horizontal = 10.dp).pointerInput(Unit) {
+                            modifier = Modifier.padding(horizontal = 10.dp).pointerInput(it.id) {
                                 detectTapGestures(
                                     onLongPress = { _ ->
                                         showContextualMenu = true

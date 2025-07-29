@@ -71,7 +71,7 @@ fun AllExpensesView(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(filteredExpenses) {
                     ExpenseItem(
-                        modifier = Modifier.padding(horizontal = 10.dp).pointerInput(Unit) {
+                        modifier = Modifier.padding(horizontal = 10.dp).pointerInput(it.id) {
                             detectTapGestures()
                         },
                         title = it.title,

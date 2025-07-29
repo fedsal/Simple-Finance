@@ -55,7 +55,7 @@ fun SelectableChip(
     Box {
         Surface(
             modifier = Modifier.clickable(onClick = onClick).height(50.dp).width(120.dp)
-                .pointerInput(Unit) {
+                .pointerInput(text) {
                     detectTapGestures(onTap = { onClick.invoke() }, onLongPress = {
                         longPressed = true
                         GlobalScope.launch(Dispatchers.IO) {
