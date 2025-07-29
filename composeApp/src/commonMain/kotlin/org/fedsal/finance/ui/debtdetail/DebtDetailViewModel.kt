@@ -106,6 +106,7 @@ class DebtDetailViewModel(
         }.onSuccess {
             _uiState.update { it.copy(debts = it.debts - debt) }
         }.onFailure { error ->
+            error.printStackTrace()
             _uiState.update {
                 it.copy(
                     error = error.message ?: "Failed to delete debt"

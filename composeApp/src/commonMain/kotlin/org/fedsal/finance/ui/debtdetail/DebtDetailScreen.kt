@@ -193,7 +193,7 @@ fun DebtDetailScreen(
             ) {
                 items(uiState.debts) {
                     DebtItem(
-                        modifier = Modifier.pointerInput(Unit) {
+                        modifier = Modifier.pointerInput(it.id) {
                             detectTapGestures(
                                 onLongPress = { _ ->
                                     selectedDebt = it
