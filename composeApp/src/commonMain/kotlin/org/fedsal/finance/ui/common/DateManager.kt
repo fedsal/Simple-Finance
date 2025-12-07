@@ -2,6 +2,7 @@ package org.fedsal.finance.ui.common
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
@@ -11,30 +12,36 @@ object DateManager {
     private val currentInstant = Clock.System.todayIn(
         TimeZone.currentSystemDefault()
     )
-    val year = currentInstant.year
+
     private val _selectedMonth: MutableStateFlow<Month> = MutableStateFlow(
         currentInstant.month
     )
     val selectedMonth: StateFlow<Month> get() = _selectedMonth
 
+    private val _selectedYear = MutableStateFlow(currentInstant.year) // Año actual
+    val selectedYear: StateFlow<Int> = _selectedYear.asStateFlow()
+
+    fun isInCurrentYear() = _selectedYear.value == currentInstant.year
+
     fun incrementMonth() {
-        val currentMonth = _selectedMonth.value.ordinal
-        val newMonth = if (currentMonth == 0) {
-            Month.entries.first()
+        if (_selectedMonth.value == Month.DECEMBER) {
+            _selectedYear.value++
+            _selectedMonth.value = Month.JANUARY
         } else {
-            Month.entries[currentMonth + 1]
+            val currentMonthOrdinal = _selectedMonth.value.ordinal
+            _selectedMonth.value = Month.entries[currentMonthOrdinal + 1]
         }
-        _selectedMonth.value = newMonth
     }
 
+
     fun decrementMonth() {
-        val currentMonth = _selectedMonth.value.ordinal
-        val newMonth = if (currentMonth == Month.entries.lastIndex) {
-            Month.entries.last()
+        if (_selectedMonth.value == Month.JANUARY) {
+            _selectedYear.value--
+            _selectedMonth.value = Month.DECEMBER
         } else {
-            Month.entries[currentMonth -1]
+            val currentMonthOrdinal = _selectedMonth.value.ordinal
+            _selectedMonth.value = Month.entries[currentMonthOrdinal - 1]
         }
-        _selectedMonth.value = newMonth
     }
 
     fun getCurrentDate(): String {

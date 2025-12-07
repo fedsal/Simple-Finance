@@ -45,11 +45,14 @@ fun HomeScreen(
         topBar = {
             if (isOnBalance) return@Scaffold
             val month by DateManager.selectedMonth.collectAsState()
-            val localDate = LocalDate(DateManager.year, month, 1)
+            val localDate = LocalDate(DateManager.selectedYear.value, month, 1)
             DateFilterHeader(
                 onPreviousClicked = { DateManager.decrementMonth() },
                 onNextClicked = { DateManager.incrementMonth() },
-                dateString = getLocalizedMonthName(localDate, getCurrentLocale()).uppercase()
+                dateString = getLocalizedMonthName(
+                    localDate,
+                    getCurrentLocale()
+                ).uppercase() + if (DateManager.isInCurrentYear()) "" else " ${DateManager.selectedYear.value}"
             )
 
         },
@@ -61,7 +64,10 @@ fun HomeScreen(
         }
     ) { padding ->
         if (showBottomSheet) {
-            ButtonBottomSheet(sheetState, isOnBalance, onDismissRequest = { showBottomSheet = false })
+            ButtonBottomSheet(
+                sheetState,
+                isOnBalance,
+                onDismissRequest = { showBottomSheet = false })
         }
         HomeNavigation(
             modifier = Modifier.padding(padding),

@@ -39,7 +39,7 @@ class ExpensesByCategoryViewModel(
             expenseRepository.getExpensesByCategory(
                 this@ExpensesByCategoryViewModel.categoryId,
                 DateManager.selectedMonth.value,
-                DateManager.year
+                DateManager.selectedYear.value
             ).collectLatest { expenses ->
                 _uiState.value = uiState.value.copy(
                     isLoading = false,
