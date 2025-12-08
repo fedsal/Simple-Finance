@@ -95,9 +95,9 @@ fun opaqueColor(color: Color, factor: Float = 0.55f): Color {
 fun convertToIso(input: String): String {
     try {
         val digits = input.filter { it.isDigit() }
-        if (digits.length != 4) return ""
+        if (digits.length != 4 && digits.length != 8) return ""
 
-        val day = digits.substring(0, 2)
+        val day = digits.take(2)
         val month = digits.substring(2, 4)
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
