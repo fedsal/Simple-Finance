@@ -91,7 +91,7 @@ class ExpensesByCategoryViewModel(
     fun deleteCategory() = viewModelScope.launch {
         runCatching {
             val category = uiState.value.category
-            categoryRepository.delete(category)
+            categoryRepository.delete(category, DateManager.getCurrentDate())
         }.onFailure { e ->
             _uiState.value = uiState.value.copy(
                 error = e.message ?: "Failed to delete category"

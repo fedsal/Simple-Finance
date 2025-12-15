@@ -20,17 +20,19 @@ import org.fedsal.finance.framework.room.dao.CategoryDao
 import org.fedsal.finance.framework.room.dao.DebtDao
 import org.fedsal.finance.framework.room.dao.ExpenseDao
 import org.fedsal.finance.framework.room.dao.PaymentMethodDao
+import org.fedsal.finance.framework.room.dao.UserCategoryDao
 import org.fedsal.finance.framework.room.model.CategoryEntity
 import org.fedsal.finance.framework.room.model.DebtEntity
 import org.fedsal.finance.framework.room.model.ExpenseEntity
 import org.fedsal.finance.framework.room.model.PaymentMethodEntity
+import org.fedsal.finance.framework.room.model.UserCategoryEntity
 import org.fedsal.finance.framework.room.model.toEntity
 
 object INSTANCE {
     var database: AppDatabase? = null
 }
 
-@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, PaymentMethodEntity::class], version = 2)
+@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, UserCategoryEntity::class, PaymentMethodEntity::class], version = 2)
 @TypeConverters(Converters::class)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase: RoomDatabase() {
@@ -38,6 +40,8 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun debtDao(): DebtDao
     abstract fun paymentMethodDao(): PaymentMethodDao
     abstract fun categoryDao(): CategoryDao
+
+    abstract fun userCategoryDao(): UserCategoryDao
 }
 
 private class InitialDataCallback: RoomDatabase.Callback() {
@@ -45,7 +49,7 @@ private class InitialDataCallback: RoomDatabase.Callback() {
         super.onCreate(connection)
         CoroutineScope(Dispatchers.IO).launch {
             INSTANCE.database?.let { db ->
-                db.categoryDao().insertAll(
+                db.userCategoryDao().insertAll(
                     DefaultCategories.MARKET.toEntity(),
                     DefaultCategories.FIXED_EXPENSES.toEntity(),
                     DefaultCategories.TRANSPORT.toEntity(),
@@ -89,6 +93,9 @@ fun getDebtDao(database: AppDatabase) = database.debtDao()
 fun getPaymentMethodDao(database: AppDatabase) = database.paymentMethodDao()
 
 fun getCategoryDao(database: AppDatabase) = database.categoryDao()
+
+fun getUserCategoryDao(database: AppDatabase) = database.userCategoryDao()
+
 
 
 // MIGRATIONS

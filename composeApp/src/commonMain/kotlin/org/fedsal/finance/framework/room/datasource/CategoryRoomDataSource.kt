@@ -15,8 +15,12 @@ class CategoryRoomDataSource(
         return categoryDao.create(category.toEntity())
     }
 
-    override fun read(): Flow<List<Category>> {
-        return categoryDao.readAll().map { categoryEntities -> categoryEntities.map { it.toDomain() }  }
+    override fun read(selectedDate: String): Flow<List<Category>> {
+        return categoryDao.readAll(selectedDate).map { categoryEntities -> categoryEntities.map { it.toDomain() }  }
+    }
+
+    override fun readAll(): Flow<List<Category>> {
+        return categoryDao.readAllEntries().map { categoryEntities -> categoryEntities.map { it.toDomain() }  }
     }
 
     override suspend fun update(category: Category) {

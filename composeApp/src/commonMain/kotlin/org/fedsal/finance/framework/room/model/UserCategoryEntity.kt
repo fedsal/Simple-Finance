@@ -3,39 +3,35 @@ package org.fedsal.finance.framework.room.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.domain.models.UserCategory
 
-@Entity(tableName = "categories")
-data class CategoryEntity(
+@Entity(tableName = "user_categories")
+data class UserCategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val userCategoryId: Int,
-    val title: String,
-    val budget: Double,
-    val iconId: String,
-    val color: String,
-    val date: String,
+    val title: String = "",
+    val budget: Double = 0.0,
+    val iconId: String = "",
+    val color: String = "",
 )
 
-fun CategoryEntity.toDomain(): Category {
-    return Category(
+fun UserCategoryEntity.toDomain(): UserCategory {
+    return UserCategory(
         id = id,
-        userCategoryId = userCategoryId,
         title = title,
         budget = budget,
         iconId = iconId,
         color = color,
-        date = date
     )
 }
 
-fun Category.toEntity(): CategoryEntity {
-    return CategoryEntity(
+fun UserCategory.toEntity(): UserCategoryEntity {
+    return UserCategoryEntity(
         id = id,
-        userCategoryId = userCategoryId,
         title = title,
         budget = budget,
         iconId = iconId,
         color = color,
-        date = date
     )
 }
+

@@ -8,6 +8,7 @@ import org.fedsal.finance.data.expense.ExpenseLocalDataSource
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodLocalDataSource
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
+import org.fedsal.finance.data.usercategory.UserCategoryLocalDataSource
 import org.fedsal.finance.domain.usecases.GetAllDebtBySourceUseCase
 import org.fedsal.finance.domain.usecases.GetExpensesByCategoryUseCase
 import org.fedsal.finance.framework.room.database.getCategoryDao
@@ -15,10 +16,12 @@ import org.fedsal.finance.framework.room.database.getDebtDao
 import org.fedsal.finance.framework.room.database.getExpenseDao
 import org.fedsal.finance.framework.room.database.getPaymentMethodDao
 import org.fedsal.finance.framework.room.database.getRoomDatabase
+import org.fedsal.finance.framework.room.database.getUserCategoryDao
 import org.fedsal.finance.framework.room.datasource.CategoryRoomDataSource
 import org.fedsal.finance.framework.room.datasource.DebtRoomDataSource
 import org.fedsal.finance.framework.room.datasource.ExpenseRoomDataSource
 import org.fedsal.finance.framework.room.datasource.PaymentMethodRoomDataSource
+import org.fedsal.finance.framework.room.datasource.UserCategoryRoomDataSource
 import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryViewModel
 import org.fedsal.finance.ui.common.composables.modals.categorydata.CategoryDataViewModel
 import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataViewModel
@@ -62,6 +65,7 @@ val provideDataSourceModule = module {
     singleOf(::DebtRoomDataSource).bind(DebtLocalDataSource::class)
     singleOf(::CategoryRoomDataSource).bind(CategoryLocalDataSource::class)
     singleOf(::PaymentMethodRoomDataSource).bind(PaymentMethodLocalDataSource::class)
+    singleOf(::UserCategoryRoomDataSource).bind(UserCategoryLocalDataSource::class)
 }
 
 val provideRepositoryModule = module {
@@ -77,6 +81,7 @@ val provideDatabaseModule = module {
     single { getDebtDao(get()) }
     single { getCategoryDao(get()) }
     single { getPaymentMethodDao(get()) }
+    single { getUserCategoryDao(get()) }
 }
 
 val useCaseModule = module {

@@ -10,6 +10,7 @@ import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.domain.models.AppColors
 import org.fedsal.finance.domain.models.AppIcons
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.ui.common.DateManager
 import org.fedsal.finance.ui.common.DisplayInfoMode
 
 class CategoryDataViewModel(
@@ -93,7 +94,7 @@ class CategoryDataViewModel(
                 color = color.hexString,
                 iconId = icon.name
             )
-            categoryRepository.update(category)
+            categoryRepository.update(category, DateManager.getCurrentSelectedDate())
             _uiState.update {
                 it.copy(
                     isLoading = false,

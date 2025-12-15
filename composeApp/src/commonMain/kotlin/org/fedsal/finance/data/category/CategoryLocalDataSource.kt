@@ -7,7 +7,9 @@ interface CategoryLocalDataSource {
 
     // CRUD
     suspend fun create(category: Category): Long
-    fun read(): Flow<List<Category>>
+    fun read(selectedDate: String): Flow<List<Category>>
+
+    fun readAll(): Flow<List<Category>>
     suspend fun update(category: Category)
     suspend fun delete(category: Category)
 

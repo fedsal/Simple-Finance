@@ -2,32 +2,37 @@ package org.fedsal.finance.domain.usecases
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
+import kotlinx.datetime.number
 import org.fedsal.finance.data.category.CategoryRepository
 import org.fedsal.finance.data.expense.ExpenseRepository
 import org.fedsal.finance.domain.models.ExpensesByCategory
+import org.fedsal.finance.ui.common.DateManager
 
 class GetExpensesByCategoryUseCase(
     private val expenseRepository: ExpenseRepository,
     private val categoryRepository: CategoryRepository
-) : BaseUseCase<Month, Flow<List<ExpensesByCategory>>>() {
+) : BaseUseCase<GetExpensesByCategoryUseCase.Params, Flow<List<ExpensesByCategory>>>() {
+
+    data class Params(val month: Month, val year: Int)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun execute(params: Month): Flow<List<ExpensesByCategory>> {
-        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    override suspend fun execute(params: Params): Flow<List<ExpensesByCategory>> {
+        val currentDateString = DateManager.getCurrentDate()
 
-        return categoryRepository.read() // Flow<List<Category>>
+        val selectedMonth = params.month.number.toString().padStart(2, '0')
+        val selectedDateString = "$selectedMonth/${params.year}"
+
+        return categoryRepository.read(selectedDate = selectedDateString, currentDate = currentDateString) // Flow<List<Category>>
             .flatMapLatest { categories ->
                 val flows: List<Flow<ExpensesByCategory>> = categories.map { category ->
                     expenseRepository
-                        .getExpensesByCategory(category.id, params, currentDate.year)
+                        .getExpensesByCategory(category.id, params.month, params.year)
                         .map { expenses ->
                             val totalSpent = expenses.sumOf { it.amount }
                             val availableAmount = category.budget - totalSpent
@@ -48,6 +53,4 @@ class GetExpensesByCategoryUseCase(
                 }
             }
     }
-
-
 }

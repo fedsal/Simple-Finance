@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.todayIn
 
 object DateManager {
@@ -52,5 +53,15 @@ object DateManager {
             currentInstant.monthNumber.toString()
         }
         return "$day$month"
+    }
+
+    fun getCurrentSelectedDate(): String {
+        val monthNumber = _selectedMonth.value.number
+        val year = _selectedYear.value
+
+        // Asegura que el mes tenga dos dígitos (ej: 01, 09, 12)
+        val monthFormatted = monthNumber.toString().padStart(2, '0')
+
+        return "$monthFormatted$year"
     }
 }

@@ -2,31 +2,31 @@ package org.fedsal.finance.domain.models
 
 
 object DefaultCategories {
-    val MARKET = Category(
+    val MARKET = UserCategory(
         title = "Mercado",
         budget = 200000.0,
         iconId = AppIcons.SHOPPING_CART.name,
         color = AppColors.ORANGE.hexString
     )
-    val FIXED_EXPENSES = Category(
+    val FIXED_EXPENSES = UserCategory(
         title = "Gastos fijos",
         budget = 100000.0,
         iconId = AppIcons.PIN.name,
         color = AppColors.CYAN.hexString
     )
-    val TRANSPORT = Category(
+    val TRANSPORT = UserCategory(
         title = "Transporte",
         budget = 100000.0,
         iconId = AppIcons.CAR.name,
         color = AppColors.PURPLE.hexString
     )
-    val RENT = Category(
+    val RENT = UserCategory(
         title = "Alquiler",
         budget = 500000.0,
         iconId = AppIcons.HOME.name,
         color = AppColors.RED.hexString
     )
-    val FUN = Category(
+    val FUN = UserCategory(
         title = "Diversión",
         budget = 200000.0,
         iconId = AppIcons.SHOPPING_BAG.name,

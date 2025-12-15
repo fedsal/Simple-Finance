@@ -14,8 +14,11 @@ interface CategoryDao {
     @Insert
     suspend fun create(category: CategoryEntity): Long
 
+    @Query("SELECT * FROM categories WHERE date = :selectedDate ORDER BY title ASC")
+    fun readAll(selectedDate: String): Flow<List<CategoryEntity>>
+
     @Query("SELECT * FROM categories ORDER BY title ASC")
-    fun readAll(): Flow<List<CategoryEntity>>
+    fun readAllEntries(): Flow<List<CategoryEntity>>
 
     @Update
     suspend fun update(category: CategoryEntity)

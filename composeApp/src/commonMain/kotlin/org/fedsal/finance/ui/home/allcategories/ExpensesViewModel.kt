@@ -2,9 +2,12 @@ package org.fedsal.finance.ui.home.allcategories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Month
 import org.fedsal.finance.data.expense.ExpenseRepository
@@ -24,7 +27,7 @@ class ExpensesViewModel(
 
     fun initViewModel() {
         viewModelScope.launch {
-            DateManager.selectedMonth.collectLatest { month ->
+            DateManager.selectedMonth.debounce { 300 }.collectLatest { month ->
                 getExpensesByCategory(month)
             }
         }
@@ -35,7 +38,10 @@ class ExpensesViewModel(
         _uiState.value = uiState.value.copy(isLoading = true)
         runCatching {
             getExpensesByCategoryUseCase(
-                params = month,
+                params = GetExpensesByCategoryUseCase.Params(
+                    DateManager.selectedMonth.value,
+                    DateManager.selectedYear.value
+                ),
                 onError = {
                     throw it
                 },
