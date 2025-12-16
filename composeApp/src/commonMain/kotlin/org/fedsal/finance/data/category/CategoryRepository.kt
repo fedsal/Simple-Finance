@@ -1,7 +1,9 @@
 package org.fedsal.finance.data.category
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import org.fedsal.finance.data.usercategory.UserCategoryLocalDataSource
 import org.fedsal.finance.domain.models.Category
 import org.fedsal.finance.domain.models.toCategory
@@ -16,27 +18,22 @@ class CategoryRepository(
         return userCategoryLocalDataSource.create(category.toUserCategory())
     }
 
-
-    suspend fun read(selectedDate: String, currentDate: String): Flow<List<Category>> {
-        val categories = localDataSource.read(selectedDate).first()
+    fun read(selectedDate: String, currentDate: String): Flow<List<Category>> = flow {
+        val currentCategories = localDataSource.read(selectedDate).first()
         val userCategories = userCategoryLocalDataSource.read().first()
         val userCategoriesAsCategories = userCategories.map { it.toCategory() }
 
-        val categoriesToAdd = userCategoriesAsCategories.filterNot { categories.any { it.userCategoryId == it.userCategoryId && it.date == selectedDate } }
+        val categoriesToAdd = userCategoriesAsCategories.filterNot { userCat ->
+            currentCategories.any { it.userCategoryId == userCat.userCategoryId }
+        }
+
         if (categoriesToAdd.isNotEmpty() && isDateGreaterOrEqual(selectedDate, currentDate)) {
             categoriesToAdd.forEach { category ->
                 localDataSource.create(category.copy(date = selectedDate))
             }
         }
 
-        val categoriesToRemove = categories.filterNot { categories.any { it.userCategoryId == it.userCategoryId && it.date == selectedDate } }
-        if (categoriesToRemove.isNotEmpty()) {
-            categoriesToRemove.forEach { category ->
-                localDataSource.delete(category)
-            }
-        }
-
-        return localDataSource.read(selectedDate)
+        emitAll(localDataSource.read(selectedDate))
     }
 
     suspend fun update(category: Category, currentDate: String){

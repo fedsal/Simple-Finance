@@ -19,7 +19,7 @@ class GetAllDebtBySourceUseCase(
     data object Params
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun execute(params: Params): Flow<List<DebtBySource>> {
+    override fun execute(params: Params): Flow<List<DebtBySource>> {
         return paymentMethodRepository.readWithFlow().flatMapLatest { paymentMethodList ->
             // Fix color
             paymentMethodList.forEach { paymentMethod ->

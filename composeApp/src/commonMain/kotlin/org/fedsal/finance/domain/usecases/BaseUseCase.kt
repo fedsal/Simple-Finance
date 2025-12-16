@@ -10,14 +10,14 @@ import kotlinx.coroutines.withContext
 
 abstract class BaseUseCase<in ParamsType, out ReturnType> {
 
-    private var job: Job? = null
+    protected var job: Job? = null
 
     open val dispatcher: CoroutineDispatcher = Dispatchers.IO
     open val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 
     // This fun will be used to provide the actual implementation
     // in the child class
-    protected abstract suspend fun execute(params: ParamsType): ReturnType
+    abstract fun execute(params: ParamsType): ReturnType
 
     // This will enable you to call the useCase as function
     // example sendPayment(params)
