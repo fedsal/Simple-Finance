@@ -55,6 +55,17 @@ object DateManager {
         return "$day$month"
     }
 
+    fun getCurrentDateOrSelectedMonth(): String {
+        if (currentInstant.month == selectedMonth.value) {
+            return getCurrentDate()
+        } else {
+            val month = if (selectedMonth.value.number < 10) { "0${selectedMonth.value.number}" } else {
+                selectedMonth.value.number.toString()
+            }
+            return "01$month"
+        }
+    }
+
     fun getCurrentSelectedDate(): String {
         val monthNumber = _selectedMonth.value.number
         val year = _selectedYear.value

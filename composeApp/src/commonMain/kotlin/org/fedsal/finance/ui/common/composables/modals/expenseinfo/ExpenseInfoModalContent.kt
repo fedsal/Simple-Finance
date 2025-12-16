@@ -69,7 +69,7 @@ fun ExpenseInfoModalContent(
         addExpenseModalViewModel.dispose()
     }
 
-    val currentDate by remember { mutableStateOf(DateManager.getCurrentDate()) }
+    val currentDate by remember { mutableStateOf(DateManager.getCurrentDateOrSelectedMonth()) }
 
     val paymentMethods = uiState.value.paymentMethods
 
