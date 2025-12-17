@@ -18,7 +18,7 @@ interface CategoryDao {
     fun readAll(selectedDate: String): Flow<List<CategoryEntity>>
 
     @Query("SELECT * FROM categories ORDER BY title ASC")
-    fun readAllEntries(): Flow<List<CategoryEntity>>
+    suspend fun readAllEntries(): List<CategoryEntity>
 
     @Update
     suspend fun update(category: CategoryEntity)

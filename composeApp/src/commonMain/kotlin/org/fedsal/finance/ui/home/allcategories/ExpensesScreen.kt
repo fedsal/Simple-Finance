@@ -34,10 +34,6 @@ fun ExpensesScreen(
     viewModel: ExpensesViewModel = koinViewModel(),
     onNavigateToCategory: (categoryId: Int) -> Unit
 ) {
-    LaunchedEffect(key1 = Unit) {
-        viewModel.initViewModel()
-    }
-
     val uiState by viewModel.uiState.collectAsState()
     var showAllExpenses by remember { mutableStateOf(false) }
 

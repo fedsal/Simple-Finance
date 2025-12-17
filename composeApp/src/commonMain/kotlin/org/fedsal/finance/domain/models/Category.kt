@@ -14,6 +14,7 @@ data class Category (
 )
 
 fun Category.toUserCategory() = UserCategory(
+    id = userCategoryId,
     title = title,
     budget = budget,
     iconId = iconId,

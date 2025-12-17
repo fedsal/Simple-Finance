@@ -29,7 +29,7 @@ class ExpensesViewModel(
     private val _uiState = MutableStateFlow(ExpensesUIState())
     val uiState: StateFlow<ExpensesUIState> get() = _uiState
 
-    fun initViewModel() {
+    init {
         observeData()
         getPaymentMethods()
     }

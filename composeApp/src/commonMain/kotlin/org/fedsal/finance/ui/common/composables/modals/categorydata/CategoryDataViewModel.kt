@@ -87,7 +87,7 @@ class CategoryDataViewModel(
         icon: AppIcons
     ) = viewModelScope.launch {
         runCatching {
-            val category = Category(
+            val category = uiState.value.category.copy(
                 id = categoryId.toInt(),
                 title = title,
                 budget = budget,

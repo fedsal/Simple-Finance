@@ -21,15 +21,14 @@ class CategoryRepository(
     fun read(selectedDate: String, currentDate: String): Flow<List<Category>> = flow {
         val currentCategories = localDataSource.read(selectedDate).first()
         val userCategories = userCategoryLocalDataSource.read().first()
-        val userCategoriesAsCategories = userCategories.map { it.toCategory() }
 
-        val categoriesToAdd = userCategoriesAsCategories.filterNot { userCat ->
-            currentCategories.any { it.userCategoryId == userCat.userCategoryId }
+        val categoriesToAdd = userCategories.filterNot { userCat ->
+            currentCategories.any { it.userCategoryId == userCat.id }
         }
 
         if (categoriesToAdd.isNotEmpty() && isDateGreaterOrEqual(selectedDate, currentDate)) {
             categoriesToAdd.forEach { category ->
-                localDataSource.create(category.copy(date = selectedDate))
+                localDataSource.create(category.toCategory().copy(date = selectedDate))
             }
         }
 
@@ -39,10 +38,10 @@ class CategoryRepository(
     suspend fun update(category: Category, currentDate: String){
         userCategoryLocalDataSource.update(category.toUserCategory())
 
-        val allMonthlyCategories = localDataSource.readAll().first()
+        val allMonthlyCategories = localDataSource.readAll()
 
         val futureInstancesToUpdate = allMonthlyCategories.filter {
-            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(it.date, currentDate)
+            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(it.date, category.date)
         }
 
         futureInstancesToUpdate.forEach { futureCategory ->
@@ -63,10 +62,10 @@ class CategoryRepository(
     suspend fun delete(category: Category, currentDate: String){
         userCategoryLocalDataSource.delete(category.toUserCategory())
 
-        val allMonthlyCategories = localDataSource.readAll().first()
+        val allMonthlyCategories = localDataSource.readAll()
 
         val futureInstancesToDelete = allMonthlyCategories.filter {
-            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(it.date, currentDate)
+            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(it.date, category.date)
         }
 
         futureInstancesToDelete.forEach { futureCategory ->
