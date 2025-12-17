@@ -101,7 +101,7 @@ fun convertToIso(input: String): String {
         val month = digits.substring(2, 4)
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val year = now.year
+        val year = DateManager.selectedYear.value
         val hour = now.hour.toString().padStart(2, '0')
         val minute = now.minute.toString().padStart(2, '0')
         val second = now.second.toString().padStart(2, '0')
