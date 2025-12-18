@@ -26,9 +26,11 @@ class CategoryRepository(
             currentCategories.any { it.userCategoryId == userCat.id }
         }
 
-        if (categoriesToAdd.isNotEmpty() && isDateGreaterOrEqual(selectedDate, currentDate)) {
-            categoriesToAdd.forEach { category ->
-                localDataSource.create(category.toCategory().copy(date = selectedDate))
+        if (categoriesToAdd.isNotEmpty()) {
+            if (isDateGreaterOrEqual(selectedDate, currentDate) || currentCategories.isEmpty()) {
+                categoriesToAdd.forEach { category ->
+                    localDataSource.create(category.toCategory().copy(date = selectedDate))
+                }
             }
         }
 

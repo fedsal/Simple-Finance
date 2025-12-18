@@ -24,7 +24,7 @@ class GetExpensesByCategoryUseCase(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(params: Params): Flow<List<ExpensesByCategory>> {
-        val currentDateString = DateManager.getCurrentDate()
+        val currentDateString = DateManager.getCurrentMonthAndYear()
 
         val selectedMonth = params.month.number.toString().padStart(2, '0')
         val selectedDateString = "$selectedMonth/${params.year}"
