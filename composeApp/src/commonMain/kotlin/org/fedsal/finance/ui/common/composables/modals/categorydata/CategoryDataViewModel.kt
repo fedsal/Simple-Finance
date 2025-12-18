@@ -64,7 +64,7 @@ class CategoryDataViewModel(
                     color = color.hexString,
                     iconId = icon.name
                 )
-                categoryRepository.create(category).takeIf { it > 0 }?.let { categoryId ->
+                categoryRepository.create(category, DateManager.getCurrentSelectedDate()).takeIf { it > 0 }?.let { categoryId ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,

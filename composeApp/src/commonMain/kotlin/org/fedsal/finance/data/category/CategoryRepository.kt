@@ -1,11 +1,16 @@
 package org.fedsal.finance.data.category
 
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import org.fedsal.finance.data.usercategory.UserCategoryLocalDataSource
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.domain.models.UserCategory
 import org.fedsal.finance.domain.models.toCategory
 import org.fedsal.finance.domain.models.toUserCategory
 
@@ -13,12 +18,44 @@ class CategoryRepository(
     private val localDataSource: CategoryLocalDataSource,
     private val userCategoryLocalDataSource: UserCategoryLocalDataSource
 ) {
+    private val _categoryUpdateFlow = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
     // CRUD
-    suspend fun create(category: Category): Long {
-        return userCategoryLocalDataSource.create(category.toUserCategory())
+    suspend fun create(category: Category, selectedDate: String): Long {
+
+        val formattedDate: String = if (selectedDate.length == 6) {
+            StringBuilder(selectedDate)
+                .insert(2, "/")
+                .toString()
+        } else {
+            selectedDate
+        }
+
+        val userCategoryId = userCategoryLocalDataSource.create(
+            UserCategory(
+                title = category.title,
+                budget = category.budget,
+                iconId = category.iconId,
+                color = category.color
+            )
+        )
+
+        val newCategory = category.copy(
+            userCategoryId = userCategoryId.toInt(),
+            date = formattedDate
+        )
+
+        val newCategoryId = localDataSource.create(newCategory)
+
+        _categoryUpdateFlow.tryEmit(Unit)
+
+        return newCategoryId
     }
 
-    fun read(selectedDate: String, currentDate: String): Flow<List<Category>> = flow {
+    fun read(selectedDate: String, currentDate: String): Flow<List<Category>> = channelFlow {
         val currentCategories = localDataSource.read(selectedDate).first()
         val userCategories = userCategoryLocalDataSource.read().first()
 
@@ -33,17 +70,29 @@ class CategoryRepository(
                 }
             }
         }
+        launch {
+            localDataSource.read(selectedDate).collect { categories ->
+                send(categories)
+            }
+        }
 
-        emitAll(localDataSource.read(selectedDate))
+        launch {
+            _categoryUpdateFlow.collect {
+                send(localDataSource.read(selectedDate).first())
+            }
+        }
     }
 
-    suspend fun update(category: Category, currentDate: String){
+    suspend fun update(category: Category, currentDate: String) {
         userCategoryLocalDataSource.update(category.toUserCategory())
 
         val allMonthlyCategories = localDataSource.readAll()
 
         val futureInstancesToUpdate = allMonthlyCategories.filter {
-            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(it.date, category.date)
+            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(
+                it.date,
+                category.date
+            )
         }
 
         futureInstancesToUpdate.forEach { futureCategory ->
@@ -61,13 +110,16 @@ class CategoryRepository(
     }
 
 
-    suspend fun delete(category: Category, currentDate: String){
+    suspend fun delete(category: Category, currentDate: String) {
         userCategoryLocalDataSource.delete(category.toUserCategory())
 
         val allMonthlyCategories = localDataSource.readAll()
 
         val futureInstancesToDelete = allMonthlyCategories.filter {
-            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(it.date, category.date)
+            it.userCategoryId == category.userCategoryId && isDateGreaterOrEqual(
+                it.date,
+                category.date
+            )
         }
 
         futureInstancesToDelete.forEach { futureCategory ->
