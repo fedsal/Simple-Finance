@@ -4,9 +4,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.fedsal.finance.data.usercategory.UserCategoryLocalDataSource
 import org.fedsal.finance.domain.models.Category
@@ -137,6 +135,10 @@ class CategoryRepository(
 
     suspend fun getById(id: Int): Category? {
         return localDataSource.getById(id)
+    }
+
+    suspend fun getUserCategoryById(id: Int): UserCategory? {
+        return userCategoryLocalDataSource.getById(id)
     }
 
     suspend fun deleteById(id: Int): Boolean {

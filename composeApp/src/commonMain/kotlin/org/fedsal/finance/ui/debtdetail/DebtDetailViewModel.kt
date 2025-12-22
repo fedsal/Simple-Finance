@@ -17,6 +17,7 @@ import org.fedsal.finance.data.debt.DebtRepository
 import org.fedsal.finance.data.paymentmethod.PaymentMethodRepository
 import org.fedsal.finance.domain.models.Debt
 import org.fedsal.finance.domain.models.PaymentMethod
+import org.fedsal.finance.domain.models.toCategory
 import kotlin.coroutines.CoroutineContext
 
 class DebtDetailViewModel(
@@ -72,7 +73,8 @@ class DebtDetailViewModel(
             debtRepository.getDebtsByPaymentMethod(sourceId).map { debt ->
                 debt.map { item ->
                     item.copy(
-                        category = categoryRepository.getById(item.category.id)
+                        category = categoryRepository.getUserCategoryById(item.category.id)
+                            ?.toCategory()?.copy(id = item.category.id)
                             ?: item.category,
                     )
                 }

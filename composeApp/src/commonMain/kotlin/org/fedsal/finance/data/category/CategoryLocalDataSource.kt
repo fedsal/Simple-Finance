@@ -2,6 +2,7 @@ package org.fedsal.finance.data.category
 
 import kotlinx.coroutines.flow.Flow
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.domain.models.UserCategory
 
 interface CategoryLocalDataSource {
 

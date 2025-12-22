@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.fedsal.finance.data.category.CategoryLocalDataSource
 import org.fedsal.finance.domain.models.Category
+import org.fedsal.finance.domain.models.UserCategory
 import org.fedsal.finance.framework.room.dao.CategoryDao
 import org.fedsal.finance.framework.room.model.toDomain
 import org.fedsal.finance.framework.room.model.toEntity

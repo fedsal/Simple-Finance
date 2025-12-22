@@ -7,6 +7,8 @@ interface UserCategoryLocalDataSource {
     // CRUD
     suspend fun create(category: UserCategory): Long
     fun read(): Flow<List<UserCategory>>
+
+    suspend fun getById(id: Int): UserCategory?
     suspend fun update(category: UserCategory)
     suspend fun delete(category: UserCategory)
 }

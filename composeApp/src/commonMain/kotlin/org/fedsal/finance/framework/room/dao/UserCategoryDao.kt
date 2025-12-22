@@ -23,6 +23,9 @@ interface UserCategoryDao {
     @Delete
     suspend fun delete(category: UserCategoryEntity)
 
+    @Query("SELECT * FROM user_categories WHERE id = :id")
+    suspend fun getById(id: Int): UserCategoryEntity?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg categories: UserCategoryEntity)
 }

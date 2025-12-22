@@ -80,34 +80,36 @@ class SelectCategoryViewModel(
             onSuccess = { debts ->
                 viewModelScope.launch {
                     debts.collectLatest { debtList ->
-                        val debtItems = debtList
+                        val repoCategories = categoryRepository.readUserCategories()
+                        val repoCategoriesMap = repoCategories.associateBy { it.id }
+
+                        val processedDebts = debtList
                             .flatMap { it.debtsList }
                             .groupBy { it.category }
                             .map { (category, debts) ->
                                 debts.sumOf { it.amount } to category
-                            }.toMutableList()
-                        val categories = categoryRepository.readUserCategories()
-                        val categoriesInDebtItems = debtItems.map { it.second }
-                        val categoriesNotInDebtItems = categories.filterNot {
-                            categoriesInDebtItems.any { debtCat ->
-                                it.id == debtCat.userCategoryId || it.id == debtCat.id
                             }
-                        }
-                        debtItems.forEachIndexed { index, pair ->
-                            val category = categories.find { it.id == pair.second.id }
-                            category?.let {
-                                debtItems[index] = pair.first to it.toCategory().copy(id = it.id)
-                            } ?: run {
-                                //debtItems.removeAt(index)
+                            .mapNotNull { (amount, tempCategory) ->
+                                val realCategory = repoCategoriesMap[tempCategory.id]
+
+                                realCategory?.let {
+                                    amount to it.toCategory().copy(id = it.id)
+                                }
                             }
-                        }
-                        debtItems.addAll(categoriesNotInDebtItems.map {
-                            0.0 to it.toCategory().copy(id = it.id)
-                        })
+
+                        val usedCategoryIds = processedDebts.map { it.second.id }.toSet()
+
+                        val unusedCategories = repoCategories
+                            .filter { it.id !in usedCategoryIds }
+                            .map {
+                                0.0 to it.toCategory().copy(id = it.id)
+                            }
+
                         _uiState.update { ui ->
-                            ui.copy(isLoading = false, categories = debtItems)
+                            ui.copy(isLoading = false, categories = processedDebts + unusedCategories)
                         }
                     }
+
                 }
             }
         )

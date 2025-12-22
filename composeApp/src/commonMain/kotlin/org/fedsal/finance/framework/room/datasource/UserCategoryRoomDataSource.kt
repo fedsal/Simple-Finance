@@ -23,6 +23,10 @@ class UserCategoryRoomDataSource(
         userCategoryDao.update(category.toEntity())
     }
 
+    override suspend fun getById(id: Int): UserCategory? {
+        return userCategoryDao.getById(id)?.toDomain()
+    }
+
     override suspend fun delete(category: UserCategory) {
         userCategoryDao.delete(category.toEntity())
     }
