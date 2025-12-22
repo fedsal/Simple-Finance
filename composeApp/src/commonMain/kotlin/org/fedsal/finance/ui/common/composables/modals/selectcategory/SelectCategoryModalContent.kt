@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -35,7 +36,13 @@ fun SelectCategoryModalContent(
 ) {
 
     LaunchedEffect(Unit) {
-        selectCategoryViewModel.initViewModel()
+        selectCategoryViewModel.initViewModel(isOnBalance)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            selectCategoryViewModel.dispose()
+        }
     }
 
     val uiState = selectCategoryViewModel.uiState.collectAsState()
@@ -65,9 +72,11 @@ fun SelectCategoryModalContent(
                     }
                 )
             }
-            item {
-                DashedChip(Modifier.width(190.dp).height(70.dp)) {
-                    onNewCategoryClicked()
+            if (!isOnBalance) {
+                item {
+                    DashedChip(Modifier.width(190.dp).height(70.dp)) {
+                        onNewCategoryClicked()
+                    }
                 }
             }
         }

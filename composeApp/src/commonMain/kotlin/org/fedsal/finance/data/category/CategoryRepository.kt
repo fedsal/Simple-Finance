@@ -55,6 +55,12 @@ class CategoryRepository(
         return newCategoryId
     }
 
+    suspend fun readUserCategories(): List<UserCategory> {
+        return userCategoryLocalDataSource.read().first()
+    }
+
+
+
     fun read(selectedDate: String, currentDate: String): Flow<List<Category>> = channelFlow {
         val currentCategories = localDataSource.read(selectedDate).first()
         val userCategories = userCategoryLocalDataSource.read().first()
