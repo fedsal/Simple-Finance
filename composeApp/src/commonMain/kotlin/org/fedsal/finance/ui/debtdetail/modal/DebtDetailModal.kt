@@ -37,12 +37,12 @@ import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.visualtransformations.MaskVisualTransformation
 import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCurrencyVisualTransformation
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebtDetailModal(
-    viewModel: DebtDetailModalViewModel = koinInject(),
+    viewModel: DebtDetailModalViewModel = koinViewModel(),
     debt: Debt,
     sheetState: SheetState,
     onDismissRequest: () -> Unit

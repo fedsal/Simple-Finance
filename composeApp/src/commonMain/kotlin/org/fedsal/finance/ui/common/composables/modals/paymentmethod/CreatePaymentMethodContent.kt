@@ -37,11 +37,11 @@ import org.fedsal.finance.ui.common.composables.CustomEditText
 import org.fedsal.finance.ui.common.composables.SelectableChip
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.opaqueColor
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreatePaymentMethodContent(
-    viewModel: CreatePaymentMethodViewModel = koinInject(),
+    viewModel: CreatePaymentMethodViewModel = koinViewModel(),
     showCreditOnly: Boolean = false,
     onDismissRequest: () -> Unit,
 ) {

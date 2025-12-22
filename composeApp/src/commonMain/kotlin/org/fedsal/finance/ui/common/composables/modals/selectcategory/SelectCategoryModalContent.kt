@@ -25,11 +25,11 @@ import org.fedsal.finance.ui.common.composables.CategoryItem
 import org.fedsal.finance.ui.common.composables.DashedChip
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SelectCategoryModalContent(
-    selectCategoryViewModel: SelectCategoryViewModel = koinInject(),
+    selectCategoryViewModel: SelectCategoryViewModel = koinViewModel(),
     isOnBalance: Boolean = false,
     onCategoryClicked: (category: Category) -> Unit,
     onNewCategoryClicked: () -> Unit,

@@ -36,6 +36,7 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -90,14 +91,14 @@ val useCaseModule = module {
 }
 
 val provideViewModelModule = module {
-    single { ExpensesViewModel(get(), get(), get()) }
-    single { ExpensesByCategoryViewModel(get(), get(), get()) }
-    single { ExpenseInfoModalViewModel(get(), get(), get()) }
-    single { SelectCategoryViewModel(get(), get(), get()) }
-    single { CategoryDataViewModel(get()) }
-    single { BalanceViewModel(get()) }
-    single { DebtDataViewModel(get(), get()) }
-    single { DebtDetailViewModel(get(), get(), get()) }
-    single { DebtDetailModalViewModel(get()) }
-    single { CreatePaymentMethodViewModel(get()) }
+    viewModel { ExpensesViewModel(get(), get(), get()) }
+    viewModel { ExpensesByCategoryViewModel(get(), get(), get()) }
+    viewModel { ExpenseInfoModalViewModel(get(), get(), get()) }
+    viewModel { SelectCategoryViewModel(get(), get(), get()) }
+    viewModel { CategoryDataViewModel(get()) }
+    viewModel { BalanceViewModel(get()) }
+    viewModel { DebtDataViewModel(get(), get()) }
+    viewModel { DebtDetailViewModel(get(), get(), get()) }
+    viewModel { DebtDetailModalViewModel(get()) }
+    viewModel { CreatePaymentMethodViewModel(get()) }
 }

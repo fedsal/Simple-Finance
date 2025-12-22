@@ -46,13 +46,13 @@ import org.fedsal.finance.ui.common.composables.modals.expenseinfo.ExpenseInfoMo
 import org.fedsal.finance.ui.common.convertFromIso
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpensesByCategoryScreen(
     categoryId: Int = 0,
-    viewModel: ExpensesByCategoryViewModel = koinInject(),
+    viewModel: ExpensesByCategoryViewModel = koinViewModel(),
     onNavigateBack: () -> Unit
 ) {
     LaunchedEffect(Unit) {

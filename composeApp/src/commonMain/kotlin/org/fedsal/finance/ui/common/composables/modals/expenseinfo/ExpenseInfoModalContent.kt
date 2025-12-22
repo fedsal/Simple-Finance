@@ -48,12 +48,12 @@ import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCu
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.opaqueColor
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun ExpenseInfoModalContent(
-    addExpenseModalViewModel: ExpenseInfoModalViewModel = koinInject(),
+    addExpenseModalViewModel: ExpenseInfoModalViewModel = koinViewModel(),
     categoryId: Long,
     onDismissRequest: () -> Unit,
     mode: DisplayInfoMode = DisplayInfoMode.CREATE,

@@ -45,12 +45,12 @@ import org.fedsal.finance.ui.common.composables.visualtransformations.rememberCu
 import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.common.opaqueColor
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun CategoryDataModalContent(
-    categoryDataViewModel: CategoryDataViewModel = koinInject(),
+    categoryDataViewModel: CategoryDataViewModel = koinViewModel(),
     mode: DisplayInfoMode = DisplayInfoMode.CREATE,
     categoryId: Long = -1L,
     onSuccess: (Long) -> Unit
