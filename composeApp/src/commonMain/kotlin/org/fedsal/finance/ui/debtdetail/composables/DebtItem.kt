@@ -69,10 +69,8 @@ fun DebtItem(
                 maxLines = 1,
                 modifier = Modifier.padding(vertical = 2.dp)
             )
-            // Installments
-            val installmentImport = debt.amount / debt.installments
             Text(
-                text = "Cuota ${debt.paidInstallments} de ${debt.installments}. ($ ${installmentImport.formatDecimal()})",
+                text = "Cuota ${debt.paidInstallments} de ${debt.installments}",
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     fontWeight = FontWeight.SemiBold
@@ -81,10 +79,14 @@ fun DebtItem(
             )
         }
 
+        val installmentImport = debt.amount / debt.installments
         // Total debt
-        Text(
-            text = "$ ${debt.amount.formatDecimal()}",
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-        )
+        Column {
+            Text(
+                text = "$ ${debt.amount.formatDecimal()}",
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+            )
+            Text("C/ $${installmentImport.formatDecimal()}")
+        }
     }
 }
