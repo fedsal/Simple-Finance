@@ -43,6 +43,7 @@ import org.fedsal.finance.domain.models.Debt
 import org.fedsal.finance.ui.common.DisplayInfoMode
 import org.fedsal.finance.ui.common.composables.CategoryIcon
 import org.fedsal.finance.ui.common.composables.EditSelectorBottomSheet
+import org.fedsal.finance.ui.common.composables.FilterRow
 import org.fedsal.finance.ui.common.composables.modals.debtdata.DebtDataModalContent
 import org.fedsal.finance.ui.common.formatDecimal
 import org.fedsal.finance.ui.common.getIcon
@@ -186,6 +187,20 @@ fun DebtDetailScreen(
 
             Spacer(Modifier.height(20.dp))
 
+            // Filter
+            val items = listOf("Pendiente", "Finalizado")
+            val filter by viewModel.filter.collectAsState()
+
+            FilterRow(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                items = items,
+                selectedItem = filter,
+                onItemSelected = { onItemSelected ->
+                    viewModel.setFilter(onItemSelected ?: -1)
+                }
+            )
+
+            Spacer(Modifier.height(20.dp))
             // Debts list
             LazyColumn(
                 Modifier.padding(horizontal = 20.dp),

@@ -8,7 +8,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,6 +27,12 @@ class DebtDetailViewModel(
     private val paymentMethodRepository: PaymentMethodRepository,
     private val categoryRepository: CategoryRepository,
 ) : ViewModel() {
+
+    // Pending => 0
+    // Paid => 1
+    private val _filter = MutableStateFlow(0)
+    val filter: StateFlow<Int> get() = _filter.asStateFlow()
+
 
     data class UIState(
         val isLoading: Boolean = true,
@@ -78,6 +86,16 @@ class DebtDetailViewModel(
                             ?: item.category,
                     )
                 }
+            }.combine(filter) { debts, currentFilter ->
+                when (currentFilter) {
+                    0 -> debts.filter { debt ->
+                        debt.paidInstallments < debt.installments
+                    }
+                    1 -> debts.filter { debt ->
+                        debt.paidInstallments == debt.installments
+                    }
+                    else -> debts
+                }
             }.collectLatest { debts ->
                 _uiState.update {
                     UIState(
@@ -120,5 +138,11 @@ class DebtDetailViewModel(
     fun dispose() {
         ioDispatchers.cancel()
         _uiState.value = UIState() // Reset state
+    }
+
+    fun setFilter(newFilter: Int) {
+        if (newFilter != filter.value) {
+            _filter.value = newFilter
+        }
     }
 }
