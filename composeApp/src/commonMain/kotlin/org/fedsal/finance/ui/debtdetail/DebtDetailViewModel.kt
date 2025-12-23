@@ -39,6 +39,7 @@ class DebtDetailViewModel(
         val error: String? = null,
         val debts: List<Debt> = emptyList(),
         val totalDebt: Double = 0.0,
+        val toPayNextMonth: Double = 0.0,
         val source: PaymentMethod = PaymentMethod()
     )
 
@@ -87,7 +88,17 @@ class DebtDetailViewModel(
                     )
                 }
             }.combine(filter) { debts, currentFilter ->
-                when (currentFilter) {
+                // --- Cálculo de 'toPayNextMonth' (Debe hacerse sobre *TODAS* las deudas pendientes) ---
+                val toPayNextMonth = debts
+                    .filter { debt -> debt.paidInstallments < debt.installments } // Solo las que tienen cuotas pendientes
+                    .sumOf { debt -> debt.amount / debt.installments }
+
+                val totalDebt = debts.sumOf { item ->
+                    val installmentImport = item.amount / item.installments
+                    item.amount - (installmentImport * item.paidInstallments)
+                }
+
+                val filteredDebts = when (currentFilter) {
                     0 -> debts.filter { debt ->
                         debt.paidInstallments < debt.installments
                     }
@@ -96,16 +107,15 @@ class DebtDetailViewModel(
                     }
                     else -> debts
                 }
-            }.collectLatest { debts ->
+                Triple(filteredDebts, toPayNextMonth, totalDebt)
+            }.collectLatest { (debts, toPayNextMonth, totalDebt) ->
                 _uiState.update {
                     UIState(
                         isLoading = false,
                         debts = debts,
-                        totalDebt = debts.sumOf { item ->
-                            val installmentImport = item.amount / item.installments
-                            item.amount - (installmentImport * item.paidInstallments)
-                        },
-                        source = it.source
+                        totalDebt = totalDebt,
+                        source = it.source,
+                        toPayNextMonth = toPayNextMonth
                     )
                 }
             }
