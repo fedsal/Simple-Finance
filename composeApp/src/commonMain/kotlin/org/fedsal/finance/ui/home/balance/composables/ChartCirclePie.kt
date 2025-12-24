@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,6 +43,7 @@ import org.fedsal.finance.ui.common.hexToColor
 @Composable
 fun PieChart(
     data: List<DebtBySource>,
+    toPayNextMonth: Double = 0.0,
     radiusOuter: Dp = 140.dp,
     chartBarWidth: Dp = 20.dp,
     animDuration: Int = 1000,
@@ -100,19 +104,37 @@ fun PieChart(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    "Deuda total",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                )
-                Text(
-                    "$ ${totalSum.formatDecimal()}",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 36.sp
-                    ),
-                )
+                Column(
+                    Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(Modifier.fillMaxHeight(0.35f))
+                    Text(
+                        "Deuda total",
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                    )
+                    Text(
+                        "$ ${totalSum.formatDecimal()}",
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 36.sp
+                        ),
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        text = "Pago siguiente",
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        text = "$ ${toPayNextMonth.formatDecimal()}",
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                    )
+                }
+
             }
             Canvas(
                 modifier = Modifier
@@ -165,7 +187,11 @@ fun DetailsPieChart(
 }
 
 @Composable
-fun DetailsPieChartItem(data: DebtBySource, percentage: Double, onItemClicked: (PaymentMethod) -> Unit) {
+fun DetailsPieChartItem(
+    data: DebtBySource,
+    percentage: Double,
+    onItemClicked: (PaymentMethod) -> Unit
+) {
     Surface(
         modifier = Modifier.height(84.dp).clickable { onItemClicked(data.source) },
         shape = RoundedCornerShape(16.dp),

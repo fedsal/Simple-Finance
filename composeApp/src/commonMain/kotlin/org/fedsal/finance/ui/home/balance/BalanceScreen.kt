@@ -41,7 +41,7 @@ fun BalanceScreen(
             Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
                     imageVector = Icons.Default.Celebration,
-                    contentDescription = "No debts",
+                    contentDescription = "No hay ninguna deuda",
                     modifier = Modifier.size(140.dp)
                 )
                 Spacer(Modifier.height(12.dp))
@@ -56,6 +56,7 @@ fun BalanceScreen(
         Column(Modifier.padding(top = 50.dp, start = 16.dp, end = 16.dp)) {
             PieChart(
                 data = uiState.debts,
+                toPayNextMonth = uiState.toPayNextMonth,
                 onItemClicked = { paymentMethod ->
                     onDebtClick(paymentMethod.id)
                 },
