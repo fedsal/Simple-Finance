@@ -32,7 +32,7 @@ object INSTANCE {
     var database: AppDatabase? = null
 }
 
-@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, UserCategoryEntity::class, PaymentMethodEntity::class], version = 2)
+@Database(entities = [ExpenseEntity::class, DebtEntity::class, CategoryEntity::class, UserCategoryEntity::class, PaymentMethodEntity::class], version = 3)
 @TypeConverters(Converters::class)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase: RoomDatabase() {
@@ -80,7 +80,7 @@ fun getRoomDatabase(
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .addCallback(InitialDataCallback())
-        .addMigrations(MIGRATION_1_2)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         .build()
     INSTANCE.database = db
     return db
@@ -118,5 +118,11 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 description TEXT NOT NULL
             )
         """.trimIndent())
+    }
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("ALTER TABLE debts ADD COLUMN expenseId INTEGER")
     }
 }

@@ -11,7 +11,7 @@ import org.fedsal.finance.framework.room.model.ExpenseEntity
 @Dao
 interface ExpenseDao {
     @Insert
-    suspend fun create(expense: ExpenseEntity)
+    suspend fun create(expense: ExpenseEntity): Long
 
     @Query("SELECT * FROM expenses ORDER BY date DESC")
     fun readAll(): Flow<List<ExpenseEntity>>

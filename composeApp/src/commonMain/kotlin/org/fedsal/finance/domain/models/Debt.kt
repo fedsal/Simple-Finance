@@ -10,4 +10,5 @@ data class Debt(
     val paidInstallments: Int = 0,
     val paymentMethod: PaymentMethod = PaymentMethod(),
     val description: String = "",
+    val expenseId: Long? = null
 )

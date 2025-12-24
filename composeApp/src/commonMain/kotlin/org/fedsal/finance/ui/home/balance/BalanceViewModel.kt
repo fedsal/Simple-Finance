@@ -6,9 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.fedsal.finance.domain.models.Debt
-import org.fedsal.finance.domain.models.DebtBySource // Asegúrate que importa esta clase
-import org.fedsal.finance.domain.models.PaymentMethod
+import org.fedsal.finance.domain.models.DebtBySource
 import org.fedsal.finance.domain.usecases.GetAllDebtBySourceUseCase
 
 class BalanceViewModel(
@@ -50,6 +48,7 @@ class BalanceViewModel(
                         val toPayNextMonth = debtList.sumOf { debtBySource ->
                             // Recorremos la lista de deudas individuales de cada fuente:
                             debtBySource.debtsList
+                                .filter { it.installments > 0 }
                                 // Filtramos solo las que aún tienen cuotas por pagar (Pendientes)
                                 .filter { debt -> debt.paidInstallments < debt.installments }
                                 .sumOf { debt ->

@@ -19,6 +19,7 @@ data class DebtEntity(
     val paidInstallments: Int = 0,
     val paymentMethodId: Int,
     val description: String,
+    val expenseId: Long? = null
 )
 
 fun DebtEntity.toDomain(): Debt {
@@ -37,7 +38,8 @@ fun DebtEntity.toDomain(): Debt {
             iconId = "",
             color = ""
         ),
-        description = description
+        description = description,
+        expenseId = expenseId
     )
 }
 
@@ -51,6 +53,7 @@ fun Debt.toEntity(): DebtEntity {
         installments = installments,
         paidInstallments = paidInstallments,
         paymentMethodId = paymentMethod.id,
-        description = description
+        description = description,
+        expenseId = expenseId
     )
 }

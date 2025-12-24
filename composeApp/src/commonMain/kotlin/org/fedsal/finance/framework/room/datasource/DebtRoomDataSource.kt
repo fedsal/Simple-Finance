@@ -35,4 +35,8 @@ class DebtRoomDataSource(
         return debtDao.getDebtsByPaymentMethod(paymentMethodId)
             .map { debtEntities -> debtEntities.map { it.toDomain() } }
     }
+
+    override suspend fun deleteByExpenseId(expenseId: Long) {
+        debtDao.deleteByExpenseId(expenseId)
+    }
 }

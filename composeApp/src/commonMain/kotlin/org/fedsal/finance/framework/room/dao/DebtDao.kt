@@ -25,6 +25,9 @@ interface DebtDao {
     @Query("SELECT * FROM debts WHERE id = :debtId LIMIT 1")
     suspend fun getDebtById(debtId: Long): DebtEntity?
 
+    @Query("DELETE FROM debts WHERE expenseId = :expenseId")
+    suspend fun deleteByExpenseId(expenseId: Long)
+
     @Query(
         "SELECT * FROM debts WHERE paymentMethodId = :paymentMethodId"
     )

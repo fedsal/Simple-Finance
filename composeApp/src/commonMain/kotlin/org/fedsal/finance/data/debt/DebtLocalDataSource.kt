@@ -11,4 +11,6 @@ interface DebtLocalDataSource {
     suspend fun delete(debt: Debt)
     suspend fun getDebtById(debtId: Long): Debt?
     fun getDebtsByPaymentMethod(paymentMethodId: Int): Flow<List<Debt>>
+
+    suspend fun deleteByExpenseId(expenseId: Long)
 }

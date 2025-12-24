@@ -5,7 +5,7 @@ import kotlinx.datetime.Month
 import org.fedsal.finance.domain.models.Expense
 
 interface ExpenseLocalDataSource {
-    suspend fun create(expense: Expense)
+    suspend fun create(expense: Expense): Long
     fun read(): Flow<List<Expense>>
     suspend fun update(expense: Expense)
     suspend fun delete(expense: Expense)

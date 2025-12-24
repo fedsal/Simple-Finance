@@ -12,8 +12,8 @@ import org.fedsal.finance.framework.room.model.toEntity
 class ExpenseRoomDataSource(
     private val expenseDao: ExpenseDao
 ) : ExpenseLocalDataSource {
-    override suspend fun create(expense: Expense) {
-        expenseDao.create(expense.toEntity())
+    override suspend fun create(expense: Expense): Long {
+        return expenseDao.create(expense.toEntity())
     }
 
     override fun read(): Flow<List<Expense>> {
