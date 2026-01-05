@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import org.fedsal.finance.ui.common.DateDefaults.DATE_LENGTH
 import org.fedsal.finance.ui.common.DateDefaults.DATE_MASK
 import org.fedsal.finance.ui.common.DateManager
@@ -63,15 +66,15 @@ fun ExpenseInfoModalContent(
     LaunchedEffect(Unit) {
         addExpenseModalViewModel.initViewModel(categoryId, mode, expenseId)
     }
-    val uiState = addExpenseModalViewModel.uiState.collectAsState()
-    if (uiState.value.shouldContinue) {
+    val uiState by addExpenseModalViewModel.uiState.collectAsState()
+    if (uiState.shouldContinue) {
         onDismissRequest()
         addExpenseModalViewModel.dispose()
     }
 
     val currentDate by remember { mutableStateOf(DateManager.getCurrentDateOrSelectedMonth()) }
 
-    val paymentMethods = uiState.value.paymentMethods
+    val paymentMethods = uiState.paymentMethods
 
     Box(Modifier.fillMaxSize()) {
         var title by remember { mutableStateOf("") }
@@ -80,69 +83,95 @@ fun ExpenseInfoModalContent(
         var selectedMethod by remember { mutableStateOf(-1) }
         var description by remember { mutableStateOf("") }
 
-        LaunchedEffect(uiState.value.expense) {
+        LaunchedEffect(uiState.expense) {
             if (mode == DisplayInfoMode.EDIT) {
-                title = uiState.value.expense.title
-                importAmount = uiState.value.expense.amount.roundToInt().toString()
-                date = uiState.value.expense.date
-                description = uiState.value.expense.description
+                title = uiState.expense.title
+                importAmount = uiState.expense.amount.roundToInt().toString()
+                date = uiState.expense.date
+                description = uiState.expense.description
                 selectedMethod =
-                    paymentMethods.indexOfFirst { it.id == uiState.value.expense.paymentMethod.id }
+                    paymentMethods.indexOfFirst { it.id == uiState.expense.paymentMethod.id }
             }
         }
 
-        Icon(
-            imageVector = Icons.Default.Done,
-            contentDescription = "Done",
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(60.dp)
-                .padding(end = 24.dp)
-                .clickable {
-                    addExpenseModalViewModel.execute(
-                        category = uiState.value.category,
-                        title = title,
-                        amount = importAmount.toDoubleOrNull() ?: 0.0,
-                        date = date,
-                        paymentMethod = paymentMethods[selectedMethod],
-                        description = description
+        // Error toast
+        if (uiState.error.isNullOrEmpty().not()) {
+            Row(
+                modifier = Modifier.padding(20.dp).fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .height(40.dp)
+                    .background(
+                        MaterialTheme.colorScheme.errorContainer,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = uiState.error ?: "Error desconocido",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onErrorContainer
                     )
-                },
-        )
-
-        Column(
-            modifier = Modifier.fillMaxSize().padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            // Error toast
-            if (uiState.value.error.isNullOrEmpty().not()) {
-                Box(
-                    modifier = Modifier.padding(top = 20.dp, bottom = 12.dp).fillMaxWidth()
-                        .height(30.dp)
-                        .background(
-                            opaqueColor(Color.Red).copy(alpha = .3f),
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = uiState.value.error ?: "Error desconocido",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Red.copy(alpha = .7f)
-                        )
+                )
+                Spacer(Modifier.weight(1f))
+                IconButton({ addExpenseModalViewModel.consumeError() }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Cerrar",
                     )
                 }
             }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize().padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Box(Modifier.fillMaxWidth()) {
+                Icon(
+                    imageVector = Icons.Default.Done,
+                    contentDescription = "Done",
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .size(50.dp)
+                        .clickable {
+                            if (title.isBlank()) {
+                                addExpenseModalViewModel.postError("Ingrese el titulo")
+                                return@clickable
+                            }
+                            if (importAmount.isBlank() || importAmount.toDoubleOrNull() == null) {
+                                addExpenseModalViewModel.postError("Ingrese un importe valido")
+                                return@clickable
+                            }
+                            if (date.isBlank()) {
+                                addExpenseModalViewModel.postError("Ingrese una fecha valida")
+                                return@clickable
+                            }
+                            if (selectedMethod < 0 || selectedMethod >= paymentMethods.size) {
+                                addExpenseModalViewModel.postError("Seleccione un metodo de pago")
+                                return@clickable
+                            }
+                            addExpenseModalViewModel.execute(
+                                category = uiState.category,
+                                title = title,
+                                amount = importAmount.toDoubleOrNull() ?: 0.0,
+                                date = date,
+                                paymentMethod = paymentMethods[selectedMethod],
+                                description = description
+                            )
+                        },
+                )
+            }
             CategoryIcon(
                 modifier = Modifier.size(50.dp),
-                icon = getIcon(uiState.value.category.iconId),
-                iconTint = hexToColor(uiState.value.category.color)
+                icon = getIcon(uiState.category.iconId),
+                iconTint = hexToColor(uiState.category.color)
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                text = uiState.value.category.title,
+                text = uiState.category.title,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
             )

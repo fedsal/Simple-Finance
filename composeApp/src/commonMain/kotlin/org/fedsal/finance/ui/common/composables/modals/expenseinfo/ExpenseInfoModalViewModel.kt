@@ -226,6 +226,14 @@ class ExpenseInfoModalViewModel(
             }
     }
 
+    fun consumeError() {
+        _uiState.update { it.copy(error = null) }
+    }
+
+    fun postError(error: String) {
+        _uiState.update { it.copy(error = error) }
+    }
+
     /**
      * Disposes of the ViewModel resources.
      */
