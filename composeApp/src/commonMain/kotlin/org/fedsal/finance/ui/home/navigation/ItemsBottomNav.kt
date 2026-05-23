@@ -3,6 +3,7 @@ package org.fedsal.finance.ui.home.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class ItemsBottomNav(
@@ -20,5 +21,11 @@ sealed class ItemsBottomNav(
         icon = Icons.Outlined.AccountBalance,
         title = "Balance",
         route = HomeDestination.Balance
+    )
+
+    data object Export: ItemsBottomNav(
+        icon = Icons.Outlined.AutoAwesome,
+        title = "IA",
+        route = HomeDestination.Export
     )
 }

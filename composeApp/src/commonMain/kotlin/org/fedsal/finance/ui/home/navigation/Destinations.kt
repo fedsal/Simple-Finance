@@ -10,4 +10,6 @@ sealed class HomeDestination {
     data object Home : HomeDestination()
     @Serializable
     data object Balance : HomeDestination()
+    @Serializable
+    data object Export : HomeDestination()
 }

@@ -30,6 +30,7 @@ import org.fedsal.finance.ui.common.composables.modals.paymentmethod.CreatePayme
 import org.fedsal.finance.ui.common.composables.modals.selectcategory.SelectCategoryViewModel
 import org.fedsal.finance.ui.debtdetail.DebtDetailViewModel
 import org.fedsal.finance.ui.debtdetail.modal.DebtDetailModalViewModel
+import org.fedsal.finance.ui.home.export.ExportViewModel
 import org.fedsal.finance.ui.home.allcategories.ExpensesViewModel
 import org.fedsal.finance.ui.home.balance.BalanceViewModel
 import org.koin.core.KoinApplication
@@ -101,4 +102,5 @@ val provideViewModelModule = module {
     viewModel { DebtDetailViewModel(get(), get(), get()) }
     viewModel { DebtDetailModalViewModel(get()) }
     viewModel { CreatePaymentMethodViewModel(get()) }
+    viewModel { ExportViewModel(get(), get(), get()) }
 }

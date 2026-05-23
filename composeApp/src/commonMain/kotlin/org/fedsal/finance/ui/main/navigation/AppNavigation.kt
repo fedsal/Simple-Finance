@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import org.fedsal.finance.ui.categoryExpenses.ExpensesByCategoryScreen
+import org.fedsal.finance.ui.categoryExpenses.CategoryScreen
 import org.fedsal.finance.ui.common.navigation.animatedComposable
 import org.fedsal.finance.ui.debtdetail.DebtDetailScreen
 import org.fedsal.finance.ui.home.HomeScreen
@@ -30,7 +30,7 @@ fun AppNavigation(
         // Category details destination
         animatedComposable<AppDestinations.Category> { backStackEntry ->
             val categoryExpenses: AppDestinations.Category = backStackEntry.toRoute()
-            ExpensesByCategoryScreen(categoryExpenses.id) {
+            CategoryScreen(categoryExpenses.id) {
                 navController.navigateUp()
             }
         }

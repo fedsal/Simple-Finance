@@ -40,10 +40,11 @@ fun HomeScreen(
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val isOnBalance = navBackStackEntry.hasRoute(HomeDestination.Balance)
+    val isOnExport = navBackStackEntry.hasRoute(HomeDestination.Export)
 
     Scaffold(
         topBar = {
-            if (isOnBalance) return@Scaffold
+            if (isOnBalance || isOnExport) return@Scaffold
             val month by DateManager.selectedMonth.collectAsState()
             val localDate = LocalDate(DateManager.selectedYear.value, month, 1)
             DateFilterHeader(

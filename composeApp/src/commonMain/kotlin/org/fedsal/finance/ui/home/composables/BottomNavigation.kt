@@ -56,7 +56,7 @@ fun BottomNavigation(
 
 @Composable
 private fun CustomAppBar(navHostController: NavHostController) {
-    val menuItems = listOf(ItemsBottomNav.Expenses, ItemsBottomNav.Balance)
+    val menuItems = listOf(ItemsBottomNav.Expenses, ItemsBottomNav.Balance, ItemsBottomNav.Export)
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     BottomAppBar(
         modifier = Modifier

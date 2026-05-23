@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import org.fedsal.finance.ui.home.balance.BalanceScreen
 import org.fedsal.finance.ui.home.allcategories.ExpensesScreen
+import org.fedsal.finance.ui.home.export.ExportScreen
 import org.fedsal.finance.ui.main.navigation.AppDestinations
 
 @Composable
@@ -35,6 +36,11 @@ fun HomeNavigation(
             ) { BalanceScreen {
                 onNavigateOuterHome(AppDestinations.DebtDetail(it))
             } }
+            composable<HomeDestination.Export>(
+                enterTransition = { EnterTransition.None }
+            ) {
+                ExportScreen()
+            }
         }
     }
 }
