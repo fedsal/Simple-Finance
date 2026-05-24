@@ -8,12 +8,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGestures
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +36,10 @@ import org.fedsal.finance.ui.common.getIcon
 import org.fedsal.finance.ui.common.hexToColor
 import org.fedsal.finance.ui.home.allcategories.composables.ExpenseCategoryItem
 import org.fedsal.finance.ui.home.allexpenses.AllExpensesView
+import org.fedsal.finance.ui.home.composables.ButtonBottomSheet
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpensesScreen(
     viewModel: ExpensesViewModel = koinViewModel(),
@@ -36,10 +47,35 @@ fun ExpensesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showAllExpenses by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    if (showBottomSheet) {
+        ButtonBottomSheet(
+            sheetState = sheetState,
+            isOnBalance = false,
+            onDismissRequest = { showBottomSheet = false }
+        )
+    }
 
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
         contentWindowInsets = WindowInsets.safeGestures,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showBottomSheet = true },
+                shape = RoundedCornerShape(16.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                elevation = FloatingActionButtonDefaults.elevation(0.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    imageVector = Icons.Rounded.Add,
+                    tint = MaterialTheme.colorScheme.primaryContainer,
+                    contentDescription = "Agregar gasto"
+                )
+            }
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier.padding(

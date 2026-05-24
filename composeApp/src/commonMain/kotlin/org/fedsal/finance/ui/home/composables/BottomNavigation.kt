@@ -1,16 +1,8 @@
 package org.fedsal.finance.ui.home.composables
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -19,7 +11,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,28 +21,8 @@ import org.fedsal.finance.ui.home.navigation.ItemsBottomNav
 import org.fedsal.finance.ui.home.navigation.hasRoute
 
 @Composable
-fun BottomNavigation(
-    navHostController: NavHostController,
-    onButtonClicked: () -> Unit,
-) {
-    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        CustomAppBar(navHostController)
-        FloatingActionButton(
-            modifier = Modifier.size(65.dp).offset(y = (-30).dp),
-            onClick = { onButtonClicked.invoke() },
-            shape = RoundedCornerShape(16.dp),
-            containerColor = MaterialTheme.colorScheme.primary,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp)
-        ) {
-            Icon(
-                modifier = Modifier.size(42.dp),
-                imageVector = Icons.Rounded.Add,
-                tint = MaterialTheme.colorScheme.primaryContainer,
-                contentDescription = ""
-            )
-        }
-    }
-
+fun BottomNavigation(navHostController: NavHostController) {
+    CustomAppBar(navHostController)
 }
 
 @Composable
