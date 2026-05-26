@@ -133,6 +133,35 @@ All modules are in `framework/koin/di.kt`:
 
 ---
 
+## Testing
+
+Tests unitarios en `composeApp/src/commonTest/` usando `kotlin-test` + `kotlinx-coroutines-test`.
+
+```bash
+./gradlew :composeApp:testDebugUnitTest
+```
+
+### Cobertura actual
+
+| Test | Qué prueba |
+|---|---|
+| `ExportPromptBuilderTest` | `ExportViewModel.buildPrompt()` — 12 casos: estado vacío, deudas activas/pagadas/sin cuotas, presupuesto excedido, ordenamiento, totales |
+| `GetAllDebtBySourceUseCaseTest` | `GetAllDebtBySourceUseCase.execute()` — 10 casos: filtrado CASH, cálculo totalDebt parcial/completo/cero cuotas, múltiples fuentes |
+
+### Fakes disponibles (en `commonTest/fakes/`)
+
+- `FakeDebtLocalDataSource(debtsByPaymentMethodId: Map<Int, List<Debt>>)` — stub en memoria
+- `FakePaymentMethodLocalDataSource(initialMethods: List<PaymentMethod>)` — stub en memoria con `MutableStateFlow`
+
+### Reglas para nuevos tests
+
+- Lógica pura → `commonTest` (corre en Android JVM y potencialmente iOS)
+- Usar `runTest { flow.first() }` para casos de Use Case con Flow
+- Para hacer testeable una función privada del ViewModel, moverla al `companion object` con visibilidad `internal`
+- Nombre de test: `metodo_condicion_resultadoEsperado` (todo en español)
+
+---
+
 ## Current Features
 
 | Screen | Description |

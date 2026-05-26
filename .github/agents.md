@@ -77,6 +77,34 @@ DI con Koin. Todos los módulos en `composeApp/src/commonMain/.../framework/koin
 
 ---
 
+## Tests unitarios
+
+Tests ubicados en `composeApp/src/commonTest/`. Ejecutar con:
+
+```bash
+./gradlew :composeApp:testDebugUnitTest
+```
+
+### Cobertura actual
+
+| Archivo de test | Clase bajo prueba | Tests |
+|---|---|---|
+| `ui/home/export/ExportPromptBuilderTest.kt` | `ExportViewModel.buildPrompt()` | 12 |
+| `domain/usecases/GetAllDebtBySourceUseCaseTest.kt` | `GetAllDebtBySourceUseCase` | 10 |
+
+### Fakes reutilizables (en `fakes/`)
+
+- `FakeDebtLocalDataSource` — implementación en memoria de `DebtLocalDataSource`
+- `FakePaymentMethodLocalDataSource` — implementación en memoria de `PaymentMethodLocalDataSource`
+
+### Convenciones de test
+
+- Nombres en español con formato `metodo_condicion_resultadoEsperado`
+- Tests de lógica pura en `commonTest` (sin dependencias de plataforma)
+- Usar `runTest { flow.first() }` para colectar el primer valor de un Flow en tests de use case
+
+---
+
 ## Cómo agregar un nuevo tab al bottom nav
 
 1. `Destinations.kt` → agregar `data object NuevoTab : HomeDestination()`

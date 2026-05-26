@@ -152,91 +152,94 @@ class ExportViewModel(
         )
     }
 
-    private fun extractYearMonth(isoDate: String): Pair<Int, Int> {
-        return try {
-            val datePart = isoDate.substringBefore('T')
-            val parts = datePart.split("-")
-            parts[0].toInt() to parts[1].toInt()
-        } catch (e: Exception) {
-            0 to 0
-        }
-    }
-
-    private fun buildPrompt(
-        monthSummaries: List<MonthSummary>,
-        debtsBySource: List<DebtBySource>,
-        totalAmount: Double,
-        totalDebt: Double,
-        toPayNextMonth: Double,
-        totalExpenses: Int,
-    ): String = buildString {
-        appendLine("Analiza mi situación financiera personal y dame recomendaciones detalladas.")
-        appendLine()
-        appendLine("## Resumen general")
-        appendLine("- Total de gastos registrados: $totalExpenses")
-        appendLine("- Monto total gastado (todos los meses): \$${totalAmount.formatDecimal()}")
-        appendLine()
-        if (monthSummaries.isEmpty()) {
-            appendLine("## Gastos")
-            appendLine("- Sin gastos registrados.")
-        } else {
-            appendLine("## Gastos por mes")
-            monthSummaries.forEach { month ->
-                appendLine()
-                appendLine("### ${month.label} — Total: \$${month.totalAmount.formatDecimal()}")
-                month.categories.forEach { cat ->
-                    val budgetInfo = if (cat.budget > 0) " · presupuesto \$${cat.budget.formatDecimal()}" else ""
-                    val overBudget = if (cat.budget > 0 && cat.total > cat.budget) " ⚠️ excede presupuesto" else ""
-                    appendLine("**${cat.name}** — Total \$${cat.total.formatDecimal()}$budgetInfo$overBudget")
-                    cat.expenses.forEach { expense ->
-                        appendLine("  - ${expense.title}: \$${expense.amount.formatDecimal()} (Método de pago: ${expense.paymentMethodName})")
-                    }
-                }
-            }
-        }
-        appendLine()
-        if (debtsBySource.isNotEmpty()) {
-            appendLine("## Deudas activas")
-            appendLine("- Deuda total pendiente: \$${totalDebt.formatDecimal()}")
-            appendLine("- Cuotas a pagar el próximo mes: \$${toPayNextMonth.formatDecimal()}")
-            appendLine()
-            debtsBySource.forEach { source ->
-                appendLine("### ${source.source.name} — deuda: \$${source.totalDebt.formatDecimal()}")
-                val activeDebts = source.debtsList
-                    .filter { it.installments > 0 && it.paidInstallments < it.installments }
-                if (activeDebts.isEmpty()) {
-                    appendLine("  - Sin cuotas pendientes.")
-                } else {
-                    activeDebts.forEach { debt ->
-                        val monthly = debt.amount / debt.installments
-                        appendLine(
-                            "  - ${debt.title}: \$${debt.amount.formatDecimal()} total, " +
-                                "cuota \$${monthly.formatDecimal()}/mes, " +
-                                "${debt.paidInstallments}/${debt.installments} cuotas pagadas"
-                        )
-                    }
-                }
-            }
-            appendLine()
-        } else {
-            appendLine("## Deudas")
-            appendLine("- Sin deudas activas.")
-            appendLine()
-        }
-        appendLine("## Solicitud")
-        appendLine("Por favor:")
-        appendLine("1. Analiza la evolución de mis gastos mes a mes e identifica tendencias.")
-        appendLine("2. Identifica categorías donde gasto de más o que exceden el presupuesto.")
-        appendLine("3. Evalúa mis deudas y sugiere un orden de pago eficiente.")
-        appendLine("4. Dame recomendaciones concretas para mejorar mi salud financiera.")
-        appendLine("5. Señala cualquier patrón preocupante que detectes.")
-    }
+    private fun extractYearMonth(isoDate: String): Pair<Int, Int> =
+        Companion.extractYearMonth(isoDate)
 
     companion object {
-        private val MONTH_NAMES_ES = mapOf(
+        internal val MONTH_NAMES_ES = mapOf(
             1 to "Enero", 2 to "Febrero", 3 to "Marzo", 4 to "Abril",
             5 to "Mayo", 6 to "Junio", 7 to "Julio", 8 to "Agosto",
             9 to "Septiembre", 10 to "Octubre", 11 to "Noviembre", 12 to "Diciembre"
         )
+
+        internal fun extractYearMonth(isoDate: String): Pair<Int, Int> {
+            return try {
+                val datePart = isoDate.substringBefore('T')
+                val parts = datePart.split("-")
+                parts[0].toInt() to parts[1].toInt()
+            } catch (e: Exception) {
+                0 to 0
+            }
+        }
+
+        internal fun buildPrompt(
+            monthSummaries: List<MonthSummary>,
+            debtsBySource: List<DebtBySource>,
+            totalAmount: Double,
+            totalDebt: Double,
+            toPayNextMonth: Double,
+            totalExpenses: Int,
+        ): String = buildString {
+            appendLine("Analiza mi situación financiera personal y dame recomendaciones detalladas.")
+            appendLine()
+            appendLine("## Resumen general")
+            appendLine("- Total de gastos registrados: $totalExpenses")
+            appendLine("- Monto total gastado (todos los meses): \$${totalAmount.formatDecimal()}")
+            appendLine()
+            if (monthSummaries.isEmpty()) {
+                appendLine("## Gastos")
+                appendLine("- Sin gastos registrados.")
+            } else {
+                appendLine("## Gastos por mes")
+                monthSummaries.forEach { month ->
+                    appendLine()
+                    appendLine("### ${month.label} — Total: \$${month.totalAmount.formatDecimal()}")
+                    month.categories.forEach { cat ->
+                        val budgetInfo = if (cat.budget > 0) " · presupuesto \$${cat.budget.formatDecimal()}" else ""
+                        val overBudget = if (cat.budget > 0 && cat.total > cat.budget) " ⚠️ excede presupuesto" else ""
+                        appendLine("**${cat.name}** — Total \$${cat.total.formatDecimal()}$budgetInfo$overBudget")
+                        cat.expenses.forEach { expense ->
+                            appendLine("  - ${expense.title}: \$${expense.amount.formatDecimal()} (Método de pago: ${expense.paymentMethodName})")
+                        }
+                    }
+                }
+            }
+            appendLine()
+            if (debtsBySource.isNotEmpty()) {
+                appendLine("## Deudas activas")
+                appendLine("- Deuda total pendiente: \$${totalDebt.formatDecimal()}")
+                appendLine("- Cuotas a pagar el próximo mes: \$${toPayNextMonth.formatDecimal()}")
+                appendLine()
+                debtsBySource.forEach { source ->
+                    appendLine("### ${source.source.name} — deuda: \$${source.totalDebt.formatDecimal()}")
+                    val activeDebts = source.debtsList
+                        .filter { it.installments > 0 && it.paidInstallments < it.installments }
+                    if (activeDebts.isEmpty()) {
+                        appendLine("  - Sin cuotas pendientes.")
+                    } else {
+                        activeDebts.forEach { debt ->
+                            val monthly = debt.amount / debt.installments
+                            appendLine(
+                                "  - ${debt.title}: \$${debt.amount.formatDecimal()} total, " +
+                                    "cuota \$${monthly.formatDecimal()}/mes, " +
+                                    "${debt.paidInstallments}/${debt.installments} cuotas pagadas"
+                            )
+                        }
+                    }
+                }
+                appendLine()
+            } else {
+                appendLine("## Deudas")
+                appendLine("- Sin deudas activas.")
+                appendLine()
+            }
+            appendLine("## Solicitud")
+            appendLine("Por favor:")
+            appendLine("1. Analiza la evolución de mis gastos mes a mes e identifica tendencias.")
+            appendLine("2. Identifica categorías donde gasto de más o que exceden el presupuesto.")
+            appendLine("3. Evalúa mis deudas y sugiere un orden de pago eficiente.")
+            appendLine("4. Dame recomendaciones concretas para mejorar mi salud financiera.")
+            appendLine("5. Señala cualquier patrón preocupante que detectes.")
+        }
     }
 }
